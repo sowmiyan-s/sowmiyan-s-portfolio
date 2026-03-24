@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&family=Oxanium:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 0 100% 50%; /* Pure Red */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 0 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 100%; /* White border */
+    --input: 0 0% 10%;
+    --ring: 0 100% 50%;
+
+    --radius: 0; /* Sharp corners for premium tech look */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border/20;
+    cursor: none !important; /* System Override */
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased overflow-x-hidden;
+    letter-spacing: -0.02em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading uppercase;
+  }
+
+  ::selection {
+    background: #FF0000;
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 2px; /* Very thin scrollbar */
+  }
+  ::-webkit-scrollbar-track {
+    background: black;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #FF0000;
+  }
+}
+
+@layer utilities {
+  .grid-bg {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+
+  .grid-bg-dense {
+    background-size: 10px 10px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+
+  .dot-bg {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .cross-bg {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 100px 100px;
+    background-position: center;
+  }
+
+  .tech-border {
+    @apply border border-white/20 relative;
+  }
+
+  .tech-border::before {
+    content: '';
+    @apply absolute top-0 left-0 w-1 h-1 bg-red-600;
+  }
+
+  .tech-border::after {
+    content: '';
+    @apply absolute bottom-0 right-0 w-1 h-1 bg-red-600;
+  }
+
+  /* Coding animation text effect */
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+  }
+
+  .no-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Three.js Canvas Container */
+#canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
