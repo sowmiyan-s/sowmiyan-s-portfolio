@@ -1,76 +1,93 @@
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import DecodeText from './DecodeText';
 
-const categories = [
-  {
-    title: "AI / ML",
-    color: "primary",
-    skills: ["TensorFlow", "PyTorch", "LangChain", "OpenAI", "Computer Vision", "NLP"],
-  },
-  {
-    title: "Backend",
-    color: "accent",
-    skills: ["Python", "Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL"],
-  },
-  {
-    title: "Frontend",
-    color: "primary",
-    skills: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Three.js", "Framer Motion"],
-  },
-  {
-    title: "DevOps",
-    color: "accent",
-    skills: ["Docker", "AWS", "CI/CD", "Kubernetes", "Terraform", "Linux"],
-  },
-];
+const defaultTechSkills = ['Python', 'JavaScript', 'React', 'Node.js', 'TensorFlow', 'PyTorch', 'AWS', 'Docker'];
+const defaultNonTechSkills = ['Problem Solving', 'Communication', 'Team Leadership', 'Project Management', 'Public Speaking'];
 
 const SkillsSection = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+    const [techSkills, setTechSkills] = useState<string[]>([]);
+    const [nonTechSkills, setNonTechSkills] = useState<string[]>([]);
 
-  return (
-    <section id="skills" className="py-32 relative">
-      <div className="container mx-auto px-6" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <p className="text-primary font-mono text-sm tracking-widest uppercase mb-3">Skills</p>
-          <h2 className="text-4xl sm:text-5xl font-heading font-bold">
-            My <span className="text-gradient">Arsenal</span>
-          </h2>
-        </motion.div>
+    useEffect(() => {
+        const savedTech = localStorage.getItem('techSkills');
+        const savedNonTech = localStorage.getItem('nonTechSkills');
+        
+        if (savedTech) {
+            setTechSkills(JSON.parse(savedTech));
+        } else {
+            setTechSkills(defaultTechSkills);
+            localStorage.setItem('techSkills', JSON.stringify(defaultTechSkills));
+        }
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {categories.map((cat, i) => (
-            <motion.div
-              key={cat.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-              className="glass rounded-xl p-8 group hover:glow-primary transition-all duration-500"
-            >
-              <h3 className={`text-xl font-heading font-semibold mb-5 ${cat.color === "accent" ? "text-accent" : "text-primary"}`}>
-                {cat.title}
-              </h3>
-              <div className="flex flex-wrap gap-2.5">
-                {cat.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-3.5 py-1.5 rounded-lg bg-muted text-muted-foreground text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all duration-300 cursor-default"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+        if (savedNonTech) {
+            setNonTechSkills(JSON.parse(savedNonTech));
+        } else {
+            setNonTechSkills(defaultNonTechSkills);
+            localStorage.setItem('nonTechSkills', JSON.stringify(defaultNonTechSkills));
+        }
+    }, []);
+
+    return (
+        <section className="relative py-32 px-6 border-t border-white/5 bg-black z-10 overflow-hidden">
+            <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-20" />
+            
+            <div className="max-w-7xl mx-auto flex flex-col gap-16">
+                <div className="flex flex-col gap-2 border-l-2 border-red-600 pl-4">
+                    <span className="text-[10px] opacity-40 font-mono tracking-[0.5em] uppercase">04 // Capability Matrix</span>
+                    <h2 className="text-4xl md:text-6xl font-heading font-black text-white uppercase tracking-tighter">Skill Parameters</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    {/* Tech Skills */}
+                    <div className="flex flex-col gap-8">
+                        <h3 className="text-xl font-heading uppercase text-red-600 tracking-widest border-b border-white/10 pb-4">
+                            Technical Skills
+                        </h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            {techSkills.map((skill, index) => (
+                                <motion.div 
+                                    key={`tech-${index}`}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                                    viewport={{ once: true }}
+                                    className="p-4 border border-white/10 bg-white/5 hover:bg-red-900/10 hover:border-red-600/50 transition-all group relative overflow-hidden flex items-center justify-center text-center"
+                                >
+                                    <DecodeText text={skill} className="relative z-10 font-mono text-xs uppercase text-white/80 group-hover:text-red-400 transition-colors tracking-widest" />
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-red-600/0 group-hover:bg-red-600/100 transition-all" />
+                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-red-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Non-Tech Skills */}
+                    <div className="flex flex-col gap-8">
+                        <h3 className="text-xl font-heading uppercase text-red-600 tracking-widest border-b border-white/10 pb-4">
+                            Non-Technical Skills
+                        </h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+                            {nonTechSkills.map((skill, index) => (
+                                <motion.div 
+                                    key={`nontech-${index}`}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                                    viewport={{ once: true }}
+                                    className="p-4 border border-white/10 bg-white/5 hover:bg-red-900/10 hover:border-red-600/50 transition-all group relative overflow-hidden flex items-center justify-center text-center"
+                                >
+                                    <DecodeText text={skill} className="relative z-10 font-mono text-xs uppercase text-white/80 group-hover:text-red-400 transition-colors tracking-widest" />
+                                    <div className="absolute top-0 right-0 w-1 h-full bg-red-600/0 group-hover:bg-red-600/100 transition-all" />
+                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-red-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
 };
 
 export default SkillsSection;

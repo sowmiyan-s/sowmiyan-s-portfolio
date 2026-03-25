@@ -9,7 +9,7 @@ const BlogSection = () => {
     useEffect(() => {
         const load = async () => {
             const data = await fetchMediumPosts();
-            setPosts(data.slice(0, 3)); // Display top 3 real posts
+            setPosts(data.length > 0 ? data : []);
             setLoading(false);
         };
         load();
@@ -21,73 +21,84 @@ const BlogSection = () => {
     };
 
     if (loading) return (
-        <div className="py-24 text-center font-mono text-red-600 opacity-40 uppercase animate-pulse">
+        <div className="py-24 text-center font-mono text-red-600 opacity-40 uppercase animate-pulse bg-black">
             [ SYNCING_EXTERNAL_KNOWLEDGE_FEED... ]
         </div>
     );
 
+    // Duplicate logic for the infinite marquee
+    // Create an array large enough to cover the screen seamlessly
+    const duplicatedPosts = posts.length > 0 ? [...posts, ...posts, ...posts, ...posts] : [];
+
     return (
-        <section id="blog" className="relative py-32 px-6 dot-bg-dense border-t border-white/10 z-10">
-            <div className="max-w-7xl mx-auto flex flex-col gap-16">
-                <div className="flex justify-between items-end border-b border-white/20 pb-8">
-                    <div className="flex flex-col gap-2">
-                        <span className="text-[10px] opacity-40 font-mono tracking-[0.5em]">05 // KNOWLEDGE TRANSFER</span>
-                        <h2 className="text-5xl md:text-7xl font-heading font-black text-white uppercase tracking-tighter">LATEST INTEL</h2>
+        <section id="blog" className="relative py-32 bg-black dot-bg-dense border-y border-white/10 z-10 overflow-hidden">
+            <div className="w-full flex flex-col gap-16">
+                <div className="px-6 flex justify-center border-b border-white/20 pb-8 text-center max-w-7xl mx-auto w-full">
+                    <div className="flex flex-col gap-2 items-center">
+                        <span className="text-[10px] opacity-40 font-mono tracking-[0.5em] uppercase text-red-600">05 // Transmission Log</span>
+                        <h2 className="text-4xl md:text-6xl font-heading font-black text-white uppercase tracking-tighter mx-auto flex">
+                            LATEST POSTS(MEDIUM)
+                        </h2>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    {posts.map((post, i) => (
-                        <motion.a 
-                            key={i}
-                            href={post.link}
-                            target="_blank"
-                            initial={{ y: 50, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            transition={{ delay: i * 0.1 }}
-                            viewport={{ once: true }}
-                            className="flex flex-col gap-6 group cursor-pointer"
+                <div className="flex w-full overflow-hidden relative group">
+                    <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+                    
+                    {posts.length > 0 ? (
+                        <motion.div 
+                            className="flex gap-4 md:gap-8 px-4"
+                            animate={{ x: ["0%", "-50%"] }}
+                            transition={{ duration: duplicatedPosts.length * 3, ease: "linear", repeat: Infinity }}
                         >
-                            <div className="relative aspect-[16/9] bg-white/5 border border-white/10 overflow-hidden">
-                                <img 
-                                    src={post.thumbnail} 
-                                    alt={post.title} 
-                                    className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
-                                />
-                                <div className="absolute inset-0 bg-red-900/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="absolute top-4 left-4 text-[9px] font-mono text-white bg-red-600 px-3 py-1 uppercase font-bold tracking-widest">
-                                    {post.categories[0] || 'DATA'}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest">
-                                    {new Date(post.pubDate).toLocaleDateString()} // ORIGIN: MEDIUM
-                                </span>
-                                <h3 className="text-xl font-heading font-black uppercase leading-[1.1] group-hover:text-red-600 transition-colors tracking-tight">
-                                    {post.title}
-                                </h3>
-                                <p className="text-xs font-mono opacity-40 leading-relaxed line-clamp-3">
-                                    {stripHtml(post.description)}
-                                </p>
-                            </div>
-                            <div className="w-12 h-[1px] bg-white/20 group-hover:w-full group-hover:bg-red-600 transition-all duration-500" />
-                        </motion.a>
-                    ))}
-                    {posts.length === 0 && (
-                        <div className="col-span-3 py-12 text-center font-mono opacity-20 uppercase tracking-widest italic">
+                            {duplicatedPosts.map((post, i) => (
+                                <a 
+                                    key={i}
+                                    href={post.link}
+                                    target="_blank"
+                                    className="flex-shrink-0 w-[280px] md:w-[400px] flex flex-col gap-4 border border-white/10 p-4 bg-white/5 hover:border-red-600 hover:bg-black transition-colors group cursor-pointer"
+                                >
+                                    <div className="relative aspect-[16/9] w-full overflow-hidden border border-white/5">
+                                        <img 
+                                            src={post.thumbnail} 
+                                            alt={post.title} 
+                                            className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                                        />
+                                        <div className="absolute top-2 left-2 text-[8px] font-mono text-white bg-red-600 px-2 py-0.5 uppercase tracking-widest">
+                                            {post.categories[0] || 'ARTICLE'}
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-2 flex-grow mt-2">
+                                        <h3 className="text-sm font-heading font-black uppercase leading-[1.2] group-hover:text-red-500 transition-colors line-clamp-2">
+                                            {post.title}
+                                        </h3>
+                                        <p className="text-[10px] font-mono opacity-40 leading-relaxed line-clamp-2 mt-1">
+                                            {stripHtml(post.description)}
+                                        </p>
+                                    </div>
+                                    <div className="text-[9px] font-mono text-red-600 uppercase mt-auto tracking-widest bg-red-600/10 px-2 py-1 flex items-center justify-between border border-red-600/20">
+                                       <span>READ_TRANSCRIPT</span>
+                                       <span>↗</span>
+                                    </div>
+                                </a>
+                            ))}
+                        </motion.div>
+                    ) : (
+                        <div className="w-full text-center py-12 font-mono opacity-20 uppercase tracking-widest">
                             No external transmission detected.
                         </div>
                     )}
                 </div>
 
-                <div className="flex justify-center pt-8">
+                <div className="flex justify-center pt-8 px-6">
                     <a 
                         href="https://medium.com/@sowmiyan_s_" 
                         target="_blank" 
-                        className="px-12 py-4 border border-white/10 text-xs font-heading font-black uppercase tracking-[0.3em] hover:border-red-600 hover:text-red-600 transition-all group overflow-hidden relative"
+                        className="px-12 py-4 border-2 border-red-600 text-xs font-mono font-bold uppercase tracking-[0.2em] bg-red-600/10 hover:bg-red-600 hover:text-white transition-all text-red-500 group flex gap-3 items-center"
                     >
-                        <span className="relative z-10">Expand Intelligence Matrix</span>
-                        <div className="absolute inset-0 bg-red-600/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                        <span>Access Medium Profile</span>
+                        <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </a>
                 </div>
             </div>

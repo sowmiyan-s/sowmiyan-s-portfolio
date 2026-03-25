@@ -42,7 +42,7 @@ const ProjectDetail = () => {
                     <h1 className="text-4xl md:text-7xl font-heading font-black text-white uppercase tracking-tighter shrink-0">{id?.replace(/-/g, ' ')}</h1>
                 </div>
 
-                <article className="prose prose-invert prose-red max-w-none bg-black/40 p-8 md:p-12 border border-white/5 tech-border mb-12 overflow-hidden shadow-[0_0_50px_rgba(220,38,38,0.05)]">
+                <article className="prose prose-invert prose-red max-w-none bg-black/40 p-8 md:p-12 border border-white/5 tech-border mb-12 overflow-hidden">
                     <ReactMarkdown rehypePlugins={[rehypeRaw]}>{readme}</ReactMarkdown>
                 </article>
 

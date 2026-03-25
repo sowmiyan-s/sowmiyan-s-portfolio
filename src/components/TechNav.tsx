@@ -11,7 +11,7 @@ const TechNav = () => {
                 <span className="opacity-40 uppercase tracking-[0.3em]">AI ENGINEER / FULL STACK</span>
             </div>
             
-            <div className="grid grid-cols-5 gap-8 text-[11px]">
+            <div className="grid grid-cols-6 gap-6 text-[11px]">
                 <div className="flex flex-col">
                     <span className="text-[9px] opacity-30 mb-1">01</span>
                     <Link to="/" className="hover:text-red-600 transition-all uppercase font-heading tracking-widest text-white decoration-red-600 underline-offset-4 hover:underline">Home</Link>
@@ -30,6 +30,13 @@ const TechNav = () => {
                 </div>
                 <div className="flex flex-col">
                     <span className="text-[9px] opacity-30 mb-1">05</span>
+                    <a href="#contact" className="hover:text-red-600 transition-all uppercase font-heading tracking-widest text-white decoration-red-600 underline-offset-4 hover:underline" onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }}>Contact</a>
+                </div>
+                <div className="flex flex-col">
+                    <span className="text-[9px] opacity-30 mb-1">06</span>
                     <a href="/resume.pdf" target="_blank" className="hover:text-red-600 transition-all uppercase font-heading tracking-widest text-red-600 font-bold decoration-white underline-offset-4 hover:underline">My Resume</a>
                 </div>
             </div>

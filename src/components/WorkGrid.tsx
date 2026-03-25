@@ -62,7 +62,7 @@ const WorkGrid = () => {
                                      <div className="flex gap-1">
                                         {[...Array(3)].map((_, j) => <div key={j} className="w-1 h-1 bg-red-600" />)}
                                      </div>
-                                     <span className="text-[8px] font-mono text-red-600 tracking-widest text-shadow-glow">DECRYPT_README</span>
+                                     <span className="text-[8px] font-mono text-red-600 tracking-widest">DECRYPT_README</span>
                                 </div>
                             </div>
                         </div>
