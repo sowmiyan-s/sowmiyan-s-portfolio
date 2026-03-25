@@ -124,6 +124,22 @@
   .no-scroll::-webkit-scrollbar {
     display: none;
   }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-red-600 via-white to-red-600;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+
+  .glass-strong {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  }
 }
 
 /* Three.js Canvas Container */

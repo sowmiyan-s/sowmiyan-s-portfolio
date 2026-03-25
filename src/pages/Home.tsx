@@ -8,6 +8,7 @@ import SkillsSection from "@/components/SkillsSection";
 import HireMeSection from "@/components/HireMeSection";
 import ContentCreationSection from "@/components/ContentCreationSection";
 import MarqueeSection from "@/components/MarqueeSection";
+import ProjectsSection from "@/components/ProjectsSection";
 
 const Home = () => {
     return (
@@ -25,6 +26,10 @@ const Home = () => {
 
                 <div className="sticky top-0 bg-[#0d0d0d] h-screen overflow-y-auto no-scroll w-full z-[3]">
                     <BlogSection />
+                </div>
+
+                <div className="relative bg-black w-full z-[3.5] border-y border-white/5">
+                    <ProjectsSection />
                 </div>
 
                 <div className="sticky top-0 bg-[#121212] flex items-center h-screen overflow-y-auto no-scroll w-full z-[4]">
