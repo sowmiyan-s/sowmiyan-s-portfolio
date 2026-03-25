@@ -31,7 +31,7 @@ const PopularProjectsSlider = () => {
     if (loading) return (
         <div className="py-24 flex flex-col items-center justify-center gap-8 bg-black">
             <RadarLoader />
-            <p className="text-[10px] font-mono text-red-600 animate-pulse tracking-[0.5em]">SCANNING_PROJECT_SURFACE</p>
+            <p className="text-[10px] font-mono text-red-600 animate-pulse tracking-[0.5em]">Scanning Project Surface</p>
         </div>
     );
 
@@ -46,7 +46,7 @@ const PopularProjectsSlider = () => {
                         <ScrambleText text="03 // High Priority Nodes" />
                     </span>
                     <h2 className="text-4xl md:text-6xl font-heading font-black text-white uppercase tracking-tighter flex items-center gap-4">
-                        <ScrambleText text="POPULAR_PROJECTS" speed={0.5} delay={0.2} />
+                        <ScrambleText text="Popular Projects" speed={0.5} delay={0.2} />
                     </h2>
                 </div>
             </div>

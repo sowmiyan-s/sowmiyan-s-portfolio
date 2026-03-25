@@ -7,14 +7,14 @@ const Footer = () => {
         <footer id="contact" className="relative py-12 px-6 cross-bg border-t border-white/10 z-10 overflow-hidden bg-black text-white">
             {/* Terminal Close-out Details (Static - No Hover) */}
             <div className="absolute top-12 left-12 opacity-20 text-[8px] font-mono uppercase tracking-[0.5em] hidden md:block select-none grayscale cursor-default">
-                 <ScrambleText text="TERMINAL_v1.02" delay={4} /><br/>
-                 ENCRYPTION: SH256<br/>
-                 AUTH_STABLE: OK
+                 <ScrambleText text="Terminal v1.02" delay={4} /><br/>
+                 Encryption: SH256<br/>
+                 Auth Stable: OK
             </div>
 
             <div className="absolute top-12 right-12 opacity-20 text-[8px] font-mono uppercase tracking-[0.5em] text-right hidden md:block select-none grayscale cursor-default">
-                 LOC_REF: CHN_04<br/>
-                 <span className="text-red-500 font-bold">END_OF_TRANSMISSION</span>
+                 Loc Ref: CHN 04<br/>
+                 <span className="text-red-500 font-bold">End of Transmission</span>
             </div>
 
             {/* Visual Accent */}

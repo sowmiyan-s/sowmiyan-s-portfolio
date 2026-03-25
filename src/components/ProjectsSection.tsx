@@ -139,7 +139,7 @@ const ProjectsSection = () => {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-60 gap-12">
             <RadarLoader />
-            <p className="font-mono text-[10px] uppercase tracking-[1em] text-red-600 animate-pulse text-center">Reconstructing_Timeline_Axis</p>
+            <p className="font-mono text-[10px] uppercase tracking-[1em] text-red-600 animate-pulse text-center">Reconstructing Timeline Axis</p>
           </div>
         ) : years.length > 0 ? (
           <div className="relative">
@@ -153,7 +153,7 @@ const ProjectsSection = () => {
                   <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-black border-2 border-red-600 rounded-full z-20 shadow-[0_0_15px_rgba(255,0,0,0.8)]" />
                   <div className="flex items-center gap-6">
                     <h4 className="text-4xl md:text-7xl font-heading font-black text-white/20 tracking-tighter leading-none select-none">
-                      <ScrambleText text={`YEAR_${year}`} />
+                      <ScrambleText text={`Year ${year}`} />
                     </h4>
                     <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
                   </div>
@@ -169,7 +169,7 @@ const ProjectsSection = () => {
           </div>
         ) : (
           <div className="text-center py-40 border-2 border-dashed border-white/10 rounded-[3rem] bg-white/[0.01]">
-            <p className="font-mono text-xl text-red-600 uppercase tracking-widest mb-3 font-black">Timeline_Axis_Offline</p>
+            <p className="font-mono text-xl text-red-600 uppercase tracking-widest mb-3 font-black">Timeline Axis Offline</p>
             <p className="text-[10px] text-white/30 uppercase tracking-[0.5em]">No significant events found in the public repository archive.</p>
           </div>
         )}
