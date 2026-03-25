@@ -8,7 +8,7 @@ import SkillsSection from "@/components/SkillsSection";
 import HireMeSection from "@/components/HireMeSection";
 import ContentCreationSection from "@/components/ContentCreationSection";
 import MarqueeSection from "@/components/MarqueeSection";
-import ProjectsSection from "@/components/ProjectsSection";
+import PopularProjectsSlider from "@/components/PopularProjectsSlider";
 
 const Home = () => {
     return (
@@ -29,7 +29,7 @@ const Home = () => {
                 </div>
 
                 <div className="relative bg-black w-full z-[3.5] border-y border-white/5">
-                    <ProjectsSection />
+                    <PopularProjectsSlider />
                 </div>
 
                 <div className="sticky top-0 bg-[#121212] flex items-center h-screen overflow-y-auto no-scroll w-full z-[4]">

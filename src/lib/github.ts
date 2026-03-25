@@ -10,6 +10,7 @@ export interface GitHubRepo {
   stargazers_count: number;
   language: string;
   updated_at: string;
+  forks_count: number;
 }
 
 export const fetchRepos = async (): Promise<GitHubRepo[]> => {

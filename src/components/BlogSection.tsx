@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { fetchMediumPosts, MediumPost } from '@/lib/medium';
+import RadarLoader from './RadarLoader';
+import ScrambleText from './ScrambleText';
 
 const BlogSection = () => {
     const [posts, setPosts] = useState<MediumPost[]>([]);
@@ -21,8 +23,9 @@ const BlogSection = () => {
     };
 
     if (loading) return (
-        <div className="py-24 text-center font-mono text-red-600 opacity-40 uppercase animate-pulse bg-black">
-            [ SYNCING_EXTERNAL_KNOWLEDGE_FEED... ]
+        <div className="py-40 flex flex-col items-center justify-center gap-12 bg-black border-y border-white/5">
+            <RadarLoader />
+            <p className="font-mono text-[10px] uppercase tracking-[1em] text-red-600 animate-pulse text-center">Interpreting_Global_Feeds</p>
         </div>
     );
 
@@ -31,13 +34,35 @@ const BlogSection = () => {
     const duplicatedPosts = posts.length > 0 ? [...posts, ...posts, ...posts, ...posts] : [];
 
     return (
-        <section id="blog" className="relative py-32 bg-black dot-bg-dense border-y border-white/10 z-10 overflow-hidden">
+        <section id="blog" className="relative py-32 bg-black tactical-grid border-y border-white/10 z-10 overflow-hidden">
+            {/* Mission Interface Detailing (Static) */}
+            <div className="absolute top-12 left-12 opacity-30 text-[9px] font-mono leading-relaxed hidden lg:block select-none grayscale cursor-default">
+                 <div className="flex items-center gap-3 mb-2">
+                    <div className="w-1.5 h-1.5 bg-red-600 rounded-full" />
+                    <span className="text-red-500 uppercase font-black">FEED_SYNC: ACTIVE</span>
+                 </div>
+                 NODE_LATENCY: 42ms<br/>
+                 PROX_SRVR: CHN_04<br/>
+                 <span className="opacity-40">UPLINK_STABLE // 12.04.1</span>
+            </div>
+
+            <div className="absolute top-12 right-12 w-32 border-l border-white/10 pl-6 opacity-30 text-left hidden lg:block select-none grayscale cursor-default">
+                 <div className="absolute bottom-0 left-[-1px] w-1 h-8 bg-white/20" />
+                 <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-white font-bold block mb-1">DATA_NODES</span>
+                 <p className="text-[12px] font-heading text-red-600 font-black">
+                     <span className="text-white">NODE_COUNT: </span> {posts.length}
+                 </p>
+                 <p className="text-[8px] font-mono mt-1 opacity-50 uppercase tracking-widest leading-none">Global_Indexing_Active</p>
+            </div>
+
             <div className="w-full flex flex-col gap-16">
                 <div className="px-6 flex justify-center border-b border-white/20 pb-8 text-center max-w-7xl mx-auto w-full">
                     <div className="flex flex-col gap-2 items-center">
-                        <span className="text-[10px] opacity-40 font-mono tracking-[0.5em] uppercase text-red-600">05 // Transmission Log</span>
+                        <span className="text-[10px] opacity-40 font-mono tracking-[0.5em] uppercase text-red-600">
+                            <ScrambleText text="04 // Transmission Log" />
+                        </span>
                         <h2 className="text-4xl md:text-6xl font-heading font-black text-white uppercase tracking-tighter mx-auto flex">
-                            LATEST POSTS(MEDIUM)
+                            <ScrambleText text="MY ARTICLES" speed={0.5} delay={0.2} />
                         </h2>
                     </div>
                 </div>

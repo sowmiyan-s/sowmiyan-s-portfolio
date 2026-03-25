@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import TopographicBackground from './TopographicBackground';
+import ScrambleText from './ScrambleText';
 
 const HireMeSection = () => {
     return (
@@ -10,12 +11,14 @@ const HireMeSection = () => {
             
             <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center justify-center gap-16 text-center pointer-events-auto">
                 <div className="flex flex-col gap-6 items-center justify-center w-full">
-                    <span className="text-xs md:text-sm opacity-40 font-mono tracking-[0.5em] uppercase text-center block w-full text-white">OPEN TO NEW OPPORTUNITIES</span>
+                    <span className="text-xs md:text-sm opacity-40 font-mono tracking-[0.5em] uppercase text-center block w-full text-white">
+                        <ScrambleText text="OPEN TO NEW OPPORTUNITIES" />
+                    </span>
                     <h2 className="text-5xl md:text-8xl lg:text-[8rem] font-heading font-black text-white uppercase tracking-tighter text-center leading-none">
-                        Hire <span className="text-red-600">Me</span>
+                        <ScrambleText text="Hire Me" speed={0.4} delay={0.2} />
                     </h2>
-                    <p className="text-lg md:text-2xl font-mono text-white/80 max-w-3xl mt-6 leading-relaxed text-center mx-auto">
-                        Available for job opportunities and freelancing projects. Let's build intelligent systems and premium web experiences together.
+                    <p className="text-lg md:text-2xl font-mono text-white/80 max-w-3xl mt-6 leading-relaxed text-center mx-auto italic">
+                        <ScrambleText text="Available for job opportunities and freelancing projects. Let's build intelligent systems and premium web experiences together." speed={0.2} delay={0.6} />
                     </p>
                 </div>
 

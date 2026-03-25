@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
 import { useNavigate } from 'react-router-dom';
+import RadarLoader from './RadarLoader';
 
 const WorkGrid = () => {
     const [projects, setProjects] = useState<GitHubRepo[]>([]);
@@ -19,8 +20,9 @@ const WorkGrid = () => {
     }, []);
 
     if (loading) return (
-        <div className="py-24 text-center font-mono text-red-600 opacity-40 uppercase animate-pulse">
-            [ UPDATING_PROJECT_MATRIX... ]
+        <div className="py-40 flex flex-col items-center justify-center gap-12 border-y border-white/5 bg-black/20">
+            <RadarLoader />
+            <p className="font-mono text-[10px] uppercase tracking-[1em] text-red-600 animate-pulse text-center">Synchronizing_Project_Nodes</p>
         </div>
     );
 

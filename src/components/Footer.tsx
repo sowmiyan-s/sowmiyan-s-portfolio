@@ -1,20 +1,37 @@
 import React from 'react';
 import { Mail, MapPin, Linkedin, Instagram, Phone, PenTool, Twitter } from 'lucide-react';
+import ScrambleText from './ScrambleText';
 
 const Footer = () => {
     return (
         <footer id="contact" className="relative py-12 px-6 cross-bg border-t border-white/10 z-10 overflow-hidden bg-black text-white">
+            {/* Terminal Close-out Details (Static - No Hover) */}
+            <div className="absolute top-12 left-12 opacity-20 text-[8px] font-mono uppercase tracking-[0.5em] hidden md:block select-none grayscale cursor-default">
+                 <ScrambleText text="TERMINAL_v1.02" delay={4} /><br/>
+                 ENCRYPTION: SH256<br/>
+                 AUTH_STABLE: OK
+            </div>
+
+            <div className="absolute top-12 right-12 opacity-20 text-[8px] font-mono uppercase tracking-[0.5em] text-right hidden md:block select-none grayscale cursor-default">
+                 LOC_REF: CHN_04<br/>
+                 <span className="text-red-500 font-bold">END_OF_TRANSMISSION</span>
+            </div>
+
             {/* Visual Accent */}
             <div className="absolute top-0 right-0 w-64 h-64 border border-white/10 -translate-y-1/2 translate-x-1/2 rotate-45 pointer-events-none opacity-20" />
             
             <div className="max-w-7xl mx-auto flex flex-col gap-12 relative">
                 <div className="flex flex-col gap-4">
-                     <span className="text-[10px] opacity-40 font-mono tracking-[0.4em] uppercase text-red-600">06 // Core Contact</span>
+                     <span className="text-[10px] opacity-40 font-mono tracking-[0.4em] uppercase text-red-600">
+                        <ScrambleText text="06 // Core Contact" />
+                     </span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 border-t border-white/10 pt-12">
                     <div className="flex flex-col gap-4">
-                        <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest text-red-600">Physical Archive</span>
+                        <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest text-red-600">
+                            <ScrambleText text="Physical Archive" triggerOnHover />
+                        </span>
                         <div className="flex items-start gap-3 opacity-80 hover:opacity-100 transition-opacity">
                             <MapPin size={14} className="mt-1 flex-shrink-0 text-red-600" />
                             <p className="text-xs font-mono tracking-tight leading-relaxed">
@@ -25,31 +42,35 @@ const Footer = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest text-red-600">Direct Comms</span>
+                        <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest text-red-600">
+                            <ScrambleText text="Direct Comms" triggerOnHover />
+                        </span>
                         <div className="flex flex-col gap-3">
                             <a href="mailto:sowmisowmiyan58@gmail.com" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Mail size={14} className="text-red-600" /> Email
+                                <Mail size={14} className="text-red-600" /> <ScrambleText text="Email" triggerOnHover />
                             </a>
                             <a href="https://wa.me/919042561295" target="_blank" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Phone size={14} className="text-red-600" /> WhatsApp
+                                <Phone size={14} className="text-red-600" /> <ScrambleText text="WhatsApp" triggerOnHover />
                             </a>
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest text-red-600">Social Matrix</span>
+                        <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest text-red-600">
+                            <ScrambleText text="Social Matrix" triggerOnHover />
+                        </span>
                         <div className="flex flex-col gap-3">
                             <a href="https://linkedin.com/in/sowmiyan-s" target="_blank" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Linkedin size={14} className="text-red-600" /> LinkedIn
+                                <Linkedin size={14} className="text-red-600" /> <ScrambleText text="LinkedIn" triggerOnHover />
                             </a>
                             <a href="https://instagram.com/sowmiyan.s_" target="_blank" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Instagram size={14} className="text-red-600" /> Instagram
+                                <Instagram size={14} className="text-red-600" /> <ScrambleText text="Instagram" triggerOnHover />
                             </a>
                             <a href="https://twitter.com/sowmiyan_s" target="_blank" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Twitter size={14} className="text-red-600" /> X (Twitter)
+                                <Twitter size={14} className="text-red-600" /> <ScrambleText text="X (Twitter)" triggerOnHover />
                             </a>
                             <a href="https://medium.com/@sowmiyan_s_" target="_blank" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <PenTool size={14} className="text-red-600" /> Medium
+                                <PenTool size={14} className="text-red-600" /> <ScrambleText text="Medium" triggerOnHover />
                             </a>
                         </div>
                     </div>

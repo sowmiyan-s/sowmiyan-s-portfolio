@@ -14,10 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Syne"', 'sans-serif'],
+        heading: ['"Audiowide"', 'cursive'],
         body: ['"JetBrains Mono"', 'monospace'],
         mono: ['"JetBrains Mono"', 'monospace'],
-        ui: ['"Oxanium"', 'cursive'],
+        ui: ['"Chakra Petch"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

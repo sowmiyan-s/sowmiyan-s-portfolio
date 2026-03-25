@@ -46,7 +46,7 @@ const MarqueeSection = () => {
 
     return (
         <section className="py-6 bg-white overflow-hidden relative border-y border-red-600 -skew-y-2 scale-105 my-12">
-            <div className="w-[300vw] flex flex-nowrap items-center text-red-600" style={{ fontFamily: "'Ruthie', cursive" }}>
+            <div className="w-[300vw] flex flex-nowrap items-center text-red-600" style={{ fontFamily: "'Waterfall', cursive" }}>
                 <motion.div 
                     className="flex flex-nowrap whitespace-nowrap text-5xl md:text-7xl lg:text-8xl font-bold mix-blend-multiply"
                     style={{ transform: `translateX(${x1}%)` }}
