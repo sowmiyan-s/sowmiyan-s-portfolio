@@ -1,11 +1,11 @@
 import React from 'react';
 
 const achievements = [
-    { type: 'PATENT', title: 'SMART DUSTBIN SYSTEM', desc: 'IoT automated collections & management.' },
-    { type: 'AWARD', title: 'HACKATHON 2ND PRIZE', desc: 'Inter-College event among 20+ teams.' },
-    { type: 'WORKSHOP', title: 'GEN AI LEAD', desc: 'Conducted session for 50+ students.' },
-    { type: 'BOOK', title: 'PYTHON AUTHOR', desc: 'Authored "Python for Beginners".' },
-    { type: 'PAPER', title: 'CYBER CRIME RSCH', desc: 'Research paper published in IJCRT.' }
+    { type: 'PATENT', title: 'SMART DUSTBIN (IOT-01)', desc: 'IoT waste monitoring & automated collection protocol.', hash: 'PAT-7729-AX' },
+    { type: 'AWARD', title: 'HACKATHON // RUNNER UP', desc: 'Secured 2nd prize in inter-college coding sprint.', hash: 'AWD-9104-BR' },
+    { type: 'WORKSHOP', title: 'INTEL_LEAD // GEN AI', desc: 'Generative AI technical session for 50+ students.', hash: 'WKS-2231-LD' },
+    { type: 'BOOK', title: 'CORE_DOCS // AUTHOR', desc: 'Published "Python for Beginners" technical manual.', hash: 'PUB-1102-BK' },
+    { type: 'PAPER', title: 'OSINT_RSCH // CYBER CRIME', desc: 'Research paper published in IJCRT (Threat Vectors).', hash: 'RSR-5541-IJ' }
 ];
 
 const certifications = [
@@ -33,10 +33,11 @@ const AchievementsSection = () => {
                                 <span className="text-[10px] font-mono text-red-600 border border-red-600/30 px-2 py-1 w-20 text-center">
                                     {item.type}
                                 </span>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col flex-1">
                                     <h3 className="text-sm font-heading font-bold uppercase group-hover:text-red-600 transition-colors">{item.title}</h3>
                                     <p className="text-[10px] font-mono opacity-40 uppercase">{item.desc}</p>
                                 </div>
+                                <span className="text-[8px] font-mono opacity-20 group-hover:opacity-40">{item.hash}</span>
                             </div>
                         ))}
                     </div>

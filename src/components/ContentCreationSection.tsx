@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 
 const ContentCreationSection = () => {
     const links = [
-        { name: "YouTube", url: "#", desc: "Tutorials & Tech Insights" },
-        { name: "LinkedIn", url: "#", desc: "Professional Updates" },
-        { name: "Instagram", url: "#", desc: "Behind the Scenes" },
-        { name: "Discord", url: "#", desc: "Community Server" }
+        { name: "Medium", url: "https://medium.com/@sowmiyan_s_", desc: "Technical Articles & OSINT" },
+        { name: "LinkedIn", url: "https://linkedin.com/in/sowmiyan-s", desc: "Professional Network // AI Sync" },
+        { name: "Instagram", url: "https://instagram.com/sowmiyan.s_", desc: "Visual Intel // Studio Logs" },
+        { name: "GitHub", url: "https://github.com/sowmiyan-s", desc: "Core Repository // Source Code" }
     ];
 
     return (

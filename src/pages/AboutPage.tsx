@@ -14,10 +14,10 @@ const stats = [
 ];
 
 const timeline = [
-  { year: '2022', title: 'Started B.Tech AI & DS', desc: 'V.S.B. College of Engineering, Coimbatore' },
-  { year: '2023', title: 'Founded AI Projects', desc: 'Built intelligent systems with CrewAI & LangChain' },
-  { year: '2024', title: 'Published Research & Book', desc: 'Cyber Crime paper (IJCRT) + Python for Beginners' },
-  { year: '2025', title: 'Full Stack + Cloud', desc: 'AWS deployments, React apps, and production systems' },
+  { year: '2022', title: 'DEPLOY_V1 // ACADEMIC START', desc: 'B.Tech AI & Data Science @ V.S.B. College of Engineering, Coimbatore.' },
+  { year: '2023', title: 'AGENT_CORE // AI FOUNDATIONS', desc: 'Developed multi-agent systems using CrewAI and LangChain frameworks.' },
+  { year: '2024', title: 'INTEL_AUTH // RESEARCH & PUBLICATION', desc: 'Published "Cyber Crime" research in IJCRT and authored "Python for Beginners".' },
+  { year: '2025', title: 'CLOUD_SYNC // FULL STACK SCALE', desc: 'Building production-grade AWS deployments and large-scale React architectures.' },
 ];
 
 const containerVariants = {
@@ -53,13 +53,13 @@ const AboutPage = () => {
               className="flex flex-col gap-8"
             >
               <p className="text-lg text-muted-foreground leading-relaxed">
-                I'm Sowmiyan S — a builder at the intersection of artificial intelligence and full-stack engineering. 
-                I design systems that don't just work, they <span className="text-primary font-bold">think</span>. 
-                From multi-agent AI architectures to production-grade web platforms, I operate at the edge of what's possible.
+                I'm Sowmiyan S — a software architect operating at the intersection of <span className="text-primary font-bold">Artificial Intelligence</span> and high-performance web systems. 
+                I don't just build applications; I engineer intelligent environments that adapt, learn, and scale.
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed opacity-70">
-                Currently pursuing B.Tech in AI & Data Science, I've shipped 30+ projects, authored a book, 
-                published research, and led workshops for 50+ students. Every line of code is intentional. Every system is built to scale.
+                Currently pursuing a B.Tech in AI & Data Science, I have successfully deployed 30+ projects 
+                ranging from autonomous agents to enterprise web stacks. As an author and researcher, 
+                I bridge the gap between complex theory and production-ready implementation.
               </p>
             </motion.div>
 

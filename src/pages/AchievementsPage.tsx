@@ -6,11 +6,11 @@ import CyberBackground from '@/components/CyberBackground';
 import PageHero from '@/components/PageHero';
 
 const achievements = [
-  { type: 'PATENT', title: 'SMART DUSTBIN SYSTEM', desc: 'IoT automated collections & management.', icon: '⚙️' },
-  { type: 'AWARD', title: 'HACKATHON 2ND PRIZE', desc: 'Inter-College event among 20+ teams.', icon: '🏆' },
-  { type: 'WORKSHOP', title: 'GEN AI LEAD', desc: 'Conducted session for 50+ students.', icon: '🎓' },
-  { type: 'BOOK', title: 'PYTHON AUTHOR', desc: 'Authored "Python for Beginners".', icon: '📖' },
-  { type: 'PAPER', title: 'CYBER CRIME RSCH', desc: 'Research paper published in IJCRT.', icon: '📄' },
+  { type: 'PATENT', title: 'SMART DUSTBIN (IOT-01)', desc: 'Integrated IoT-based waste monitoring & automated collection protocol.', icon: '⚙️', hash: 'PAT-7729-AX' },
+  { type: 'AWARD', title: 'HACKATHON // RUNNER UP', desc: 'Secured 2nd prize in inter-college coding sprint among 20+ teams.', icon: '🏆', hash: 'AWD-9104-BR' },
+  { type: 'WORKSHOP', title: 'INTEL_LEAD // GEN AI', desc: 'Orchestrated generative AI technical session for 50+ students.', icon: '🎓', hash: 'WKS-2231-LD' },
+  { type: 'BOOK', title: 'CORE_DOCS // AUTHOR', desc: 'Architected and published "Python for Beginners" technical manual.', icon: '📖', hash: 'PUB-1102-BK' },
+  { type: 'PAPER', title: 'OSINT_RSCH // CYBER CRIME', desc: 'Research paper published in IJCRT on digital threat vectors.', icon: '📄', hash: 'RSR-5541-IJ' },
 ];
 
 const certifications = [
@@ -89,12 +89,12 @@ const AchievementsPage = () => {
                     <span className="text-[10px] font-mono text-primary border border-primary/30 px-3 py-1 uppercase tracking-widest">
                       {item.type}
                     </span>
-                    <span className="text-2xl">{item.icon}</span>
+                    <span className="text-[8px] font-mono text-muted-foreground opacity-50">{item.hash}</span>
                   </div>
                   <h3 className="text-lg font-heading font-bold uppercase tracking-tight group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs font-mono text-muted-foreground uppercase">{item.desc}</p>
+                  <p className="text-xs font-mono text-muted-foreground uppercase leading-relaxed">{item.desc}</p>
                 </motion.div>
               ))}
             </motion.div>

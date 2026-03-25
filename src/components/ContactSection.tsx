@@ -22,12 +22,12 @@ const ContactSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-primary font-mono text-sm tracking-widest uppercase mb-3">Contact</p>
-          <h2 className="text-4xl sm:text-5xl font-heading font-bold">
-            Let's <span className="text-gradient">Connect</span>
+          <p className="text-primary font-mono text-[10px] tracking-[0.5em] uppercase mb-4 opacity-40">06 // Communication Layer</p>
+          <h2 className="text-4xl sm:text-7xl font-heading font-black mb-8 uppercase tracking-tighter italic">
+            Establish <span className="text-red-600">Contact</span>
           </h2>
-          <p className="text-muted-foreground mt-4 max-w-md mx-auto">
-            Have a project in mind? Let's build something extraordinary together.
+          <p className="text-muted-foreground mt-4 max-w-lg mx-auto font-mono text-sm opacity-60">
+            Open a secure channel for project collaboration, research inquiries, or system integration.
           </p>
         </motion.div>
 
@@ -40,37 +40,37 @@ const ContactSection = () => {
         >
           <input
             type="text"
-            placeholder="Your Name"
+            placeholder="ORIGIN_IDENTIFIER (YOUR NAME)"
             required
-            className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
+            className="w-full px-6 py-4 rounded-none bg-black/40 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-red-600 transition-all text-xs font-mono uppercase tracking-widest"
           />
           <input
             type="email"
-            placeholder="Your Email"
+            placeholder="COMM_FREQUENCY (YOUR EMAIL)"
             required
-            className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
+            className="w-full px-6 py-4 rounded-none bg-black/40 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-red-600 transition-all text-xs font-mono uppercase tracking-widest"
           />
           <textarea
-            placeholder="Your Message"
+            placeholder="SIGNAL_CONTENT (YOUR MESSAGE)"
             rows={4}
             required
-            className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm resize-none"
+            className="w-full px-6 py-4 rounded-none bg-black/40 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-red-600 transition-all text-xs font-mono uppercase tracking-widest resize-none"
           />
           <button
             type="submit"
-            className="w-full py-3.5 rounded-lg bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/25 transition-all duration-300"
+            className="w-full py-5 bg-red-600 text-white font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-all duration-300"
           >
-            {sent ? "Message Sent! ✓" : (
-              <>Send Message <Send size={16} /></>
+            {sent ? "TRANSMISSION_SUCCESSFUL // CHANNEL_CLOSED" : (
+              <>INITIATE TRANSMISSION <Send size={14} /></>
             )}
           </button>
         </motion.form>
 
         <div className="flex items-center justify-center gap-6 mt-12">
           {[
-            { icon: Github, href: "#", label: "GitHub" },
-            { icon: Linkedin, href: "#", label: "LinkedIn" },
-            { icon: Twitter, href: "#", label: "Twitter" },
+            { icon: Github, href: "https://github.com/sowmiyan-s", label: "GitHub" },
+            { icon: Linkedin, href: "https://linkedin.com/in/sowmiyan-s", label: "LinkedIn" },
+            { icon: Twitter, href: "https://twitter.com/sowmiyan_s", label: "Twitter" },
           ].map(({ icon: Icon, href, label }) => (
             <a
               key={label}

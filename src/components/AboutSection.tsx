@@ -4,9 +4,9 @@ import { Zap, Code2, Layers } from "lucide-react";
 import ScrambleText from './ScrambleText';
 
 const stats = [
-  { label: "Projects Completed", value: "30+", icon: Layers },
-  { label: "Technologies Mastered", value: "20+", icon: Code2 },
-  { label: "Years Coding", value: "5+", icon: Zap },
+  { label: "Neural Nodes Deployed", value: "30+", icon: Layers },
+  { label: "Protocol Specializations", value: "20+", icon: Code2 },
+  { label: "System Uptime (Years)", value: "4+", icon: Zap },
 ];
 
 const AboutSection = () => {
@@ -41,7 +41,7 @@ const AboutSection = () => {
           </h2>
           <div className="max-w-3xl mx-auto text-muted-foreground text-lg leading-relaxed font-mono opacity-80 italic">
             <ScrambleText 
-              text="I'm an AI Engineer and Full Stack Developer passionate about building intelligent, scalable systems. From neural networks to production-grade web platforms, I bridge the gap between cutting-edge research and real-world impact." 
+              text="I am Sowmiyan S, an AI Engineer and Full Stack Developer dedicated to orchestrating intelligent, scalable architectures. My mission is to bridge the frontier of machine intelligence with the robustness of production-grade systems." 
               speed={0.2}
               delay={0.6}
             />
