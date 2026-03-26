@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
+import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import RadarLoader from './RadarLoader';
 
@@ -11,9 +12,12 @@ const WorkGrid = () => {
     useEffect(() => {
         const load = async () => {
             const data = await fetchRepos();
-            const hidden = JSON.parse(localStorage.getItem('hiddenProjects') || '[]');
-            const filtered = data.filter(repo => !hidden.includes(repo.id));
-            setProjects(filtered.slice(0, 6)); // Display first 6 active projects
+            const { data: hiddenRows } = await supabase
+                .from('hidden_projects')
+                .select('github_repo_id');
+            const hiddenIds = (hiddenRows || []).map(r => r.github_repo_id);
+            const filtered = data.filter(repo => !hiddenIds.includes(repo.id));
+            setProjects(filtered.slice(0, 6));
             setLoading(false);
         };
         load();
