@@ -1,72 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
+import { supabase } from '@/integrations/supabase/client';
 import TechNav from '@/components/TechNav';
 import Footer from '@/components/Footer';
 import CyberBackground from '@/components/CyberBackground';
 import PageHero from '@/components/PageHero';
 import { motion } from 'framer-motion';
 
-const defaultTechSkills = ['Python', 'JavaScript', 'React', 'Node.js', 'TensorFlow', 'PyTorch', 'AWS', 'Docker'];
-const defaultNonTechSkills = ['Problem Solving', 'Communication', 'Team Leadership', 'Project Management', 'Public Speaking'];
-
 const Admin = () => {
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [hiddenIds, setHiddenIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
-  const [techSkills, setTechSkills] = useState<string[]>([]);
-  const [nonTechSkills, setNonTechSkills] = useState<string[]>([]);
+  const [techSkills, setTechSkills] = useState<{ id: string; name: string }[]>([]);
+  const [nonTechSkills, setNonTechSkills] = useState<{ id: string; name: string }[]>([]);
   const [newTechSkill, setNewTechSkill] = useState('');
   const [newNonTechSkill, setNewNonTechSkill] = useState('');
 
-  useEffect(() => {
-    const load = async () => {
-      const data = await fetchRepos();
-      setRepos(data);
-      const saved = localStorage.getItem('hiddenProjects');
-      if (saved) setHiddenIds(JSON.parse(saved));
-      const savedTech = localStorage.getItem('techSkills');
-      setTechSkills(savedTech ? JSON.parse(savedTech) : defaultTechSkills);
-      const savedNonTech = localStorage.getItem('nonTechSkills');
-      setNonTechSkills(savedNonTech ? JSON.parse(savedNonTech) : defaultNonTechSkills);
-      setLoading(false);
-    };
-    load();
-  }, []);
+  const loadData = async () => {
+    const [repoData, { data: hiddenRows }, { data: skillRows }] = await Promise.all([
+      fetchRepos(),
+      supabase.from('hidden_projects').select('github_repo_id'),
+      supabase.from('skills').select('id, name, category'),
+    ]);
 
-  const toggleProject = (id: number) => {
-    const newHidden = hiddenIds.includes(id) ? hiddenIds.filter(hid => hid !== id) : [...hiddenIds, id];
-    setHiddenIds(newHidden);
-    localStorage.setItem('hiddenProjects', JSON.stringify(newHidden));
+    setRepos(repoData);
+    setHiddenIds((hiddenRows || []).map(r => r.github_repo_id));
+    setTechSkills((skillRows || []).filter(s => s.category === 'tech').map(s => ({ id: s.id, name: s.name })));
+    setNonTechSkills((skillRows || []).filter(s => s.category === 'non-tech').map(s => ({ id: s.id, name: s.name })));
+    setLoading(false);
   };
 
-  const addTechSkill = (e: React.FormEvent) => {
+  useEffect(() => { loadData(); }, []);
+
+  const toggleProject = async (id: number, repoName: string) => {
+    if (hiddenIds.includes(id)) {
+      await supabase.from('hidden_projects').delete().eq('github_repo_id', id);
+      setHiddenIds(prev => prev.filter(hid => hid !== id));
+    } else {
+      await supabase.from('hidden_projects').insert({ github_repo_id: id, repo_name: repoName });
+      setHiddenIds(prev => [...prev, id]);
+    }
+  };
+
+  const addSkill = async (e: React.FormEvent, category: 'tech' | 'non-tech') => {
     e.preventDefault();
-    if (!newTechSkill.trim()) return;
-    const updated = [...techSkills, newTechSkill.trim()];
-    setTechSkills(updated);
-    localStorage.setItem('techSkills', JSON.stringify(updated));
-    setNewTechSkill('');
+    const name = category === 'tech' ? newTechSkill.trim() : newNonTechSkill.trim();
+    if (!name) return;
+    const { data } = await supabase.from('skills').insert({ name, category }).select('id, name').single();
+    if (data) {
+      if (category === 'tech') {
+        setTechSkills(prev => [...prev, data]);
+        setNewTechSkill('');
+      } else {
+        setNonTechSkills(prev => [...prev, data]);
+        setNewNonTechSkill('');
+      }
+    }
   };
 
-  const removeTechSkill = (skill: string) => {
-    const updated = techSkills.filter(s => s !== skill);
-    setTechSkills(updated);
-    localStorage.setItem('techSkills', JSON.stringify(updated));
-  };
-
-  const addNonTechSkill = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newNonTechSkill.trim()) return;
-    const updated = [...nonTechSkills, newNonTechSkill.trim()];
-    setNonTechSkills(updated);
-    localStorage.setItem('nonTechSkills', JSON.stringify(updated));
-    setNewNonTechSkill('');
-  };
-
-  const removeNonTechSkill = (skill: string) => {
-    const updated = nonTechSkills.filter(s => s !== skill);
-    setNonTechSkills(updated);
-    localStorage.setItem('nonTechSkills', JSON.stringify(updated));
+  const removeSkill = async (id: string, category: 'tech' | 'non-tech') => {
+    await supabase.from('skills').delete().eq('id', id);
+    if (category === 'tech') {
+      setTechSkills(prev => prev.filter(s => s.id !== id));
+    } else {
+      setNonTechSkills(prev => prev.filter(s => s.id !== id));
+    }
   };
 
   if (loading) return (
@@ -89,7 +87,7 @@ const Admin = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="glass-strong p-8 flex flex-col gap-12"
+              className="border border-foreground/10 bg-background p-8 flex flex-col gap-12"
             >
               <div className="flex flex-col gap-2">
                 <h2 className="text-2xl font-heading text-primary uppercase">Skills Configuration</h2>
@@ -98,16 +96,16 @@ const Admin = () => {
 
               <div className="flex flex-col gap-6">
                 <h3 className="text-lg font-heading border-b border-foreground/10 pb-2">Technical Engine</h3>
-                <form onSubmit={addTechSkill} className="flex gap-4">
+                <form onSubmit={(e) => addSkill(e, 'tech')} className="flex gap-4">
                   <input type="text" value={newTechSkill} onChange={(e) => setNewTechSkill(e.target.value)} placeholder="Add Tech Skill..."
                     className="bg-foreground/5 border border-foreground/20 p-2 font-mono text-xs w-full focus:outline-none focus:border-primary text-foreground" />
                   <button type="submit" className="px-4 bg-primary/20 text-primary border border-primary hover:bg-primary hover:text-primary-foreground transition-colors text-xs font-mono uppercase">Add</button>
                 </form>
                 <div className="flex flex-wrap gap-2">
-                  {techSkills.map((skill, i) => (
-                    <div key={i} className="px-3 py-1 bg-foreground/5 border border-foreground/10 text-xs font-mono flex items-center gap-2 hover:border-primary transition-colors">
-                      <span>{skill}</span>
-                      <button onClick={() => removeTechSkill(skill)} className="text-primary opacity-50 hover:opacity-100 text-[10px]">X</button>
+                  {techSkills.map((skill) => (
+                    <div key={skill.id} className="px-3 py-1 bg-foreground/5 border border-foreground/10 text-xs font-mono flex items-center gap-2 hover:border-primary transition-colors">
+                      <span>{skill.name}</span>
+                      <button onClick={() => removeSkill(skill.id, 'tech')} className="text-primary opacity-50 hover:opacity-100 text-[10px]">X</button>
                     </div>
                   ))}
                 </div>
@@ -115,16 +113,16 @@ const Admin = () => {
 
               <div className="flex flex-col gap-6">
                 <h3 className="text-lg font-heading border-b border-foreground/10 pb-2">Soft Protocol</h3>
-                <form onSubmit={addNonTechSkill} className="flex gap-4">
+                <form onSubmit={(e) => addSkill(e, 'non-tech')} className="flex gap-4">
                   <input type="text" value={newNonTechSkill} onChange={(e) => setNewNonTechSkill(e.target.value)} placeholder="Add Non-Tech Skill..."
                     className="bg-foreground/5 border border-foreground/20 p-2 font-mono text-xs w-full focus:outline-none focus:border-primary text-foreground" />
                   <button type="submit" className="px-4 bg-primary/20 text-primary border border-primary hover:bg-primary hover:text-primary-foreground transition-colors text-xs font-mono uppercase">Add</button>
                 </form>
                 <div className="flex flex-wrap gap-2">
-                  {nonTechSkills.map((skill, i) => (
-                    <div key={i} className="px-3 py-1 bg-foreground/5 border border-foreground/10 text-xs font-mono flex items-center gap-2 hover:border-primary transition-colors">
-                      <span>{skill}</span>
-                      <button onClick={() => removeNonTechSkill(skill)} className="text-primary opacity-50 hover:opacity-100 text-[10px]">X</button>
+                  {nonTechSkills.map((skill) => (
+                    <div key={skill.id} className="px-3 py-1 bg-foreground/5 border border-foreground/10 text-xs font-mono flex items-center gap-2 hover:border-primary transition-colors">
+                      <span>{skill.name}</span>
+                      <button onClick={() => removeSkill(skill.id, 'non-tech')} className="text-primary opacity-50 hover:opacity-100 text-[10px]">X</button>
                     </div>
                   ))}
                 </div>
@@ -136,11 +134,11 @@ const Admin = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="glass-strong p-8 flex flex-col gap-8"
+              className="border border-foreground/10 bg-background p-8 flex flex-col gap-8"
             >
               <div className="flex flex-col gap-2">
-                <h2 className="text-2xl font-heading text-primary uppercase">Project Visibility Matrix</h2>
-                <p className="text-xs font-mono text-muted-foreground uppercase">Toggle repository visibility from central root.</p>
+                <h2 className="text-2xl font-heading text-primary uppercase">Project Visibility</h2>
+                <p className="text-xs font-mono text-muted-foreground uppercase">Toggle repository visibility.</p>
               </div>
 
               <div className="flex flex-col gap-4 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
@@ -149,12 +147,12 @@ const Admin = () => {
                   return (
                     <div key={repo.id} className={`flex flex-col gap-2 p-4 border transition-all ${isHidden ? 'border-foreground/5 opacity-40 bg-foreground/5' : 'border-primary/30 bg-primary/5 hover:border-primary/60'}`}>
                       <div className="flex justify-between items-start">
-                        <h3 className="font-heading font-black uppercase tracking-tight text-sm flex-1">{repo.name.replace(/-/g, ' ')}</h3>
-                        {isHidden && <span className="text-[8px] font-mono border border-foreground/20 px-1 uppercase opacity-40 text-primary ml-2">Archived</span>}
+                        <h3 className="font-heading font-bold uppercase tracking-tight text-sm flex-1">{repo.name.replace(/-/g, ' ')}</h3>
+                        {isHidden && <span className="text-[8px] font-mono border border-foreground/20 px-1 uppercase opacity-40 text-primary ml-2">Hidden</span>}
                       </div>
-                      <button onClick={() => toggleProject(repo.id)}
-                        className={`w-full py-2 mt-2 font-mono text-[10px] uppercase border transition-all ${isHidden ? 'border-foreground/10 text-foreground/40 hover:border-primary hover:text-primary' : 'border-primary text-primary bg-background hover:bg-primary hover:text-primary-foreground'}`}>
-                        {isHidden ? 'Restore Signal' : 'Deactivate Signal'}
+                      <button onClick={() => toggleProject(repo.id, repo.name)}
+                        className={`w-full py-2 mt-2 font-mono text-[10px] uppercase border transition-all ${isHidden ? 'border-foreground/10 text-muted-foreground hover:border-primary hover:text-primary' : 'border-primary text-primary bg-background hover:bg-primary hover:text-primary-foreground'}`}>
+                        {isHidden ? 'Show Project' : 'Hide Project'}
                       </button>
                     </div>
                   );
