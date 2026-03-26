@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      hidden_projects: {
+        Row: {
+          created_at: string
+          github_repo_id: number
+          id: string
+          repo_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          github_repo_id: number
+          id?: string
+          repo_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          github_repo_id?: number
+          id?: string
+          repo_name?: string | null
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
