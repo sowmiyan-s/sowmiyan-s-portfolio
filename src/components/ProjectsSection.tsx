@@ -1,87 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Github, Star, GitFork } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { fetchRepos } from "@/lib/github";
+import { supabase } from "@/integrations/supabase/client";
 import RadarLoader from "./RadarLoader";
-import ScrambleText from "./ScrambleText";
-
-const ProjectNode = ({ project, index }: { project: any, index: number }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="relative pl-12 md:pl-24 mb-16 last:mb-0 group"
-    >
-      {/* Connector Line */}
-      <div className="absolute left-0 top-8 w-12 md:w-24 h-[1px] bg-red-600/30 group-hover:bg-red-600 transition-colors" />
-
-      {/* Node Pulse */}
-      <div className="absolute left-[-5px] top-[27px] w-2.5 h-2.5 bg-red-600 rounded-full z-10 shadow-[0_0_10px_rgba(255,0,0,0.5)] group-hover:scale-150 transition-transform" />
-
-      <a
-        href={project.github}
-        target="_blank"
-        rel="noreferrer"
-        className="block group-hover:translate-x-2 transition-transform duration-500"
-      >
-        <div className="bg-[#0a0a0a]/80 border border-white/5 group-hover:border-red-600/50 p-6 md:p-8 rounded-2xl md:rounded-3xl backdrop-blur-md relative overflow-hidden max-w-4xl shadow-2xl">
-          {/* Metadata Overlay */}
-          <div className="absolute top-4 right-6 text-[8px] font-mono text-white/10 group-hover:text-red-600/30 uppercase tracking-[0.4em] hidden md:block">
-            ARCHIVE_ID_{project.id}
-          </div>
-
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-mono text-red-600 font-bold tracking-[0.3em] uppercase mb-1 flex items-center gap-2">
-                <span className="w-1 h-1 bg-red-600 rounded-full" />
-                {project.date} // NODE_ACCESS_STABLE
-              </span>
-              <h3 className="text-2xl md:text-4xl font-heading font-black text-white uppercase tracking-tighter transition-colors group-hover:text-red-500 leading-none">
-                {project.title}
-              </h3>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-4 py-2 px-4 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono text-white/40 uppercase tracking-widest group-hover:border-red-600/30 transition-all">
-                {project.stars > 0 && (
-                  <span className="flex items-center gap-1.5"><Star size={10} className="text-yellow-500" /> {project.stars}</span>
-                )}
-                {project.forks > 0 && (
-                  <span className="flex items-center gap-1.5"><GitFork size={10} /> {project.forks}</span>
-                )}
-                <div className="w-px h-3 bg-white/10" />
-                <span className="text-red-600 font-bold">DEPLOYED</span>
-              </div>
-              <div className="p-3 rounded-full bg-red-600/10 border border-red-600/20 text-red-500 group-hover:bg-red-600 group-hover:text-white transition-all shadow-lg shadow-red-600/0 group-hover:shadow-red-600/20">
-                <Github size={18} />
-              </div>
-            </div>
-          </div>
-
-          <p className="text-white/40 text-sm md:text-base leading-relaxed mb-8 max-w-2xl font-light italic">
-            {project.description}
-          </p>
-
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map((t: string) => (
-              <span key={t} className="text-[9px] px-3 py-1 bg-white/[0.03] border border-white/10 rounded-md font-mono text-white/30 uppercase tracking-[0.2em] group-hover:border-white/20 transition-all">
-                {t}
-              </span>
-            ))}
-          </div>
-
-          {/* Tactical Grid Overlay */}
-          <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-tactical-grid -z-10" />
-        </div>
-      </a>
-    </motion.div>
-  );
-};
 
 const ProjectsSection = () => {
-  const [groupedProjects, setGroupedProjects] = useState<Record<string, any[]>>({});
+  const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -89,39 +14,33 @@ const ProjectsSection = () => {
       setLoading(true);
       try {
         const data = await fetchRepos();
-        const saved = localStorage.getItem('hiddenProjects');
-        const hiddenIds = saved ? JSON.parse(saved) : [];
+
+        // Fetch hidden projects from database
+        const { data: hiddenRows } = await supabase
+          .from('hidden_projects')
+          .select('github_repo_id');
+        const hiddenIds = (hiddenRows || []).map(r => r.github_repo_id);
+
         const visible = data.filter((r) => !hiddenIds.includes(r.id));
 
         const formatted = visible
           .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-          .map(repo => {
-            const dateObj = new Date(repo.updated_at);
-            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-            const year = dateObj.getFullYear().toString();
+          .map(repo => ({
+            id: repo.id,
+            name: repo.name,
+            title: repo.name.replace(/-/g, ' '),
+            description: repo.description || "No description available.",
+            language: repo.language || 'Code',
+            github: repo.html_url,
+            stars: repo.stargazers_count,
+            forks: repo.forks_count,
+            updated: new Date(repo.updated_at).toLocaleDateString('en-US', {
+              month: 'short',
+              year: 'numeric'
+            }),
+          }));
 
-            return {
-              id: repo.id,
-              year,
-              name: repo.name,
-              title: repo.name.replace(/-/g, ' '),
-              date: `${months[dateObj.getMonth()]} ${year}`,
-              description: repo.description || "System logs indicate high-density neural architecture. Initializing deep scan of repository kernel...",
-              tech: repo.language ? [repo.language] : ['System'],
-              github: repo.html_url,
-              stars: repo.stargazers_count,
-              forks: repo.forks_count
-            };
-          });
-
-        // Group by year
-        const groups = formatted.reduce((acc, curr) => {
-          if (!acc[curr.year]) acc[curr.year] = [];
-          acc[curr.year].push(curr);
-          return acc;
-        }, {} as Record<string, any[]>);
-
-        setGroupedProjects(groups);
+        setProjects(formatted);
       } catch (err) {
         console.error("Failed to load projects:", err);
       } finally {
@@ -131,46 +50,62 @@ const ProjectsSection = () => {
     load();
   }, []);
 
-  const years = Object.keys(groupedProjects).sort((a, b) => b.localeCompare(a));
-
   return (
-    <section id="projects-list" className="py-20 bg-black tactical-grid relative z-10 border-t border-white/5">
-      <div className="container mx-auto px-6 max-w-7xl">
+    <section id="projects-list" className="py-20 relative z-10 border-t border-foreground/5">
+      <div className="container mx-auto px-6 max-w-6xl">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-60 gap-12">
+          <div className="flex flex-col items-center justify-center py-40 gap-8">
             <RadarLoader />
-            <p className="font-mono text-[10px] uppercase tracking-[1em] text-red-600 animate-pulse text-center">Reconstructing Timeline Axis</p>
+            <p className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">Loading projects...</p>
           </div>
-        ) : years.length > 0 ? (
-          <div className="relative">
-            {/* Main Vertical Timeline Axis */}
-            <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-red-600 via-red-600/20 to-transparent ml-[-1px]" />
-
-            {years.map((year) => (
-              <div key={year} className="mb-24 last:mb-0">
-                {/* Year Marker */}
-                <div className="relative pl-12 md:pl-24 mb-12">
-                  <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-black border-2 border-red-600 rounded-full z-20 shadow-[0_0_15px_rgba(255,0,0,0.8)]" />
-                  <div className="flex items-center gap-6">
-                    <h4 className="text-4xl md:text-7xl font-heading font-black text-white/20 tracking-tighter leading-none select-none">
-                      <ScrambleText text={`Year ${year}`} />
-                    </h4>
-                    <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+        ) : projects.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.map((project, i) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05, duration: 0.4 }}
+                className="border border-foreground/10 bg-background p-6 md:p-8 flex flex-col justify-between gap-6 hover:border-primary/40 transition-colors"
+              >
+                {/* Header */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-primary uppercase tracking-widest">{project.language}</span>
+                    <span className="text-[10px] font-mono text-muted-foreground">{project.updated}</span>
                   </div>
+                  <h3 className="text-xl md:text-2xl font-heading font-bold uppercase tracking-tight text-foreground leading-tight">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                    {project.description}
+                  </p>
                 </div>
 
-                <div className="flex flex-col">
-                  {groupedProjects[year].map((project, i) => (
-                    <ProjectNode key={project.id} project={project} index={i} />
-                  ))}
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-4 border-t border-foreground/5">
+                  <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
+                    {project.stars > 0 && <span>★ {project.stars}</span>}
+                    {project.forks > 0 && <span>⑂ {project.forks}</span>}
+                  </div>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-xs font-mono text-primary hover:text-foreground transition-colors uppercase tracking-wider"
+                  >
+                    View on GitHub
+                    <ExternalLink size={12} />
+                  </a>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-40 border-2 border-dashed border-white/10 rounded-[3rem] bg-white/[0.01]">
-            <p className="font-mono text-xl text-red-600 uppercase tracking-widest mb-3 font-black">Timeline Axis Offline</p>
-            <p className="text-[10px] text-white/30 uppercase tracking-[0.5em]">No significant events found in the public repository archive.</p>
+          <div className="text-center py-40 border border-dashed border-foreground/10">
+            <p className="font-mono text-lg text-primary uppercase tracking-widest mb-2">No Projects Found</p>
+            <p className="text-sm text-muted-foreground">No repositories available in the public archive.</p>
           </div>
         )}
       </div>
