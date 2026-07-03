@@ -41,12 +41,35 @@
 @layer base {
   * {
     @apply border-border/20;
-    cursor: none !important; /* System Override */
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Custom cursor only on precise pointer (desktop). Mobile keeps native. */
+  @media (hover: hover) and (pointer: fine) {
+    * {
+      cursor: none !important;
+    }
   }
 
   body {
     @apply bg-background text-foreground font-body antialiased overflow-x-hidden;
     letter-spacing: -0.02em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -59,7 +82,7 @@
   }
 
   ::-webkit-scrollbar {
-    width: 2px; /* Very thin scrollbar */
+    width: 2px;
   }
   ::-webkit-scrollbar-track {
     background: black;
@@ -68,6 +91,7 @@
     background: #FF0000;
   }
 }
+
 
 @layer utilities {
   .grid-bg {
