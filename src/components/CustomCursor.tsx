@@ -71,8 +71,11 @@ const CustomCursor = () => {
         };
     }, []);
 
+    if (!enabled) return null;
+
     return (
-        <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden">
+        <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden hidden md:block">
+
             {/* Bullet Impacts & Tracers */}
             {shots.map(shot => (
                 <div key={shot.id} className="absolute inset-0 pointer-events-none">
