@@ -321,6 +321,32 @@ const Admin = () => {
                                 </motion.section>
                             ))}
                         </div>
+
+                        {/* Site Settings */}
+                        <motion.section
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="border border-white/10 bg-black/40 backdrop-blur-md p-6 flex flex-col gap-5"
+                        >
+                            <div>
+                                <h2 className="text-xl font-heading font-black uppercase text-red-500">Site Settings</h2>
+                                <p className="text-[10px] font-mono opacity-60 uppercase tracking-widest">Global visual toggles.</p>
+                            </div>
+                            {[
+                                { key: 'show_dividers', label: 'Show name-ticker dividers between home sections', value: showDividers },
+                                { key: 'show_global_ticker', label: 'Show global name-ticker at bottom of every page', value: showGlobalTicker },
+                            ].map(s => (
+                                <label key={s.key} className="flex items-center justify-between gap-4 p-3 border border-white/10 hover:border-red-500/50 cursor-pointer">
+                                    <span className="text-xs font-mono">{s.label}</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={s.value}
+                                        onChange={(e) => setSetting(s.key, e.target.checked)}
+                                        className="w-4 h-4 accent-red-500"
+                                    />
+                                </label>
+                            ))}
+                        </motion.section>
                     </div>
                 </div>
             </main>
