@@ -260,20 +260,30 @@ const Admin = () => {
                                     <div className="col-span-full text-center py-12 text-white/40 font-mono text-xs uppercase">No repositories match.</div>
                                 ) : filteredRepos.map(repo => {
                                     const isHidden = hiddenIds.includes(repo.id);
+                                    const isFeatured = featuredIds.includes(repo.id);
                                     return (
-                                        <div key={repo.id} className={`flex flex-col gap-3 p-4 border transition-all ${isHidden ? 'border-white/5 opacity-50 bg-white/5' : 'border-red-500/30 bg-red-500/5 hover:border-red-500'}`}>
+                                        <div key={repo.id} className={`flex flex-col gap-3 p-4 border transition-all ${isHidden ? 'border-white/5 opacity-50 bg-white/5' : isFeatured ? 'border-yellow-500/50 bg-yellow-500/5' : 'border-red-500/30 bg-red-500/5 hover:border-red-500'}`}>
                                             <div className="flex justify-between items-start gap-2">
-                                                <h3 className="font-heading font-bold uppercase tracking-tight text-xs flex-1 leading-tight">{repo.name.replace(/-/g, ' ')}</h3>
+                                                <h3 className="font-heading font-bold uppercase tracking-tight text-xs flex-1 leading-tight">{formatRepoName(repo.name)}</h3>
                                                 {isHidden ? <EyeOff size={12} className="text-white/40 shrink-0" /> : <Eye size={12} className="text-red-500 shrink-0" />}
                                             </div>
                                             <div className="flex items-center gap-3 text-[9px] font-mono opacity-60">
                                                 {repo.language && <span>{repo.language}</span>}
                                                 {repo.stargazers_count > 0 && <span className="flex items-center gap-1"><Star size={9} /> {repo.stargazers_count}</span>}
+                                                {isFeatured && <span className="text-yellow-500">★ FEATURED</span>}
                                             </div>
-                                            <button onClick={() => toggleProject(repo.id, repo.name)}
-                                                className={`w-full py-2 font-mono text-[9px] uppercase tracking-widest border transition-all ${isHidden ? 'border-white/10 text-white/60 hover:border-red-500 hover:text-red-500' : 'border-red-500 text-red-500 hover:bg-red-500 hover:text-white'}`}>
-                                                {isHidden ? 'Show on Site' : 'Hide from Site'}
-                                            </button>
+                                            <div className="flex gap-1">
+                                                <button onClick={() => toggleProject(repo.id, repo.name)}
+                                                    className={`flex-1 py-2 font-mono text-[9px] uppercase tracking-widest border transition-all ${isHidden ? 'border-white/10 text-white/60 hover:border-red-500 hover:text-red-500' : 'border-red-500 text-red-500 hover:bg-red-500 hover:text-white'}`}>
+                                                    {isHidden ? 'Show' : 'Hide'}
+                                                </button>
+                                                {!isHidden && (
+                                                    <button onClick={() => toggleFeatured(repo)}
+                                                        className={`flex-1 py-2 font-mono text-[9px] uppercase tracking-widest border transition-all ${isFeatured ? 'border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black' : 'border-white/10 text-white/60 hover:border-yellow-500 hover:text-yellow-500'}`}>
+                                                        {isFeatured ? '★ Unfeature' : '☆ Feature'}
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                     );
                                 })}
