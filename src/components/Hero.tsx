@@ -28,11 +28,11 @@ const Hero = () => {
                     </div>
 
                     <div className="text-sm md:text-base leading-relaxed font-mono mt-4 max-w-2xl text-white/90 bg-black/65 backdrop-blur-[3px] p-5 border border-white/5 text-left">
-                        <ScrambleText 
-                          text="Final-year B.Tech student passionate about AI, Machine Learning, and application development. Skilled in building intelligent solutions using modern tools and cloud platforms." 
-                          triggerOnView 
+                        <ScrambleText
+                          text="Final-year B.Tech AI & Data Science student. Building LLM applications, multi-agent systems and production-ready web apps."
+                          triggerOnView
                           speed={0.2}
-                          delay={1.6} 
+                          delay={1.6}
                         />
                     </div>
                 </div>

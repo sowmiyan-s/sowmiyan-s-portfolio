@@ -14,6 +14,8 @@ import ProjectDetail from "./pages/ProjectDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CustomCursor from "@/components/CustomCursor";
 import RadarLoader from "@/components/RadarLoader";
+import NameTicker from "@/components/NameTicker";
+import { useSiteSettings } from "@/lib/siteSettings";
 import { motion, AnimatePresence } from "framer-motion";
 
 const queryClient = new QueryClient();
@@ -81,11 +83,22 @@ const App = () => {
                         <Route path="/contact" element={<ContactPage />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/project/:id" element={<ProjectDetail />} />
-                        <Route path="*" element={<NotFound />} /> 
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
+                    <GlobalTicker />
                 </BrowserRouter>
             </TooltipProvider>
         </QueryClientProvider>
+    );
+};
+
+const GlobalTicker = () => {
+    const { show_global_ticker } = useSiteSettings();
+    if (!show_global_ticker) return null;
+    return (
+        <div className="fixed bottom-0 left-0 right-0 z-[9999] pointer-events-none">
+            <NameTicker variant="divider" />
+        </div>
     );
 };
 

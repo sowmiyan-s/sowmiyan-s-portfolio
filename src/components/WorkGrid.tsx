@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
+import { supabase } from '@/integrations/supabase/client';
+import { formatRepoName } from '@/lib/formatRepo';
 import { useNavigate } from 'react-router-dom';
 import RadarLoader from './RadarLoader';
 
@@ -9,14 +11,16 @@ const WorkGrid = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const load = async () => {
-            const data = await fetchRepos();
-            const hidden = JSON.parse(localStorage.getItem('hiddenProjects') || '[]');
+        (async () => {
+            const [data, hiddenRes] = await Promise.all([
+                fetchRepos(),
+                supabase.from('hidden_projects').select('github_repo_id'),
+            ]);
+            const hidden = (hiddenRes.data ?? []).map(r => r.github_repo_id);
             const filtered = data.filter(repo => !hidden.includes(repo.id));
-            setProjects(filtered.slice(0, 6)); // Display first 6 active projects
+            setProjects(filtered.slice(0, 6));
             setLoading(false);
-        };
-        load();
+        })();
     }, []);
 
     if (loading) return (
@@ -48,7 +52,7 @@ const WorkGrid = () => {
                             <div className="flex justify-between items-start mb-12 relative z-10">
                                 <div className="flex flex-col">
                                     <span className="text-xs font-mono text-stone-600 mb-1 leading-none">{String(i + 1).padStart(2, '0')}</span>
-                                    <h3 className="text-xl font-heading font-bold uppercase transition-all tracking-tight group-hover:text-red-600">{repo.name.replace(/-/g, '_')}</h3>
+                                    <h3 className="text-xl font-heading font-bold uppercase transition-all tracking-tight group-hover:text-red-600">{formatRepoName(repo.name)}</h3>
                                 </div>
                                 <div className="flex flex-col text-right">
                                      <span className="text-[8px] font-mono opacity-20 uppercase">Core_Lang</span>

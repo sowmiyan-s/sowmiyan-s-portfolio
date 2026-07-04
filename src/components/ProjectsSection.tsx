@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Github, Star, GitFork } from "lucide-react";
 import { fetchRepos } from "@/lib/github";
+import { supabase } from "@/integrations/supabase/client";
+import { formatRepoName } from "@/lib/formatRepo";
 import RadarLoader from "./RadarLoader";
 import ScrambleText from "./ScrambleText";
 
@@ -85,9 +87,11 @@ const ProjectsSection = () => {
     const load = async () => {
       setLoading(true);
       try {
-        const data = await fetchRepos();
-        const saved = localStorage.getItem('hiddenProjects');
-        const hiddenIds = saved ? JSON.parse(saved) : [];
+        const [data, hiddenRes] = await Promise.all([
+          fetchRepos(),
+          supabase.from('hidden_projects').select('github_repo_id'),
+        ]);
+        const hiddenIds = (hiddenRes.data ?? []).map(r => r.github_repo_id);
         const visible = data.filter((r) => !hiddenIds.includes(r.id));
 
         const formatted = visible
@@ -101,9 +105,9 @@ const ProjectsSection = () => {
               id: repo.id,
               year,
               name: repo.name,
-              title: repo.name.replace(/-/g, ' '),
+              title: formatRepoName(repo.name),
               date: `${months[dateObj.getMonth()]} ${year}`,
-              description: repo.description || "Project repository description.",
+              description: repo.description || "No description provided.",
               tech: repo.language ? [repo.language] : ['System'],
               github: repo.html_url,
               stars: repo.stargazers_count,

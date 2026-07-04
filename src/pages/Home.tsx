@@ -8,12 +8,16 @@ import BlogSection from "@/components/BlogSection";
 import SkillsSection from "@/components/SkillsSection";
 import HireMeSection from "@/components/HireMeSection";
 import ContentCreationSection from "@/components/ContentCreationSection";
-import MarqueeSection from "@/components/MarqueeSection";
 import PopularProjectsSlider from "@/components/PopularProjectsSlider";
 import Pattern from "@/components/Pattern";
 import SEOKeywords from "@/components/SEOKeywords";
+import NameTicker from "@/components/NameTicker";
+import { useSiteSettings } from "@/lib/siteSettings";
 
 const Home = () => {
+    const { show_dividers } = useSiteSettings();
+    const Divider = () => (show_dividers ? <NameTicker variant="divider" /> : null);
+
     return (
         <div className="relative min-h-screen bg-black text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
             <SEOKeywords />
@@ -24,18 +28,26 @@ const Home = () => {
                 <div className="relative w-full z-[1] flex items-center min-h-screen">
                     <Hero />
                 </div>
-                
+
+                <Divider />
+
                 <div className="relative w-full z-[2] border-t border-white/5">
                     <SkillsSection />
                 </div>
+
+                <Divider />
 
                 <div className="relative w-full z-[3] border-t border-white/5">
                     <BlogSection />
                 </div>
 
+                <Divider />
+
                 <div id="popular-projects-slider" className="relative bg-transparent w-full z-[3.5] border-y border-white/5">
                     <PopularProjectsSlider />
                 </div>
+
+                <Divider />
 
                 <Pattern>
                     <div className="relative bg-transparent flex items-center justify-center min-h-screen w-full z-[4] border-t border-white/5 py-24 md:py-32">
@@ -43,17 +55,12 @@ const Home = () => {
                     </div>
                 </Pattern>
 
+                <Divider />
+
                 <div className="relative w-full z-[5] bg-transparent flex items-center py-24 border-t border-white/5">
                     <HireMeSection />
                 </div>
 
-                <div className="relative z-[10] -mt-16 w-full pointer-events-none">
-                    <div className="h-0 flex items-center">
-                        <MarqueeSection />
-                    </div>
-                </div>
-
-                
                 <div className="relative z-[7] bg-black w-full">
                     <Footer />
                 </div>
