@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
 import { supabase } from '@/integrations/supabase/client';
+import { formatRepoName } from '@/lib/formatRepo';
 import TechNav from '@/components/TechNav';
 import Footer from '@/components/Footer';
 import CyberBackground from '@/components/CyberBackground';
@@ -18,6 +19,7 @@ const Admin = () => {
 
     const [repos, setRepos] = useState<GitHubRepo[]>([]);
     const [hiddenIds, setHiddenIds] = useState<number[]>([]);
+    const [featuredIds, setFeaturedIds] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
     const [techSkills, setTechSkills] = useState<{ id: string; name: string }[]>([]);
     const [nonTechSkills, setNonTechSkills] = useState<{ id: string; name: string }[]>([]);
@@ -25,19 +27,45 @@ const Admin = () => {
     const [newNonTechSkill, setNewNonTechSkill] = useState('');
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState<"all" | "visible" | "hidden">("all");
+    const [showDividers, setShowDividers] = useState(true);
+    const [showGlobalTicker, setShowGlobalTicker] = useState(true);
 
     const loadData = async () => {
         setLoading(true);
-        const [repoData, { data: hiddenRows }, { data: skillRows }] = await Promise.all([
+        const [repoData, hiddenRes, skillRes, featuredRes, settingsRes] = await Promise.all([
             fetchRepos(),
             supabase.from('hidden_projects').select('github_repo_id'),
             supabase.from('skills').select('id, name, category'),
+            supabase.from('featured_projects').select('github_repo_id'),
+            supabase.from('site_settings').select('key, value'),
         ]);
         setRepos(repoData);
-        setHiddenIds((hiddenRows || []).map(r => r.github_repo_id));
-        setTechSkills((skillRows || []).filter(s => s.category === 'tech').map(s => ({ id: s.id, name: s.name })));
-        setNonTechSkills((skillRows || []).filter(s => s.category === 'non-tech').map(s => ({ id: s.id, name: s.name })));
+        setHiddenIds((hiddenRes.data ?? []).map((r: any) => r.github_repo_id));
+        setFeaturedIds((featuredRes.data ?? []).map((r: any) => r.github_repo_id));
+        setTechSkills((skillRes.data ?? []).filter((s: any) => s.category === 'tech').map((s: any) => ({ id: s.id, name: s.name })));
+        setNonTechSkills((skillRes.data ?? []).filter((s: any) => s.category === 'non-tech').map((s: any) => ({ id: s.id, name: s.name })));
+        for (const row of settingsRes.data ?? []) {
+            if (row.key === 'show_dividers') setShowDividers(!!row.value);
+            if (row.key === 'show_global_ticker') setShowGlobalTicker(!!row.value);
+        }
         setLoading(false);
+    };
+
+    const toggleFeatured = async (repo: GitHubRepo) => {
+        if (featuredIds.includes(repo.id)) {
+            await supabase.from('featured_projects').delete().eq('github_repo_id', repo.id);
+            setFeaturedIds(prev => prev.filter(id => id !== repo.id));
+        } else {
+            if (featuredIds.length >= 3) { alert('Max 3 featured projects. Unfeature one first.'); return; }
+            await supabase.from('featured_projects').insert({ github_repo_id: repo.id, repo_name: repo.name, position: featuredIds.length });
+            setFeaturedIds(prev => [...prev, repo.id]);
+        }
+    };
+
+    const setSetting = async (key: string, value: boolean) => {
+        await supabase.from('site_settings').upsert({ key, value: value as any, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+        if (key === 'show_dividers') setShowDividers(value);
+        if (key === 'show_global_ticker') setShowGlobalTicker(value);
     };
 
     useEffect(() => { if (authed) loadData(); }, [authed]);
