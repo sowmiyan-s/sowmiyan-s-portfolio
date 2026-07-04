@@ -51,7 +51,7 @@ const Home = () => {
 
                 <MarqueeSection />
 
-                <div className="relative w-full z-[5] bg-transparent flex items-center py-6 md:py-8">
+                <div className="relative w-full z-[5] bg-transparent">
                     <HireMeSection />
                 </div>
 

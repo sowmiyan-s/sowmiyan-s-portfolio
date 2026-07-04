@@ -6,12 +6,14 @@ import ScrambleText from './ScrambleText';
 
 const HireMeSection = () => {
     return (
-        <section className="relative w-full min-h-[65vh] py-12 md:py-16 px-4 sm:px-6 bg-black z-10 flex flex-col items-center justify-center">
-            <div className="absolute left-0 top-0 w-full h-[calc(100%+6rem)] -translate-y-12 pointer-events-none z-20 overflow-visible">
+        <section className="relative w-full min-h-[65vh] py-12 md:py-16 px-4 sm:px-6 bg-transparent z-10 flex flex-col items-center justify-center overflow-hidden">
+            {/* Background pattern + semi-transparent fix layer */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
                 <TopographicBackground />
             </div>
 
-            <div className="relative z-30 max-w-5xl w-full mx-auto flex flex-col items-center gap-10 md:gap-14 text-center">
+            <div className="relative z-[2] max-w-5xl w-full mx-auto flex flex-col items-center gap-10 md:gap-14 text-center">
+
                 <div className="flex flex-col gap-4 items-center">
                     <span className="text-[10px] md:text-xs opacity-50 font-mono tracking-[0.4em] uppercase text-white">
                         Open to Opportunities

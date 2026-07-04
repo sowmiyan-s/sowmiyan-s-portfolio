@@ -37,7 +37,8 @@ const MarqueeSection = () => {
     });
 
     return (
-        <section className="relative py-3 overflow-hidden bg-white border-t border-b border-slate-200/60">
+        <section className="relative py-3 overflow-hidden bg-white border-t border-b border-slate-200/60 z-[9999]">
+
             <div className="relative overflow-hidden">
                 <motion.div
                     className="flex flex-nowrap whitespace-nowrap text-3xl md:text-4xl lg:text-5xl font-black text-red-600 leading-tight"
