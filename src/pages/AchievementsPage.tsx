@@ -6,6 +6,7 @@ import CyberBackground from '@/components/CyberBackground';
 import PageHero from '@/components/PageHero';
 import { certificatesList, Certificate } from '@/lib/certificates';
 import EbookShowcase from '@/components/EbookShowcase';
+import RedCrackPattern from '@/components/RedCrackPattern';
 
 const achievements = [
   { type: 'PATENT', title: 'SMART DUSTBIN', desc: 'Integrated IoT-based waste monitoring & automated collection protocol.', icon: '⚙️' },
@@ -111,8 +112,9 @@ const AchievementsPage = () => {
         <EbookShowcase />
 
         {/* Certifications */}
-        <section className="px-6 py-16 border-t border-foreground/5">
-          <div className="max-w-7xl mx-auto">
+        <RedCrackPattern>
+          <section className="px-6 py-16 border-t border-foreground/5 relative z-10">
+            <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <motion.h2
                 initial={{ opacity: 0 }}
@@ -174,6 +176,7 @@ const AchievementsPage = () => {
             )}
           </div>
         </section>
+        </RedCrackPattern>
 
         {/* Education */}
         <section className="px-6 py-16 border-t border-foreground/5">

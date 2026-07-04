@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
-import { Github, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { Github, ChevronRight } from 'lucide-react';
 import ScrambleText from './ScrambleText';
 
 const ProjectSlideshow = () => {
@@ -12,24 +13,23 @@ const ProjectSlideshow = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await fetchRepos();
-        const savedFeatured = localStorage.getItem('featuredProjects');
-        
-        let featuredIds: any[] = [];
-        try {
-          featuredIds = savedFeatured ? JSON.parse(savedFeatured) : [];
-        } catch (e) {
-          console.error("Malformed featuredProjects in localStorage", e);
+        const [data, featuredRes, hiddenRes] = await Promise.all([
+          fetchRepos(),
+          supabase.from('featured_projects').select('github_repo_id'),
+          supabase.from('hidden_projects').select('github_repo_id'),
+        ]);
+
+        const hiddenIds = (hiddenRes.data ?? []).map((row: any) => row.github_repo_id);
+        const featuredIds = (featuredRes.data ?? []).map((row: any) => row.github_repo_id);
+        const visibleRepos = data.filter(repo => !hiddenIds.includes(repo.id));
+
+        let filtered = visibleRepos.filter(repo => featuredIds.includes(repo.id));
+        if (!filtered.length) {
+          filtered = visibleRepos
+            .sort((a, b) => b.stargazers_count - a.stargazers_count)
+            .slice(0, 3);
         }
 
-        // Defensive normalization of IDs
-        const normalizedIds = featuredIds.map(id => Number(id)).filter(id => !isNaN(id));
-        
-        const filtered = data.filter(repo => normalizedIds.includes(Number(repo.id)));
-        
-        // Final fallback: if IDs are selected but no matches found in this fetch, maybe try matching by name as backup?
-        // But ID should be stable.
-        
         setFeaturedProjects(filtered);
       } catch (err) {
         console.error("Failed to fetch featured projects:", err);

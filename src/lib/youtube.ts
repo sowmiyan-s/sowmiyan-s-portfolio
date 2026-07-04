@@ -10,17 +10,57 @@ export interface YouTubeVideo {
   duration?: string;
 }
 
+const CHANNEL_ID = "UCJKa8oXWMoHYh1qxTsPeQBw";
+const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+
+function parseYouTubeFeedXml(xml: string): YouTubeVideo[] {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xml, "application/xml");
+  const entries = Array.from(doc.querySelectorAll("entry")).slice(0, 12);
+
+  return entries
+    .map((entry) => {
+      const id = entry.querySelector("yt\:videoId")?.textContent?.trim() ?? "";
+      const title = entry.querySelector("title")?.textContent?.trim() ?? "Untitled";
+      const published = entry.querySelector("published")?.textContent?.trim() ?? "";
+      return {
+        id,
+        title,
+        url: `https://www.youtube.com/watch?v=${id}`,
+        thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+        published,
+      };
+    })
+    .filter((video) => Boolean(video.id));
+}
+
+async function fetchYouTubeFeedViaProxy(): Promise<YouTubeVideo[]> {
+  try {
+    const response = await fetch(`${CORS_PROXY}${encodeURIComponent(RSS_URL)}`);
+    if (!response.ok) throw new Error(`Proxy fetch failed: ${response.status}`);
+    const xml = await response.text();
+    return parseYouTubeFeedXml(xml);
+  } catch (err) {
+    console.error("YouTube proxy fetch failed:", err);
+    return [];
+  }
+}
+
 /**
- * Fetches the latest videos from the official @bound-by-code channel via the
- * `youtube-feed` edge function. No fallback data — returns [] on failure.
+ * Fetches the latest videos from the official @bound-by-code channel.
+ * Tries the Supabase edge function first, then falls back to a direct RSS proxy.
  */
 export const fetchChannelVideos = async (): Promise<YouTubeVideo[]> => {
   try {
     const { data, error } = await supabase.functions.invoke("youtube-feed");
     if (error) throw error;
-    return (data?.videos ?? []) as YouTubeVideo[];
+    const videos = (data?.videos ?? []) as YouTubeVideo[];
+    if (videos.length > 0) return videos;
+    console.warn("Supabase response contained no videos, falling back to direct RSS feed.");
   } catch (err) {
-    console.error("Failed to fetch YouTube feed:", err);
-    return [];
+    console.warn("Supabase youtube-feed invocation failed, using RSS proxy fallback:", err);
   }
+
+  return fetchYouTubeFeedViaProxy();
 };

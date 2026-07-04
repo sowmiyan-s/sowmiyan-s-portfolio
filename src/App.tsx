@@ -14,21 +14,17 @@ import ProjectDetail from "./pages/ProjectDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CustomCursor from "@/components/CustomCursor";
 import RadarLoader from "@/components/RadarLoader";
-import NameTicker from "@/components/NameTicker";
-import { useSiteSettings } from "@/lib/siteSettings";
 import { motion, AnimatePresence } from "framer-motion";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-    const [loading, setLoading] = useState(true);
+    // Disable full-screen preloader to avoid blank screen during runtime errors.
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Global preloader duration
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 2000);
-        return () => clearTimeout(timer);
+        // no-op: preloader disabled
     }, []);
 
     return (
@@ -74,31 +70,22 @@ const App = () => {
                 </AnimatePresence>
 
                 <BrowserRouter>
-                    <CustomCursor />
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/achievements" element={<AchievementsPage />} />
-                        <Route path="/projects" element={<ProjectsPage />} />
-                        <Route path="/about" element={<AboutPage />} />
-                        <Route path="/contact" element={<ContactPage />} />
-                        <Route path="/admin" element={<Admin />} />
-                        <Route path="/project/:id" element={<ProjectDetail />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                    <GlobalTicker />
+                    <ErrorBoundary>
+                        <CustomCursor />
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/achievements" element={<AchievementsPage />} />
+                            <Route path="/projects" element={<ProjectsPage />} />
+                            <Route path="/about" element={<AboutPage />} />
+                            <Route path="/contact" element={<ContactPage />} />
+                            <Route path="/admin" element={<Admin />} />
+                            <Route path="/project/:id" element={<ProjectDetail />} />
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                    </ErrorBoundary>
                 </BrowserRouter>
             </TooltipProvider>
         </QueryClientProvider>
-    );
-};
-
-const GlobalTicker = () => {
-    const { show_global_ticker } = useSiteSettings();
-    if (!show_global_ticker) return null;
-    return (
-        <div className="fixed bottom-0 left-0 right-0 z-[9999] pointer-events-none">
-            <NameTicker variant="divider" />
-        </div>
     );
 };
 

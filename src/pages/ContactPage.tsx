@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import CyberBackground from '@/components/CyberBackground';
 import TopographicBackground from '@/components/TopographicBackground';
 import PageHero from '@/components/PageHero';
+import ScrambleText from '@/components/ScrambleText';
 
 const ContactPage = () => {
     return (
@@ -20,22 +21,27 @@ const ContactPage = () => {
                     subtitle="Available for freelance projects, internships and full-time roles."
                 />
 
-                <section className="relative w-full py-20 md:py-28 px-4 sm:px-6 border-t border-white/5 bg-black flex flex-col items-center justify-center overflow-hidden">
+                <section className="relative w-full py-28 md:py-36 px-4 sm:px-6 border-t border-white/5 bg-black flex flex-col items-center justify-center overflow-hidden">
                     <TopographicBackground />
 
-                    <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center gap-12 text-center">
-                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-black text-white uppercase tracking-tighter leading-none">
-                            Say <span className="text-red-600">Hello</span>
-                        </h2>
+                    <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center gap-10 text-center">
+                        <div className="max-w-3xl">
+                            <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-black text-white uppercase tracking-tighter leading-none">
+                                <ScrambleText text="Say Hello" triggerOnView speed={0.18} />
+                            </h2>
+                            <p className="mt-6 text-sm md:text-base leading-relaxed text-white/80 font-mono">
+                                <ScrambleText text="Available for freelance projects, internships and full-time roles. Let’s turn your AI, web, and product ideas into production-ready results." triggerOnView speed={0.16} />
+                            </p>
+                        </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full justify-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full justify-center">
                             <motion.a
                                 href="mailto:sowmisowmiyan58@gmail.com"
                                 whileHover={{ y: -2 }}
-                                className="px-8 md:px-10 py-4 md:py-5 border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
+                                className="px-8 md:px-10 py-5 border border-white/10 bg-white/10 hover:bg-white hover:text-black hover:border-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
                             >
                                 <Mail size={16} />
-                                <span>Email</span>
+                                <ScrambleText text="Email" triggerOnView speed={0.2} className="text-current" />
                             </motion.a>
 
                             <motion.a
@@ -43,10 +49,10 @@ const ContactPage = () => {
                                 target="_blank"
                                 rel="noreferrer"
                                 whileHover={{ y: -2 }}
-                                className="px-8 md:px-10 py-4 md:py-5 border border-red-600 bg-red-600/10 hover:bg-red-600 hover:text-white text-red-500 transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
+                                className="px-8 md:px-10 py-5 border border-red-600 bg-red-600/10 hover:bg-red-600 hover:text-white text-red-500 transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
                             >
                                 <Phone size={16} />
-                                <span>WhatsApp</span>
+                                <ScrambleText text="WhatsApp" triggerOnView speed={0.2} className="text-current" />
                             </motion.a>
                         </div>
                     </div>

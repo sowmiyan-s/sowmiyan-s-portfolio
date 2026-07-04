@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { fetchChannelVideos, YouTubeVideo } from '@/lib/youtube';
+import ScrambleText from './ScrambleText';
 
 const ContentCreationSection = () => {
     const links = [
@@ -23,14 +24,14 @@ const ContentCreationSection = () => {
     const duplicated = videos.length ? [...videos, ...videos, ...videos] : [];
 
     return (
-        <section className="relative py-20 bg-transparent z-10 overflow-hidden w-full">
+        <section className="relative py-16 bg-transparent z-10 overflow-hidden w-full">
             <div className="flex flex-col gap-16 items-center w-full">
                 <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto px-6 items-center text-center relative z-10">
                     <h2 className="text-5xl md:text-8xl font-heading font-black text-white uppercase tracking-tighter leading-none">
-                        Bound By <span className="text-red-700">Code</span>
+                        <ScrambleText text="Bound By Code" triggerOnView speed={0.22} />
                     </h2>
                     <p className="font-mono text-sm text-white/80 max-w-xl">
-                        Tamil-language AI, vibe-coding and developer tutorials.
+                        <ScrambleText text="Tamil-language AI, vibe-coding and developer tutorials." triggerOnView speed={0.2} />
                     </p>
                 </div>
 
@@ -77,10 +78,10 @@ const ContentCreationSection = () => {
                                         />
                                     </div>
                                     <h3 className="text-xs md:text-sm font-heading font-black uppercase leading-tight group-hover/card:text-red-500 transition-colors line-clamp-2">
-                                        {video.title}
+                                        <ScrambleText text={video.title} triggerOnView speed={0.14} className="text-current" />
                                     </h3>
                                     <div className="text-[10px] font-mono text-red-500 uppercase mt-auto tracking-widest flex items-center justify-between">
-                                        <span>Watch on YouTube</span>
+                                        <ScrambleText text="Watch on YouTube" triggerOnView speed={0.2} className="text-current" />
                                         <span>↗</span>
                                     </div>
                                 </a>

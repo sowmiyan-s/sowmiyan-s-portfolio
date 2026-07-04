@@ -11,13 +11,9 @@ import ContentCreationSection from "@/components/ContentCreationSection";
 import PopularProjectsSlider from "@/components/PopularProjectsSlider";
 import Pattern from "@/components/Pattern";
 import SEOKeywords from "@/components/SEOKeywords";
-import NameTicker from "@/components/NameTicker";
-import { useSiteSettings } from "@/lib/siteSettings";
+import MarqueeSection from "@/components/MarqueeSection";
 
 const Home = () => {
-    const { show_dividers } = useSiteSettings();
-    const Divider = () => (show_dividers ? <NameTicker variant="divider" /> : null);
-
     return (
         <div className="relative min-h-screen bg-black text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
             <SEOKeywords />
@@ -29,37 +25,36 @@ const Home = () => {
                     <Hero />
                 </div>
 
-                <Divider />
+                <MarqueeSection />
 
-                <div className="relative w-full z-[2] border-t border-white/5">
+                <div className="relative w-full z-[2]">
                     <SkillsSection />
                 </div>
 
-                <Divider />
+                <MarqueeSection />
 
-                <div className="relative w-full z-[3] border-t border-white/5">
+                <div className="relative w-full z-[3]">
                     <BlogSection />
                 </div>
 
-                <Divider />
+                <MarqueeSection />
 
-                <div id="popular-projects-slider" className="relative bg-transparent w-full z-[3.5] border-y border-white/5">
+                <div id="popular-projects-slider" className="relative bg-transparent w-full z-[3.5]">
                     <PopularProjectsSlider />
                 </div>
 
-                <Divider />
-
                 <Pattern>
-                    <div className="relative bg-transparent flex items-center justify-center min-h-screen w-full z-[4] border-t border-white/5 py-24 md:py-32">
+                    <div className="relative bg-transparent flex items-center justify-center w-full z-[4] py-8 md:py-10">
                         <ContentCreationSection />
                     </div>
                 </Pattern>
 
-                <Divider />
+                <MarqueeSection />
 
-                <div className="relative w-full z-[5] bg-transparent flex items-center py-24 border-t border-white/5">
+                <div className="relative w-full z-[5] bg-transparent">
                     <HireMeSection />
                 </div>
+
 
                 <div className="relative z-[7] bg-black w-full">
                     <Footer />

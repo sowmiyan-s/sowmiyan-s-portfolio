@@ -2,15 +2,14 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
 
-
-function isNewSupabaseApiKey(value: string): boolean {
-  return value.startsWith('sb_publishable_') || value.startsWith('sb_secret_');
+function isNewSupabaseApiKey(value?: string): boolean {
+  return !!value && (value.startsWith('sb_publishable_') || value.startsWith('sb_secret_'));
 }
 
-function createSupabaseFetch(supabaseKey: string): typeof fetch {
+function createSupabaseFetch(supabaseKey?: string): typeof fetch {
   return (input, init) => {
     const headers = new Headers(
       typeof Request !== 'undefined' && input instanceof Request ? input.headers : undefined,
@@ -21,25 +20,68 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
     }
 
     // New Supabase API keys are opaque strings, not bearer JWTs.
-    if (isNewSupabaseApiKey(supabaseKey) && headers.get('Authorization') === `Bearer ${supabaseKey}`) {
+    if (supabaseKey && isNewSupabaseApiKey(supabaseKey) && headers.get('Authorization') === `Bearer ${supabaseKey}`) {
       headers.delete('Authorization');
     }
 
-    headers.set('apikey', supabaseKey);
+    if (supabaseKey) {
+      headers.set('apikey', supabaseKey);
+    }
+
     return fetch(input, { ...init, headers });
   };
+}
+
+function createStubSupabaseClient() {
+  const emptyResult = {
+    data: null,
+    error: new Error('Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to enable data sync.'),
+  };
+
+  const createQueryBuilder = () => ({
+    select: async () => emptyResult,
+    insert: async () => emptyResult,
+    update: async () => emptyResult,
+    upsert: async () => emptyResult,
+    delete: () => createQueryBuilder(),
+    eq: () => createQueryBuilder(),
+    neq: () => createQueryBuilder(),
+    gt: () => createQueryBuilder(),
+    gte: () => createQueryBuilder(),
+    lt: () => createQueryBuilder(),
+    lte: () => createQueryBuilder(),
+    order: () => createQueryBuilder(),
+    limit: () => createQueryBuilder(),
+    single: async () => emptyResult,
+    maybeSingle: async () => emptyResult,
+  });
+
+  return {
+    from: () => createQueryBuilder(),
+    auth: {
+      getSession: async () => ({ data: { session: null }, error: null }),
+    },
+  } as any;
 }
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  global: {
-    fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
-  },
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
+
+if (!isSupabaseConfigured) {
+  console.warn('Supabase is not configured. The site will run in a degraded mode without remote data sync.');
+}
+
+export const supabase = isSupabaseConfigured
+  ? createClient<Database>(SUPABASE_URL!, SUPABASE_PUBLISHABLE_KEY!, {
+      global: {
+        fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
+      },
+      auth: {
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    })
+  : createStubSupabaseClient();

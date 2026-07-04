@@ -2,13 +2,18 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import TopographicBackground from './TopographicBackground';
+import ScrambleText from './ScrambleText';
 
 const HireMeSection = () => {
     return (
-        <section className="relative w-full min-h-[80vh] py-24 md:py-32 px-4 sm:px-6 border-t border-white/5 bg-black z-10 flex flex-col items-center justify-center overflow-hidden">
-            <TopographicBackground />
+        <section className="relative w-full min-h-[65vh] py-12 md:py-16 px-4 sm:px-6 bg-transparent z-10 flex flex-col items-center justify-center overflow-hidden">
+            {/* Background pattern + semi-transparent fix layer */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                <TopographicBackground />
+            </div>
 
-            <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center gap-10 md:gap-14 text-center">
+            <div className="relative z-[2] max-w-5xl w-full mx-auto flex flex-col items-center gap-10 md:gap-14 text-center">
+
                 <div className="flex flex-col gap-4 items-center">
                     <span className="text-[10px] md:text-xs opacity-50 font-mono tracking-[0.4em] uppercase text-white">
                         Open to Opportunities
@@ -24,7 +29,7 @@ const HireMeSection = () => {
                         whileHover={{ y: -2 }}
                         className="flex-1 px-6 md:px-10 py-4 md:py-5 border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
                     >
-                        Email Direct
+                        <ScrambleText text="Email Direct" triggerOnHover triggerOnView className="text-current" />
                     </motion.a>
 
                     <motion.a
@@ -34,7 +39,7 @@ const HireMeSection = () => {
                         whileHover={{ y: -2 }}
                         className="flex-1 px-6 md:px-10 py-4 md:py-5 border border-red-600 bg-red-600/10 hover:bg-red-600 hover:text-white text-red-500 transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
                     >
-                        WhatsApp
+                        <ScrambleText text="WhatsApp" triggerOnHover triggerOnView className="text-current" />
                     </motion.a>
                 </div>
 

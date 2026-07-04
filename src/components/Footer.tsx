@@ -1,10 +1,13 @@
 import React from 'react';
 import { Mail, MapPin, Linkedin, Instagram, Phone, PenTool, Twitter, Youtube } from 'lucide-react';
 import ScrambleText from './ScrambleText';
+import MarqueeSection from './MarqueeSection';
 
 const Footer = () => {
     return (
-        <footer id="contact" className="relative py-16 px-6 cross-bg border-t border-white/10 z-10 overflow-hidden bg-black text-white">
+        <>
+            <MarqueeSection />
+            <footer id="contact" className="relative py-16 px-6 cross-bg border-t border-white/10 z-10 overflow-hidden bg-black text-white">
             <div className="absolute top-0 right-0 w-64 h-64 border border-white/10 -translate-y-1/2 translate-x-1/2 rotate-45 pointer-events-none opacity-20" />
 
             <div className="max-w-7xl mx-auto flex flex-col gap-12 relative">
@@ -28,10 +31,10 @@ const Footer = () => {
                         </span>
                         <div className="flex flex-col gap-3">
                             <a href="mailto:sowmisowmiyan58@gmail.com" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Mail size={14} className="text-red-600" /> Email
+                                <Mail size={14} className="text-red-600" /> <ScrambleText text="Email" triggerOnView speed={0.16} className="text-current" />
                             </a>
                             <a href="https://wa.me/919042561295" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Phone size={14} className="text-red-600" /> WhatsApp
+                                <Phone size={14} className="text-red-600" /> <ScrambleText text="WhatsApp" triggerOnView speed={0.16} className="text-current" />
                             </a>
                         </div>
                     </div>
@@ -42,19 +45,19 @@ const Footer = () => {
                         </span>
                         <div className="flex flex-col gap-3">
                             <a href="https://linkedin.com/in/sowmiyan-s" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Linkedin size={14} className="text-red-600" /> LinkedIn
+                                <Linkedin size={14} className="text-red-600" /> <ScrambleText text="LinkedIn" triggerOnView speed={0.18} className="text-current" />
                             </a>
                             <a href="https://youtube.com/@bound-by-code" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Youtube size={14} className="text-red-600" /> YouTube
+                                <Youtube size={14} className="text-red-600" /> <ScrambleText text="YouTube" triggerOnView speed={0.18} className="text-current" />
                             </a>
                             <a href="https://instagram.com/sowmiyan.s_" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Instagram size={14} className="text-red-600" /> Instagram
+                                <Instagram size={14} className="text-red-600" /> <ScrambleText text="Instagram" triggerOnView speed={0.18} className="text-current" />
                             </a>
                             <a href="https://twitter.com/sowmiyan_s" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <Twitter size={14} className="text-red-600" /> X (Twitter)
+                                <Twitter size={14} className="text-red-600" /> <ScrambleText text="X (Twitter)" triggerOnView speed={0.18} className="text-current" />
                             </a>
                             <a href="https://medium.com/@sowmiyan_s_" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs font-mono transition-colors hover:text-red-600 uppercase">
-                                <PenTool size={14} className="text-red-600" /> Medium
+                                <PenTool size={14} className="text-red-600" /> <ScrambleText text="Medium" triggerOnView speed={0.18} className="text-current" />
                             </a>
                         </div>
                     </div>
@@ -64,9 +67,11 @@ const Footer = () => {
                             <ScrambleText text="Signal" triggerOnHover />
                         </span>
                         <p className="text-xs font-mono opacity-70 leading-relaxed">
-                            Building intelligent systems<br/>from Tamil Nadu, India.
+                            <ScrambleText text="Building intelligent systems from Tamil Nadu, India." triggerOnView speed={0.15} />
                         </p>
-                        <span className="text-[10px] font-mono opacity-40 tracking-widest uppercase italic mt-auto">© 2026 Sowmiyan S</span>
+                        <span className="text-[10px] font-mono opacity-40 tracking-widest uppercase italic mt-auto">
+                            <ScrambleText text="© 2026 Sowmiyan S" triggerOnView speed={0.1} />
+                        </span>
                     </div>
                 </div>
             </div>
@@ -76,6 +81,7 @@ const Footer = () => {
                 <span className="text-[10px] font-mono uppercase opacity-40 group-hover:opacity-100 transition-opacity">Return to Origin</span>
             </div>
         </footer>
+        </>
     );
 };
 

@@ -8,7 +8,7 @@ const TopographicBackground = () => {
         style={{
           position: 'absolute',
           top: 0, left: 0, width: '100%', height: '100%',
-          opacity: 0.65,
+          opacity: 1.0,
           background: 'black',
           filter: 'url(#octave1) brightness(5) contrast(1.5)',
           transform: 'scale(1)',
@@ -20,7 +20,7 @@ const TopographicBackground = () => {
         style={{
           position: 'absolute',
           top: 0, left: 0, width: '100%', height: '100%',
-          opacity: 0.4,
+          opacity: 1.0,
           background: 'transparent',
           filter: 'url(#octave2) brightness(5) contrast(1.5)',
           transform: 'scale(1)',
