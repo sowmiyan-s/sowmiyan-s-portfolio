@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      featured_projects: {
+        Row: {
+          created_at: string
+          github_repo_id: number
+          id: string
+          position: number
+          repo_name: string
+        }
+        Insert: {
+          created_at?: string
+          github_repo_id: number
+          id?: string
+          position?: number
+          repo_name: string
+        }
+        Update: {
+          created_at?: string
+          github_repo_id?: number
+          id?: string
+          position?: number
+          repo_name?: string
+        }
+        Relationships: []
+      }
       hidden_projects: {
         Row: {
           created_at: string
@@ -32,6 +56,24 @@ export type Database = {
           github_repo_id?: number
           id?: string
           repo_name?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }
