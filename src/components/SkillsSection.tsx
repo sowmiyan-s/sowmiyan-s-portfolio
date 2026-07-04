@@ -7,7 +7,7 @@ import { Users, MessageSquare, Target, Brain, Presentation, Handshake } from 'lu
 const defaultTech = ['Python', 'Java', 'SQL', 'LLMs', 'LangChain', 'CrewAI', 'Hugging Face', 'MongoDB', 'MySQL', 'AWS', 'Vercel', 'Netlify', 'Git', 'GitHub', 'Ollama', 'n8n', 'Power BI'];
 const defaultSoft = ['Problem Solving', 'Communication', 'Team Leadership', 'Presentation', 'Collaboration', 'Adaptability'];
 
-const softIconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+const softIconMap: Record<string, any> = {
     'Problem Solving': Brain,
     'Communication': MessageSquare,
     'Team Leadership': Users,
