@@ -204,7 +204,11 @@ const Admin = () => {
             return true;
         })
         .filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
-        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+        .sort((a, b) => {
+            if (sortMode === "stars") return b.stargazers_count - a.stargazers_count;
+            if (sortMode === "name") return a.name.localeCompare(b.name);
+            return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+        });
 
     const visibleCount = repos.length - hiddenIds.length;
 
