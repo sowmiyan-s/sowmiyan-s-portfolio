@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
+import { fetchChannelVideos, YouTubeVideo } from '@/lib/youtube';
 import { supabase } from '@/integrations/supabase/client';
 import { formatRepoName } from '@/lib/formatRepo';
 import TechNav from '@/components/TechNav';
@@ -7,10 +8,11 @@ import Footer from '@/components/Footer';
 import CyberBackground from '@/components/CyberBackground';
 import PageHero from '@/components/PageHero';
 import { motion } from 'framer-motion';
-import { Star, Eye, EyeOff, Trash2, Plus, Search, Lock } from 'lucide-react';
+import { Star, Eye, EyeOff, Trash2, Plus, Search, Lock, ArrowUp, ArrowDown, RefreshCw, Youtube } from 'lucide-react';
 
 const ADMIN_PASSWORD = "121212";
 const AUTH_KEY = "adminAuthenticated";
+type SortMode = "updated" | "stars" | "name";
 
 const Admin = () => {
     const [authed, setAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === "true");
@@ -19,7 +21,7 @@ const Admin = () => {
 
     const [repos, setRepos] = useState<GitHubRepo[]>([]);
     const [hiddenIds, setHiddenIds] = useState<number[]>([]);
-    const [featuredIds, setFeaturedIds] = useState<number[]>([]);
+    const [featured, setFeatured] = useState<{ id: number; repo_name: string; position: number }[]>([]);
     const [loading, setLoading] = useState(true);
     const [techSkills, setTechSkills] = useState<{ id: string; name: string }[]>([]);
     const [nonTechSkills, setNonTechSkills] = useState<{ id: string; name: string }[]>([]);
@@ -27,8 +29,13 @@ const Admin = () => {
     const [newNonTechSkill, setNewNonTechSkill] = useState('');
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState<"all" | "visible" | "hidden">("all");
+    const [sortMode, setSortMode] = useState<SortMode>("updated");
     const [showDividers, setShowDividers] = useState(true);
     const [showGlobalTicker, setShowGlobalTicker] = useState(true);
+    const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+    const [videosLoading, setVideosLoading] = useState(false);
+
+    const featuredIds = featured.map(f => f.id);
 
     const loadData = async () => {
         setLoading(true);
@@ -36,12 +43,12 @@ const Admin = () => {
             fetchRepos(),
             supabase.from('hidden_projects').select('github_repo_id'),
             supabase.from('skills').select('id, name, category'),
-            supabase.from('featured_projects').select('github_repo_id'),
+            supabase.from('featured_projects').select('github_repo_id, repo_name, position').order('position', { ascending: true }),
             supabase.from('site_settings').select('key, value'),
         ]);
         setRepos(repoData);
         setHiddenIds((hiddenRes.data ?? []).map((r: any) => r.github_repo_id));
-        setFeaturedIds((featuredRes.data ?? []).map((r: any) => r.github_repo_id));
+        setFeatured((featuredRes.data ?? []).map((r: any) => ({ id: r.github_repo_id, repo_name: r.repo_name, position: r.position ?? 0 })));
         setTechSkills((skillRes.data ?? []).filter((s: any) => s.category === 'tech').map((s: any) => ({ id: s.id, name: s.name })));
         setNonTechSkills((skillRes.data ?? []).filter((s: any) => s.category === 'non-tech').map((s: any) => ({ id: s.id, name: s.name })));
         for (const row of settingsRes.data ?? []) {
@@ -51,15 +58,37 @@ const Admin = () => {
         setLoading(false);
     };
 
+    const loadVideos = async () => {
+        setVideosLoading(true);
+        const v = await fetchChannelVideos();
+        setVideos(v);
+        setVideosLoading(false);
+    };
+
     const toggleFeatured = async (repo: GitHubRepo) => {
         if (featuredIds.includes(repo.id)) {
             await supabase.from('featured_projects').delete().eq('github_repo_id', repo.id);
-            setFeaturedIds(prev => prev.filter(id => id !== repo.id));
+            setFeatured(prev => prev.filter(f => f.id !== repo.id));
         } else {
-            if (featuredIds.length >= 3) { alert('Max 3 featured projects. Unfeature one first.'); return; }
-            await supabase.from('featured_projects').insert({ github_repo_id: repo.id, repo_name: repo.name, position: featuredIds.length });
-            setFeaturedIds(prev => [...prev, repo.id]);
+            if (featured.length >= 3) { alert('Max 3 featured projects. Unfeature one first.'); return; }
+            const position = featured.length;
+            await supabase.from('featured_projects').insert({ github_repo_id: repo.id, repo_name: repo.name, position });
+            setFeatured(prev => [...prev, { id: repo.id, repo_name: repo.name, position }]);
         }
+    };
+
+    const moveFeatured = async (idx: number, dir: -1 | 1) => {
+        const next = [...featured];
+        const target = idx + dir;
+        if (target < 0 || target >= next.length) return;
+        [next[idx], next[target]] = [next[target], next[idx]];
+        const withPos = next.map((f, i) => ({ ...f, position: i }));
+        setFeatured(withPos);
+        await Promise.all(
+            withPos.map(f =>
+                supabase.from('featured_projects').update({ position: f.position }).eq('github_repo_id', f.id)
+            )
+        );
     };
 
     const setSetting = async (key: string, value: boolean) => {
@@ -68,7 +97,7 @@ const Admin = () => {
         if (key === 'show_global_ticker') setShowGlobalTicker(value);
     };
 
-    useEffect(() => { if (authed) loadData(); }, [authed]);
+    useEffect(() => { if (authed) { loadData(); loadVideos(); } }, [authed]);
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
