@@ -286,7 +286,34 @@ const Admin = () => {
                                         </button>
                                     ))}
                                 </div>
+                                <select
+                                    value={sortMode}
+                                    onChange={e => setSortMode(e.target.value as SortMode)}
+                                    className="px-3 py-2.5 bg-white/5 border border-white/10 text-white text-[10px] font-mono uppercase tracking-widest focus:outline-none focus:border-red-500"
+                                >
+                                    <option value="updated">Sort: Updated</option>
+                                    <option value="stars">Sort: Stars</option>
+                                    <option value="name">Sort: Name</option>
+                                </select>
                             </div>
+
+                            {/* Featured order */}
+                            {featured.length > 0 && (
+                                <div className="border border-yellow-500/30 bg-yellow-500/5 p-4 flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-mono uppercase tracking-widest text-yellow-500">★ Featured Order ({featured.length}/3)</span>
+                                        <span className="text-[9px] font-mono opacity-40 uppercase">Homepage slider order</span>
+                                    </div>
+                                    {featured.map((f, i) => (
+                                        <div key={f.id} className="flex items-center gap-2 py-1.5 px-2 bg-black/40 border border-white/5">
+                                            <span className="text-yellow-500 font-mono text-[10px] w-4">{i + 1}</span>
+                                            <span className="flex-1 text-xs font-heading uppercase tracking-tight truncate">{formatRepoName(f.repo_name)}</span>
+                                            <button onClick={() => moveFeatured(i, -1)} disabled={i === 0} className="p-1 border border-white/10 hover:border-yellow-500 hover:text-yellow-500 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"><ArrowUp size={10} /></button>
+                                            <button onClick={() => moveFeatured(i, 1)} disabled={i === featured.length - 1} className="p-1 border border-white/10 hover:border-yellow-500 hover:text-yellow-500 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"><ArrowDown size={10} /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
                                 {filteredRepos.length === 0 ? (
