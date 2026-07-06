@@ -382,6 +382,47 @@ const Admin = () => {
                             ))}
                         </div>
 
+                        {/* YouTube preview */}
+                        <motion.section
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="border border-white/10 bg-black/40 backdrop-blur-md p-6 flex flex-col gap-5"
+                        >
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                    <Youtube size={20} className="text-red-500" />
+                                    <div>
+                                        <h2 className="text-xl font-heading font-black uppercase text-red-500">YouTube Feed</h2>
+                                        <p className="text-[10px] font-mono opacity-60 uppercase tracking-widest">Live from @bound-by-code · {videos.length} videos</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={loadVideos}
+                                    disabled={videosLoading}
+                                    className="flex items-center gap-2 px-3 py-2 text-[10px] font-mono uppercase tracking-widest border border-white/10 hover:border-red-500 hover:text-red-500 transition-colors disabled:opacity-50"
+                                >
+                                    <RefreshCw size={12} className={videosLoading ? 'animate-spin' : ''} /> Refresh
+                                </button>
+                            </div>
+                            {videosLoading ? (
+                                <div className="text-center py-8 font-mono text-xs opacity-40 uppercase">Fetching…</div>
+                            ) : videos.length === 0 ? (
+                                <div className="text-center py-8 font-mono text-xs text-red-500/70 uppercase">No videos returned. Check channel ID / edge function.</div>
+                            ) : (
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                    {videos.slice(0, 8).map(v => (
+                                        <a key={v.id} href={v.url} target="_blank" rel="noreferrer" className="flex flex-col gap-2 border border-white/10 hover:border-red-500 transition-colors group">
+                                            <div className="aspect-video overflow-hidden">
+                                                <img src={v.thumbnail} alt={v.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                            </div>
+                                            <p className="text-[10px] font-mono px-2 pb-2 line-clamp-2 opacity-70 group-hover:opacity-100 group-hover:text-red-500 transition-colors">{v.title}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                        </motion.section>
+
+
                         {/* Site Settings */}
                         <motion.section
                             initial={{ opacity: 0, y: 20 }}
