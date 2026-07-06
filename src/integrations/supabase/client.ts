@@ -33,33 +33,32 @@ function createSupabaseFetch(supabaseKey?: string): typeof fetch {
 }
 
 function createStubSupabaseClient() {
-  const emptyResult = {
-    data: null,
-    error: new Error('Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to enable data sync.'),
-  };
+  const emptyArray = { data: [], error: null };
+  const emptyOne = { data: null, error: null };
 
-  const createQueryBuilder = () => ({
-    select: async () => emptyResult,
-    insert: async () => emptyResult,
-    update: async () => emptyResult,
-    upsert: async () => emptyResult,
-    delete: () => createQueryBuilder(),
-    eq: () => createQueryBuilder(),
-    neq: () => createQueryBuilder(),
-    gt: () => createQueryBuilder(),
-    gte: () => createQueryBuilder(),
-    lt: () => createQueryBuilder(),
-    lte: () => createQueryBuilder(),
-    order: () => createQueryBuilder(),
-    limit: () => createQueryBuilder(),
-    single: async () => emptyResult,
-    maybeSingle: async () => emptyResult,
-  });
+  const createQueryBuilder = (): any => {
+    const chain: any = {};
+    const chainable = [
+      'select', 'insert', 'update', 'upsert', 'delete',
+      'eq', 'neq', 'gt', 'gte', 'lt', 'lte',
+      'like', 'ilike', 'is', 'in', 'contains', 'match', 'or',
+      'order', 'limit', 'range',
+    ];
+    for (const m of chainable) chain[m] = () => createQueryBuilder();
+    chain.single = async () => emptyOne;
+    chain.maybeSingle = async () => emptyOne;
+    chain.then = (resolve: any, reject: any) =>
+      Promise.resolve(emptyArray).then(resolve, reject);
+    return chain;
+  };
 
   return {
     from: () => createQueryBuilder(),
     auth: {
       getSession: async () => ({ data: { session: null }, error: null }),
+    },
+    functions: {
+      invoke: async () => ({ data: null, error: new Error('Supabase not configured') }),
     },
   } as any;
 }
