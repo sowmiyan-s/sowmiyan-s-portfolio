@@ -56,7 +56,7 @@ const TopographicBackground = () => {
             <feMergeNode in="noiseo" />
           </feMerge>
           <feGaussianBlur in="noiseo" stdDeviation={5} result="noiseo" />
-          <feDiffuseLighting in="noiseo" surfaceScale={12} diffuseConstant={1} lightingColor="#dc2626" result="lit">
+          <feDiffuseLighting in="noiseo" surfaceScale={12} diffuseConstant={1} lightingColor="#1a0000" result="lit">
             <feDistantLight azimuth={90} elevation={2} />
           </feDiffuseLighting>
           <feBlend in="lit" in2="SourceGraphic" mode="normal" />
@@ -90,7 +90,7 @@ const TopographicBackground = () => {
             <feMergeNode in="noiseo" />
           </feMerge>
           <feGaussianBlur in="noiseo" stdDeviation={5} result="noiseo" />
-          <feDiffuseLighting in="noiseo" surfaceScale={12} diffuseConstant={1} lightingColor="#ffffff" result="lit">
+          <feDiffuseLighting in="noiseo" surfaceScale={12} diffuseConstant={1} lightingColor="#000000" result="lit">
             <feDistantLight azimuth={-90} elevation={2} />
           </feDiffuseLighting>
           <feBlend in="lit" in2="SourceGraphic" mode="normal" />

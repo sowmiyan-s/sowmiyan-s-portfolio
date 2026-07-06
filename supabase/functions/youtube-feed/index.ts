@@ -7,7 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const CHANNEL_ID = "UCJKa8oXWMoHYh1qxTsPeQBw"; // @bound-by-code
+const CHANNEL_ID = "UCIf9XVT_MbyZpi5v0SrvXRg"; // @bound-by-code
 const FEED_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
 
 interface Video {

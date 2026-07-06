@@ -10,18 +10,22 @@ export interface YouTubeVideo {
   duration?: string;
 }
 
-const CHANNEL_ID = "UCJKa8oXWMoHYh1qxTsPeQBw";
+const CHANNEL_ID = "UCIf9XVT_MbyZpi5v0SrvXRg"; // @bound-by-code
 const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
 const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
 function parseYouTubeFeedXml(xml: string): YouTubeVideo[] {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xml, "application/xml");
-  const entries = Array.from(doc.querySelectorAll("entry")).slice(0, 12);
+  const entries = Array.from(doc.getElementsByTagName("entry")).slice(0, 12);
 
   return entries
     .map((entry) => {
-      const id = entry.querySelector("yt\:videoId")?.textContent?.trim() ?? "";
+      const ns = "http://www.youtube.com/xml/schemas/2015";
+      const idNode =
+        entry.getElementsByTagNameNS(ns, "videoId")[0] ??
+        entry.getElementsByTagName("yt:videoId")[0];
+      const id = idNode?.textContent?.trim() ?? "";
       const title = entry.querySelector("title")?.textContent?.trim() ?? "Untitled";
       const published = entry.querySelector("published")?.textContent?.trim() ?? "";
       return {
