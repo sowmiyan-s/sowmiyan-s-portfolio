@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import TechNav from '@/components/TechNav';
 import Footer from '@/components/Footer';
-import CyberBackground from '@/components/CyberBackground';
+
 import PageHero from '@/components/PageHero';
 import { certificatesList, Certificate } from '@/lib/certificates';
 import EbookShowcase from '@/components/EbookShowcase';
@@ -44,8 +44,7 @@ const AchievementsPage = () => {
   });
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground selection:bg-primary font-body overflow-x-hidden">
-      <CyberBackground />
+    <div className="relative min-h-screen bg-transparent text-foreground selection:bg-primary font-body overflow-x-hidden">
       <TechNav />
       <main className="relative z-10">
         <PageHero

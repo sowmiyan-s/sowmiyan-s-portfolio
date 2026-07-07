@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import TechNav from '@/components/TechNav';
 import Footer from '@/components/Footer';
-import CyberBackground from '@/components/CyberBackground';
+
 import PageHero from '@/components/PageHero';
 
 // All content strictly from the uploaded resume.
@@ -52,8 +52,7 @@ const summary =
 
 const AboutPage = () => {
   return (
-    <div className="relative min-h-screen bg-background text-foreground selection:bg-primary font-body overflow-x-hidden">
-      <CyberBackground />
+    <div className="relative min-h-screen bg-transparent text-foreground selection:bg-primary font-body overflow-x-hidden">
       <TechNav />
       <main className="relative z-10">
         <PageHero

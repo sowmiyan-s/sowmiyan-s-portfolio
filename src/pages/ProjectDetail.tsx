@@ -6,7 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import { motion } from 'framer-motion';
 import TechNav from '@/components/TechNav';
 import Footer from '@/components/Footer';
-import CyberBackground from '@/components/CyberBackground';
+
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,8 +32,7 @@ const ProjectDetail = () => {
   );
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-      <CyberBackground />
+    <div className="relative min-h-screen bg-transparent text-foreground overflow-x-hidden">
       <TechNav />
 
       <main className="relative z-10 pt-32 pb-24 px-6">

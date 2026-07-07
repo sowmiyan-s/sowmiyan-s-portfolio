@@ -2,8 +2,7 @@ import React from 'react';
 import Hero from "@/components/Hero";
 import TechNav from "@/components/TechNav";
 import Footer from "@/components/Footer";
-import CyberBackground from "@/components/CyberBackground";
-import FrameAnimationBackground from "@/components/FrameAnimationBackground";
+// Background layers are provided by SiteLayout (persistent across routes).
 import BlogSection from "@/components/BlogSection";
 import SkillsSection from "@/components/SkillsSection";
 import HireMeSection from "@/components/HireMeSection";
@@ -17,8 +16,6 @@ const Home = () => {
     return (
         <div className="relative min-h-screen bg-black text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
             <SEOKeywords />
-            <CyberBackground />
-            <FrameAnimationBackground />
             <TechNav />
             <main className="relative z-10 w-full">
                 <div className="relative w-full z-[1] flex items-center min-h-screen">

@@ -1,11 +1,35 @@
-import React from 'react';
+import { useEffect } from 'react';
+import Lenis from 'lenis';
 
-interface SmoothScrollProps {
-  children: React.ReactNode;
-}
+const SmoothScroll = () => {
+  useEffect(() => {
+    // Respect reduced-motion and touch devices.
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouch = window.matchMedia('(hover: none)').matches;
+    if (prefersReduced || isTouch) return;
 
-// Native smooth scroll — no external library. `scroll-behavior: smooth`
-// is applied globally in index.css, keeping animations 60fps light.
-const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => <>{children}</>;
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.4,
+    });
+
+    let rafId = 0;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
+
+  return null;
+};
 
 export default SmoothScroll;

@@ -3,15 +3,14 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Linkedin, Github, Youtube, Instagram } from 'lucide-react';
 import TechNav from '@/components/TechNav';
 import Footer from '@/components/Footer';
-import CyberBackground from '@/components/CyberBackground';
+
 import TopographicBackground from '@/components/TopographicBackground';
 import PageHero from '@/components/PageHero';
 import ScrambleText from '@/components/ScrambleText';
 
 const ContactPage = () => {
     return (
-        <div className="relative min-h-screen bg-black text-white selection:bg-red-600 overflow-x-hidden">
-            <CyberBackground />
+        <div className="relative min-h-screen bg-transparent text-white selection:bg-red-600 overflow-x-hidden">
             <TechNav />
 
             <main className="relative z-10">

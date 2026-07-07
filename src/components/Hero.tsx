@@ -1,10 +1,18 @@
+import { lazy, Suspense } from 'react';
 import ScrambleText from './ScrambleText';
+
+const WireGlobe = lazy(() => import('./three/WireGlobe'));
 
 const Hero = () => {
     return (
         <section id="home" className="relative min-h-screen flex items-center justify-start pt-24 pb-12 px-6 md:px-16 overflow-hidden z-10 w-full bg-transparent">
-            {/* Professional Background Image with Tactical Overlays */}
+            {/* Background: subtle rotating wire globe (desktop) + scanlines */}
             <div className="absolute inset-0 z-0 overflow-hidden">
+                <div className="hidden md:block absolute inset-0 opacity-70">
+                    <Suspense fallback={null}>
+                        <WireGlobe />
+                    </Suspense>
+                </div>
                 {/* Animated Scanlines */}
                 <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,4px_100%]" />
             </div>
