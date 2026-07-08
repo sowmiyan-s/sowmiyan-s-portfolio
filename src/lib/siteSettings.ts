@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useRealtimeRefetch } from "@/hooks/useRealtimeRefetch";
 
 export interface SiteSettings {
   show_dividers: boolean;
@@ -14,22 +15,19 @@ const defaults: SiteSettings = {
 export function useSiteSettings(): SiteSettings {
   const [settings, setSettings] = useState<SiteSettings>(defaults);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase.from("site_settings").select("key, value");
-      if (cancelled || !data) return;
-      const next: SiteSettings = { ...defaults };
-      for (const row of data) {
-        if (row.key === "show_dividers") next.show_dividers = !!row.value;
-        if (row.key === "show_global_ticker") next.show_global_ticker = !!row.value;
-      }
-      setSettings(next);
-    })();
-    return () => {
-      cancelled = true;
-    };
+  const load = useCallback(async () => {
+    const { data } = await supabase.from("site_settings").select("key, value");
+    if (!data) return;
+    const next: SiteSettings = { ...defaults };
+    for (const row of data as any[]) {
+      if (row.key === "show_dividers") next.show_dividers = !!row.value;
+      if (row.key === "show_global_ticker") next.show_global_ticker = !!row.value;
+    }
+    setSettings(next);
   }, []);
+
+  useEffect(() => { load(); }, [load]);
+  useRealtimeRefetch(["site_settings"], load);
 
   return settings;
 }
