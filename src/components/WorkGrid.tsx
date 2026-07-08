@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
 import { supabase } from '@/integrations/supabase/client';
 import { formatRepoName } from '@/lib/formatRepo';
 import { useNavigate } from 'react-router-dom';
+import { useRealtimeRefetch } from '@/hooks/useRealtimeRefetch';
 import RadarLoader from './RadarLoader';
 
 const WorkGrid = () => {
@@ -10,18 +11,20 @@ const WorkGrid = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        (async () => {
-            const [data, hiddenRes] = await Promise.all([
-                fetchRepos(),
-                supabase.from('hidden_projects').select('github_repo_id'),
-            ]);
-            const hidden = (hiddenRes.data ?? []).map(r => r.github_repo_id);
-            const filtered = data.filter(repo => !hidden.includes(repo.id));
-            setProjects(filtered.slice(0, 6));
-            setLoading(false);
-        })();
+    const load = useCallback(async () => {
+        const [data, hiddenRes] = await Promise.all([
+            fetchRepos(),
+            supabase.from('hidden_projects').select('github_repo_id'),
+        ]);
+        const hidden = (hiddenRes.data ?? []).map((r: any) => r.github_repo_id);
+        const filtered = data.filter(repo => !hidden.includes(repo.id));
+        setProjects(filtered.slice(0, 6));
+        setLoading(false);
     }, []);
+
+    useEffect(() => { load(); }, [load]);
+    useRealtimeRefetch(['hidden_projects'], load);
+
 
     if (loading) return (
         <div className="py-40 flex flex-col items-center justify-center gap-12 border-y border-white/5 bg-black/20">
