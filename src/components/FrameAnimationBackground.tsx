@@ -70,13 +70,16 @@ const FrameAnimationBackground: React.FC = () => {
     const timer = setTimeout(handleScroll, 100);
     let animationFrameId: number;
 
+    let lastUpdateTime = 0;
     const render = () => {
       const state = stateRef.current;
+      const now = performance.now();
       if (video.duration && state.isLoaded) {
         const diff = state.targetTime - state.currentTime;
-        if (Math.abs(diff) > 0.002) {
-          state.currentTime += diff * 0.08;
+        if (Math.abs(diff) > 0.004 && now - lastUpdateTime > 45) {
+          state.currentTime += diff * 0.15; // slightly faster interpolation for smoothness
           video.currentTime = Math.min(Math.max(state.currentTime, 0), video.duration);
+          lastUpdateTime = now;
         }
       }
       animationFrameId = requestAnimationFrame(render);
@@ -101,7 +104,7 @@ const FrameAnimationBackground: React.FC = () => {
         playsInline
         onLoadedMetadata={handleLoadedMetadata}
         onProgress={handleProgress}
-        className="w-full h-full object-cover transition-opacity duration-1000"
+        className="w-full h-full object-cover object-[65%] md:object-center transition-opacity duration-1000"
         style={{
           opacity: isLoaded ? 0.85 : 0
         }}

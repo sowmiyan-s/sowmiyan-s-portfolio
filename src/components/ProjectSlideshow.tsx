@@ -62,17 +62,17 @@ const ProjectSlideshow = () => {
   return (
     <section className="relative w-full overflow-hidden bg-transparent">
       {/* Section Header (Fixed at top of slideshow area) */}
-      <div className="relative px-10 md:px-16 pt-2 pb-2 flex flex-col gap-2 bg-transparent mt-4 mb-4">
-        <div className="flex items-center gap-3">
-          <span className="w-2 h-2 bg-red-600 rounded-full" />
-          <span className="text-xs font-mono text-red-600 font-bold uppercase tracking-[0.6em]">FEATURED PROJECTS</span>
+      <div className="relative px-5 md:px-16 pt-2 pb-2 flex flex-col gap-2 bg-transparent mt-4 mb-4">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 bg-red-600 rounded-full" />
+          <span className="text-[10px] md:text-xs font-mono text-red-600 font-bold uppercase tracking-[0.4em] md:tracking-[0.6em]">FEATURED PROJECTS</span>
         </div>
-        <h2 className="text-6xl md:text-8xl font-heading font-black text-white uppercase tracking-tighter leading-none">
+        <h2 className="text-4xl md:text-8xl font-heading font-black text-white uppercase tracking-tighter leading-none">
           <ScrambleText text="Popular Projects" />
         </h2>
       </div>
 
-      <div className="relative h-[80vh] md:h-screen min-h-[600px] bg-transparent border-y border-white/5 group">
+      <div className="relative h-[65vh] md:h-screen min-h-[480px] bg-transparent border-y border-white/5 group">
         {/* Top Progress Bar */}
         <div className="absolute top-0 left-0 w-full h-[3px] bg-white/5 z-40">
           <motion.div 
@@ -110,77 +110,65 @@ const ProjectSlideshow = () => {
             </div>
 
             {/* Content Overlay (Bottom-Pinned) */}
-            <div className="absolute inset-x-0 bottom-0 z-30 p-8 md:p-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
-              <div className="flex flex-col gap-6 max-w-2xl">
-                <div className="flex items-center gap-3">
+            <div className="absolute inset-x-0 bottom-0 z-30 p-5 md:p-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-10">
+              <div className="flex flex-col gap-3 md:gap-6 max-w-2xl w-full">
+                <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-red-600 rounded-full shadow-[0_0_10px_#FF0000]" />
                   <span className="text-[9px] font-mono text-red-600 font-bold uppercase tracking-[0.6em]">
                     PROJECT 0{currentIndex + 1}
                   </span>
                 </div>
                 
-                <h3 className="text-5xl md:text-7xl font-heading font-black text-white uppercase tracking-tighter leading-[0.85] break-words">
+                <h3 className="text-3xl md:text-7xl font-heading font-black text-white uppercase tracking-tighter leading-[0.9] break-words">
                    {current.name.replace(/-/g, ' ')}
                 </h3>
                 
-                <p className="text-white/80 text-[10px] md:text-xs font-mono leading-relaxed uppercase tracking-wider line-clamp-2 max-w-xl border-l-2 border-red-600/20 pl-4 bg-black/45 backdrop-blur-[2px] p-4 border border-white/5">
+                <p className="text-white/80 text-[9px] md:text-xs font-mono leading-relaxed uppercase tracking-wider line-clamp-2 max-w-xl border-l-2 border-red-600/20 pl-3 bg-black/45 backdrop-blur-[2px] p-3 md:p-4 border border-white/5">
                   {current.description || "No description available."}
                 </p>
 
-                <div className="flex items-center gap-8 mt-2 bg-black/45 backdrop-blur-[2px] px-4 py-2 border border-white/5">
+                <div className="flex items-center gap-6 bg-black/45 backdrop-blur-[2px] px-3 py-1.5 border border-white/5 w-fit">
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest leading-none">Stars</span>
+                    <span className="text-[7px] font-mono text-white/40 uppercase tracking-widest leading-none">Stars</span>
                     <span className="text-xs font-heading font-black text-white/90 leading-none">{current.stargazers_count}</span>
                   </div>
-                  <div className="w-px h-6 bg-white/10" />
+                  <div className="w-px h-5 bg-white/10" />
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest leading-none">Language</span>
+                    <span className="text-[7px] font-mono text-white/40 uppercase tracking-widest leading-none">Language</span>
                     <span className="text-xs font-heading font-black text-white/90 leading-none">{current.language || 'SYSTEM'}</span>
                   </div>
                 </div>
               </div>
 
               {/* Action & Nav Section */}
-              <div className="flex flex-col items-start md:items-end gap-10">
-                <div className="relative group/btn cursor-pointer">
-                  <a 
-                    href={current.html_url} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="relative block"
-                  >
-                    <div className="absolute -top-3 -left-3 w-4 h-4 border-t border-l border-white/20 group-hover/btn:border-red-600 transition-colors" />
-                    <div className="absolute -top-3 -right-3 w-4 h-4 border-t border-r border-white/20 group-hover/btn:border-red-600 transition-colors" />
-                    <div className="absolute -bottom-3 -left-3 w-4 h-4 border-b border-l border-white/20 group-hover/btn:border-red-600 transition-colors" />
-                    <div className="absolute -bottom-3 -right-3 w-4 h-4 border-b border-r border-white/20 group-hover/btn:border-red-600 transition-colors" />
-                    
-                    <div className="flex items-center gap-4 py-2">
-                      <div className="w-8 h-8 rounded-full bg-white/5 group-hover/btn:bg-red-600/10 border border-white/10 group-hover/btn:border-red-600 transition-all flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 bg-white group-hover/btn:bg-red-600 rounded-full shadow-[0_0_10px_white] group-hover/btn:shadow-[0_0_15px_#FF0000]" />
-                      </div>
-                      <span className="text-[10px] font-heading font-black uppercase tracking-[0.4em] text-white/80 group-hover/btn:text-white transition-colors">
-                        VIEW REPOSITORY
-                      </span>
-                    </div>
-                  </a>
-                </div>
+              <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-start gap-4 md:gap-10 w-full md:w-auto">
+                <a 
+                  href={current.html_url} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 hover:border-red-600 hover:text-red-500 transition-all text-white/80 text-[9px] font-heading font-black uppercase tracking-[0.3em] md:tracking-[0.4em]"
+                >
+                  <Github size={12} />
+                  <span className="hidden md:inline">VIEW REPOSITORY</span>
+                  <span className="md:hidden">REPO</span>
+                </a>
 
-                <div className="flex items-center gap-8">
-                  <div className="flex gap-2">
+                <div className="flex items-center gap-3 md:gap-8">
+                  <div className="flex gap-1.5 md:gap-2">
                     {featuredProjects.map((_, i) => (
                       <button 
                         key={i} 
                         onClick={() => setCurrentIndex(i)}
-                        className={`h-1 transition-all duration-500 rounded-full ${i === currentIndex ? 'w-10 bg-red-600 shadow-[0_0_10px_#FF0000]' : 'w-2 bg-white/10 hover:bg-white/30'}`}
+                        className={`h-1 transition-all duration-500 rounded-full ${i === currentIndex ? 'w-8 md:w-10 bg-red-600 shadow-[0_0_10px_#FF0000]' : 'w-2 bg-white/10 hover:bg-white/30'}`}
                       />
                     ))}
                   </div>
                   
                   <button 
                     onClick={nextSlide}
-                    className="p-2.5 bg-white/5 border border-white/10 text-white/30 hover:border-red-600 hover:text-red-500 transition-all rounded-lg"
+                    className="p-2 md:p-2.5 bg-white/5 border border-white/10 text-white/30 hover:border-red-600 hover:text-red-500 transition-all rounded-lg"
                   >
-                    <ChevronRight size={16} />
+                    <ChevronRight size={14} />
                   </button>
                 </div>
               </div>

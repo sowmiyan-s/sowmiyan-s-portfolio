@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { fetchChannelVideos, YouTubeVideo } from '@/lib/youtube';
 import ScrambleText from './ScrambleText';
+import { Instagram, Youtube, Linkedin, ExternalLink } from 'lucide-react';
+
+const socialIcons: Record<string, any> = {
+    Instagram: Instagram,
+    YouTube: Youtube,
+    LinkedIn: Linkedin
+};
 
 const ContentCreationSection = () => {
     const links = [
@@ -91,22 +98,46 @@ const ContentCreationSection = () => {
                 )}
 
                 <div className="w-full px-6 grid grid-cols-1 sm:grid-cols-3 gap-6 relative z-10 max-w-5xl mx-auto">
-                    {links.map((link, i) => (
-                        <motion.a
-                            key={i}
-                            href={link.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1, duration: 0.5 }}
-                            viewport={{ once: true }}
-                            className="group relative p-6 border border-white/10 bg-black/60 hover:border-red-600/60 transition-colors flex flex-col items-center text-center gap-2"
-                        >
-                            <h3 className="font-heading uppercase tracking-[0.2em] text-lg group-hover:text-red-500 transition-colors">{link.name}</h3>
-                            <p className="font-mono text-[10px] opacity-70 uppercase tracking-wider">{link.desc}</p>
-                        </motion.a>
-                    ))}
+                    {links.map((link, i) => {
+                        const Icon = socialIcons[link.name] || ExternalLink;
+                        return (
+                            <motion.a
+                                key={i}
+                                href={link.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1, duration: 0.5 }}
+                                viewport={{ once: true }}
+                                className="group relative p-8 border border-white/10 bg-neutral-950/60 backdrop-blur-md rounded-2xl overflow-hidden hover:border-red-500 transition-all duration-300 flex flex-col items-center text-center gap-4 hover:shadow-[0_0_30px_rgba(239,68,68,0.1)] group/btn"
+                            >
+                                {/* Futuristic corner decorations */}
+                                <span className="absolute top-2 left-2 w-1.5 h-1.5 border-t border-l border-white/30 group-hover:border-red-500 transition-colors" />
+                                <span className="absolute top-2 right-2 w-1.5 h-1.5 border-t border-r border-white/30 group-hover:border-red-500 transition-colors" />
+                                <span className="absolute bottom-2 left-2 w-1.5 h-1.5 border-b border-l border-white/30 group-hover:border-red-500 transition-colors" />
+                                <span className="absolute bottom-2 right-2 w-1.5 h-1.5 border-b border-r border-white/30 group-hover:border-red-500 transition-colors" />
+                                
+                                {/* Background scanline effect */}
+                                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] opacity-0 group-hover:opacity-40 transition-opacity pointer-events-none" />
+
+                                {/* Social Icon with animated ring */}
+                                <div className="relative w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-red-500 group-hover:border-red-500/50 group-hover:scale-110 transition-all duration-300">
+                                    <Icon size={20} />
+                                    <div className="absolute inset-0 rounded-full border border-transparent group-hover:border-red-500/20 group-hover:animate-ping opacity-60" />
+                                </div>
+
+                                <div className="flex flex-col gap-1 z-10">
+                                    <h3 className="font-heading uppercase tracking-[0.2em] text-lg font-black text-white group-hover:text-red-500 transition-colors">
+                                        {link.name}
+                                    </h3>
+                                    <p className="font-mono text-[9px] opacity-50 uppercase tracking-widest text-white/70 group-hover:opacity-80 transition-opacity">
+                                        {link.desc}
+                                    </p>
+                                </div>
+                            </motion.a>
+                        );
+                    })}
                 </div>
             </div>
         </section>

@@ -87,40 +87,42 @@ const PopularProjectsSlider = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    className="grid grid-cols-1 md:grid-cols-2 border border-white/10 bg-black/40"
+                    className="relative w-full border border-white/10 bg-black overflow-hidden group min-h-[420px]"
                 >
-                    <div
-                        onClick={() => navigate(`/project/${current.name}`)}
-                        className="relative aspect-video md:aspect-auto md:min-h-[420px] bg-black overflow-hidden cursor-pointer group"
-                    >
+                    {/* Background GitHub Opengraph Image */}
+                    <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
                         <img
                             src={socialImg(current.name)}
                             alt={formatRepoName(current.name)}
                             loading="lazy"
-                            className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-700"
+                            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.01] transition-all duration-700"
                             onError={(e) => {
                                 (e.currentTarget as HTMLImageElement).style.display = 'none';
                             }}
                         />
+                        {/* Dark overlays to ensure text legibility */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent md:bg-gradient-to-r md:from-black md:via-black/75 md:to-transparent" />
+                        <div className="absolute inset-0 bg-black/30" />
                     </div>
 
-                    <div className="flex flex-col justify-between gap-6 p-6 md:p-10">
+                    {/* Content overlayed on top of the image */}
+                    <div className="relative z-10 flex flex-col justify-between gap-6 p-8 md:p-12 min-h-[420px] select-none">
                         <div className="flex flex-col gap-4">
                             <span className="text-[10px] font-mono text-red-500 uppercase tracking-widest">
                                 {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
                             </span>
-                            <h3 className="text-2xl md:text-4xl font-heading font-black text-white uppercase tracking-tight leading-tight">
+                            <h3 className="text-3xl md:text-5xl font-heading font-black text-white uppercase tracking-tight leading-tight max-w-2xl">
                                 {formatRepoName(current.name)}
                             </h3>
-                            <p className="text-sm md:text-base text-white/75 leading-relaxed">
+                            <p className="text-sm md:text-base text-white/90 leading-relaxed max-w-xl">
                                 {current.description || 'No description available for this project.'}
                             </p>
                             <div className="flex flex-wrap gap-2 text-[10px] font-mono">
                                 {current.language && (
-                                    <span className="px-2.5 py-1 border border-white/10 text-white/70 uppercase tracking-widest">{current.language}</span>
+                                    <span className="px-2.5 py-1 border border-white/20 bg-black/60 text-white/95 uppercase tracking-widest">{current.language}</span>
                                 )}
                                 {current.stargazers_count > 0 && (
-                                    <span className="px-2.5 py-1 border border-white/10 text-white/70 flex items-center gap-1">
+                                    <span className="px-2.5 py-1 border border-white/20 bg-black/60 text-white/95 flex items-center gap-1">
                                         <Star size={10} /> {current.stargazers_count}
                                     </span>
                                 )}
@@ -139,7 +141,7 @@ const PopularProjectsSlider = () => {
                             </a>
                             <button
                                 onClick={() => navigate(`/project/${current.name}`)}
-                                className="px-5 py-3 border border-white/20 hover:border-red-600 hover:text-red-500 transition-colors font-heading text-xs uppercase tracking-widest"
+                                className="px-5 py-3 border border-white/20 hover:border-red-600 hover:text-red-500 transition-colors bg-black/20 hover:bg-black/40 font-heading text-xs uppercase tracking-widest"
                             >
                                 Details →
                             </button>

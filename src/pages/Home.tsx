@@ -40,6 +40,8 @@ const Home = () => {
                     <PopularProjectsSlider />
                 </div>
 
+                <MarqueeSection />
+
                 <Pattern>
                     <div className="relative bg-transparent flex items-center justify-center w-full z-50 py-8 md:py-10">
                         <ContentCreationSection />

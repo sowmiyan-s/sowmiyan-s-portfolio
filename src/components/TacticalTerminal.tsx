@@ -4,7 +4,7 @@ import { Terminal, X, Minimize2, Maximize2, Hash } from 'lucide-react';
 
 const COMMANDS: Record<string, string | string[]> = {
   help: ["COMMANDS:", "  ls       - List available sectors", "  cat      - Read sector data", "  clear    - Flush terminal buffer", "  whoami   - Identity identification", "  exit     - Terminate session"],
-  ls: ["SECTORS:", "  /projects", "  /about", "  /achievements", "  /contact"],
+  ls: ["SECTORS:", "  /projects", "  /achievements", "  /contact"],
   "cat about": ["SOWMIYAN_S // IDENTITY_PROFILE", "Role: AI Engineer / Full-Stack Architect", "Status: Active // Level_04_Security", "Goal: Scaling intelligent neural systems."],
   "cat projects": ["RETRIEVING_PROJECT_DATABASE...", "Total: 30+ Archived Records", "Link: /projects sector for full visualization."],
   whoami: ["USER: ANONYMOUS_GUEST", "PERMISSIONS: READ_ONLY", "IP: [ENCRYPTED]"],

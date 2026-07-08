@@ -7,7 +7,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "./pages/Home.tsx";
 import AchievementsPage from "./pages/AchievementsPage.tsx";
 import ProjectsPage from "./pages/ProjectsPage.tsx";
-import AboutPage from "./pages/AboutPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import Admin from "./pages/Admin.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
@@ -27,7 +26,7 @@ const AnimatedRoutes = () => {
                 <Route path="/" element={<PageTransition><Home /></PageTransition>} />
                 <Route path="/achievements" element={<PageTransition><AchievementsPage /></PageTransition>} />
                 <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />
-                <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
+
                 <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
                 <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
                 <Route path="/project/:id" element={<PageTransition><ProjectDetail /></PageTransition>} />

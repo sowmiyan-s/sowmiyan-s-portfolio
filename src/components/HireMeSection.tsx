@@ -6,7 +6,7 @@ import ScrambleText from './ScrambleText';
 
 const HireMeSection = () => {
     return (
-        <section className="relative w-full min-h-[65vh] py-12 md:py-16 px-4 sm:px-6 bg-transparent z-10 flex flex-col items-center justify-center overflow-hidden">
+        <section className="relative w-full min-h-screen py-16 md:py-24 px-4 sm:px-6 bg-black z-10 flex flex-col items-center justify-center overflow-hidden">
             {/* Background pattern + semi-transparent fix layer */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
                 <TopographicBackground />

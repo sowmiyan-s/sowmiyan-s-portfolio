@@ -9,8 +9,7 @@ const navItems = [
     { to: '/', label: '01_Home' },
     { to: '/achievements', label: '02_Achievements' },
     { to: '/projects', label: '03_Projects' },
-    { to: '/about', label: '04_About' },
-    { to: '/contact', label: '05_Contact' },
+    { to: '/contact', label: '04_Contact' },
 ];
 
 const TechNav = () => {
