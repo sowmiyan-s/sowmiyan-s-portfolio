@@ -197,9 +197,11 @@ const Admin = () => {
         if (hiddenIds.includes(id)) {
             await supabase.from('hidden_projects').delete().eq('github_repo_id', id);
             setHiddenIds(prev => prev.filter(hid => hid !== id));
+            toast({ title: 'Now visible', description: formatRepoName(repoName) });
         } else {
             await supabase.from('hidden_projects').insert({ github_repo_id: id, repo_name: repoName });
             setHiddenIds(prev => [...prev, id]);
+            toast({ title: 'Hidden', description: formatRepoName(repoName) });
         }
     };
 
@@ -207,15 +209,18 @@ const Admin = () => {
         if (!confirm(`Are you sure you want to ${action === "hideAll" ? "hide" : "show"} ALL repositories?`)) return;
         if (action === "hideAll") {
             const toHide = repos.filter(r => !hiddenIds.includes(r.id));
-            for (const r of toHide) {
-                await supabase.from('hidden_projects').insert({ github_repo_id: r.id, repo_name: r.name });
+            if (toHide.length) {
+                await supabase.from('hidden_projects').insert(toHide.map(r => ({ github_repo_id: r.id, repo_name: r.name })));
             }
             setHiddenIds(repos.map(r => r.id));
+            toast({ title: 'All hidden', description: `${toHide.length} repos` });
         } else {
             await supabase.from('hidden_projects').delete().neq('github_repo_id', -1);
             setHiddenIds([]);
+            toast({ title: 'All visible' });
         }
     };
+
 
     const addSkill = async (e: React.FormEvent, category: 'tech' | 'non-tech') => {
         e.preventDefault();
