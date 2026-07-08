@@ -12,7 +12,7 @@ const ProjectsPage = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-black text-foreground selection:bg-primary font-body overflow-x-hidden">
+    <div className="relative min-h-screen bg-transparent text-foreground selection:bg-primary font-body overflow-x-hidden">
       <ProjectPattern>
         <TechNav />
         <main className="relative z-10 pt-24">

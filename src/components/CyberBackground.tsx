@@ -20,14 +20,16 @@ const ParticleField = () => {
 
     useFrame((state) => {
         if (!meshRef.current) return;
-        const positions = meshRef.current.geometry.attributes.position.array as Float32Array;
+        const positionAttr = meshRef.current.geometry.attributes.position;
+        if (!positionAttr) return;
+        const positions = positionAttr.array as Float32Array;
         for (let i = 0; i < count; i++) {
             positions[i * 3 + 1] -= particles.velocities[i];
             if (positions[i * 3 + 1] < -25) {
                 positions[i * 3 + 1] = 25;
             }
         }
-        meshRef.current.geometry.attributes.position.needsUpdate = true;
+        positionAttr.needsUpdate = true;
     });
 
     return (

@@ -14,46 +14,46 @@ import MarqueeSection from "@/components/MarqueeSection";
 
 const Home = () => {
     return (
-        <div className="relative min-h-screen bg-black text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
+        <div className="relative min-h-screen bg-transparent text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
             <SEOKeywords />
             <TechNav />
             <main className="relative z-10 w-full">
-                <div className="relative w-full z-[1] flex items-center min-h-screen">
+                <div className="relative w-full z-10 flex items-center min-h-screen">
                     <Hero />
                 </div>
 
                 <MarqueeSection />
 
-                <div className="relative w-full z-[2]">
+                <div className="relative w-full z-20">
                     <SkillsSection />
                 </div>
 
                 <MarqueeSection />
 
-                <div className="relative w-full z-[3]">
+                <div className="relative w-full z-30">
                     <BlogSection />
                 </div>
 
                 <MarqueeSection />
 
-                <div id="popular-projects-slider" className="relative bg-transparent w-full z-[3.5]">
+                <div id="popular-projects-slider" className="relative bg-transparent w-full z-40">
                     <PopularProjectsSlider />
                 </div>
 
                 <Pattern>
-                    <div className="relative bg-transparent flex items-center justify-center w-full z-[4] py-8 md:py-10">
+                    <div className="relative bg-transparent flex items-center justify-center w-full z-50 py-8 md:py-10">
                         <ContentCreationSection />
                     </div>
                 </Pattern>
 
                 <MarqueeSection />
 
-                <div className="relative w-full z-[5] bg-transparent">
+                <div className="relative w-full z-[60] bg-transparent">
                     <HireMeSection />
                 </div>
 
 
-                <div className="relative z-[7] bg-black w-full">
+                <div className="relative z-[70] bg-black w-full">
                     <Footer />
                 </div>
             </main>
