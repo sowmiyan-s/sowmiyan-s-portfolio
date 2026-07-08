@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { getSkillIconUrl } from '@/lib/skillIcons';
+import { useRealtimeRefetch } from '@/hooks/useRealtimeRefetch';
 import { Users, MessageSquare, Target, Brain, Presentation, Handshake } from 'lucide-react';
 
 const defaultTech = [
@@ -39,15 +40,17 @@ const softIconMap: Record<string, any> = {};
 const SkillsSection = () => {
     const [tech, setTech] = useState<string[]>(defaultTech);
 
-    useEffect(() => {
-        (async () => {
-            const { data } = await supabase.from('skills').select('name, category');
-            if (data && data.length) {
-                const t = data.filter(s => s.category === 'tech').map(s => s.name);
-                if (t.length) setTech(t);
-            }
-        })();
+    const load = useCallback(async () => {
+        const { data } = await supabase.from('skills').select('name, category');
+        if (data && data.length) {
+            const t = data.filter((s: any) => s.category === 'tech').map((s: any) => s.name);
+            setTech(t.length ? t : defaultTech);
+        }
     }, []);
+
+    useEffect(() => { load(); }, [load]);
+    useRealtimeRefetch(['skills'], load);
+
 
     return (
         <section className="relative py-10 md:py-12 px-4 sm:px-6 bg-transparent z-10 overflow-hidden">

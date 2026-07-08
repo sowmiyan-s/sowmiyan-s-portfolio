@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRealtimeRefetch } from "@/hooks/useRealtimeRefetch";
+
 import { motion } from "framer-motion";
 import { Github, Star, GitFork } from "lucide-react";
 import { fetchRepos } from "@/lib/github";
@@ -83,54 +85,54 @@ const ProjectsSection = () => {
   const [groupedProjects, setGroupedProjects] = useState<Record<string, any[]>>({});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const [data, hiddenRes] = await Promise.all([
-          fetchRepos(),
-          supabase.from('hidden_projects').select('github_repo_id'),
-        ]);
-        const hiddenIds = (hiddenRes.data ?? []).map(r => r.github_repo_id);
-        const visible = data.filter((r) => !hiddenIds.includes(r.id));
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [data, hiddenRes] = await Promise.all([
+        fetchRepos(),
+        supabase.from('hidden_projects').select('github_repo_id'),
+      ]);
+      const hiddenIds = (hiddenRes.data ?? []).map((r: any) => r.github_repo_id);
+      const visible = data.filter((r) => !hiddenIds.includes(r.id));
 
-        const formatted = visible
-          .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-          .map(repo => {
-            const dateObj = new Date(repo.updated_at);
-            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-            const year = dateObj.getFullYear().toString();
+      const formatted = visible
+        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+        .map(repo => {
+          const dateObj = new Date(repo.updated_at);
+          const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+          const year = dateObj.getFullYear().toString();
 
-            return {
-              id: repo.id,
-              year,
-              name: repo.name,
-              title: formatRepoName(repo.name),
-              date: `${months[dateObj.getMonth()]} ${year}`,
-              description: repo.description || "No description provided.",
-              tech: repo.language ? [repo.language] : ['System'],
-              github: repo.html_url,
-              stars: repo.stargazers_count,
-              forks: repo.forks_count
-            };
-          });
+          return {
+            id: repo.id,
+            year,
+            name: repo.name,
+            title: formatRepoName(repo.name),
+            date: `${months[dateObj.getMonth()]} ${year}`,
+            description: repo.description || "No description provided.",
+            tech: repo.language ? [repo.language] : ['System'],
+            github: repo.html_url,
+            stars: repo.stargazers_count,
+            forks: repo.forks_count
+          };
+        });
 
-        // Group by year
-        const groups = formatted.reduce((acc, curr) => {
-          if (!acc[curr.year]) acc[curr.year] = [];
-          acc[curr.year].push(curr);
-          return acc;
-        }, {} as Record<string, any[]>);
+      const groups = formatted.reduce((acc, curr) => {
+        if (!acc[curr.year]) acc[curr.year] = [];
+        acc[curr.year].push(curr);
+        return acc;
+      }, {} as Record<string, any[]>);
 
-        setGroupedProjects(groups);
-      } catch (err) {
-        console.error("Failed to load projects:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+      setGroupedProjects(groups);
+    } catch (err) {
+      console.error("Failed to load projects:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => { load(); }, [load]);
+  useRealtimeRefetch(['hidden_projects'], load);
+
 
   const years = Object.keys(groupedProjects).sort((a, b) => b.localeCompare(a));
 

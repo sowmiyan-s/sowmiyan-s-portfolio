@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
 import { supabase } from '@/integrations/supabase/client';
 import { formatRepoName } from '@/lib/formatRepo';
 import { useNavigate } from 'react-router-dom';
+import { useRealtimeRefetch } from '@/hooks/useRealtimeRefetch';
 import { Github, Star } from 'lucide-react';
 
 const socialImg = (repo: string) =>
@@ -15,34 +16,36 @@ const PopularProjectsSlider = () => {
     const [index, setIndex] = useState(0);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const [repos, hiddenRes, featuredRes] = await Promise.all([
-                    fetchRepos(),
-                    supabase.from('hidden_projects').select('github_repo_id'),
-                    supabase.from('featured_projects').select('github_repo_id, position').order('position'),
-                ]);
-                const hidden = (hiddenRes.data ?? []).map(r => r.github_repo_id);
-                const featuredIds = (featuredRes.data ?? []).map(r => r.github_repo_id);
-                const visible = repos.filter(r => !hidden.includes(r.id));
+    const load = useCallback(async () => {
+        try {
+            const [repos, hiddenRes, featuredRes] = await Promise.all([
+                fetchRepos(),
+                supabase.from('hidden_projects').select('github_repo_id'),
+                supabase.from('featured_projects').select('github_repo_id, position').order('position'),
+            ]);
+            const hidden = (hiddenRes.data ?? []).map((r: any) => r.github_repo_id);
+            const featuredIds = (featuredRes.data ?? []).map((r: any) => r.github_repo_id);
+            const visible = repos.filter(r => !hidden.includes(r.id));
 
-                let final: GitHubRepo[];
-                if (featuredIds.length) {
-                    final = featuredIds
-                        .map(id => visible.find(r => r.id === id))
-                        .filter(Boolean) as GitHubRepo[];
-                } else {
-                    final = [...visible]
-                        .sort((a, b) => b.stargazers_count - a.stargazers_count)
-                        .slice(0, 3);
-                }
-                setProjects(final);
-            } finally {
-                setLoading(false);
+            let final: GitHubRepo[];
+            if (featuredIds.length) {
+                final = featuredIds
+                    .map((id: number) => visible.find(r => r.id === id))
+                    .filter(Boolean) as GitHubRepo[];
+            } else {
+                final = [...visible]
+                    .sort((a, b) => b.stargazers_count - a.stargazers_count)
+                    .slice(0, 3);
             }
-        })();
+            setProjects(final);
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => { load(); }, [load]);
+    useRealtimeRefetch(['hidden_projects', 'featured_projects'], load);
+
 
     useEffect(() => {
         if (projects.length < 2) return;
