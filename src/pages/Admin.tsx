@@ -447,8 +447,8 @@ const Admin = () => {
                         {/* Skills manager */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {[
-                                { title: "Technical Skills", cat: "tech" as const, list: techSkills, value: newTechSkill, setValue: setNewTechSkill },
-                                { title: "Soft Skills", cat: "non-tech" as const, list: nonTechSkills, value: newNonTechSkill, setValue: setNewNonTechSkill },
+                                { title: "Technical Skills", cat: "tech" as const, list: techSkills, value: newTechSkill, setValue: setNewTechSkill, bulk: bulkTech, setBulk: setBulkTech },
+                                { title: "Soft Skills", cat: "non-tech" as const, list: nonTechSkills, value: newNonTechSkill, setValue: setNewNonTechSkill, bulk: bulkNonTech, setBulk: setBulkNonTech },
                             ].map(section => (
                                 <motion.section
                                     key={section.cat}
@@ -456,7 +456,10 @@ const Admin = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="border border-white/10 bg-black/40 backdrop-blur-md p-6 flex flex-col gap-5"
                                 >
-                                    <h3 className="text-lg font-heading font-black uppercase text-red-500">{section.title}</h3>
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-lg font-heading font-black uppercase text-red-500">{section.title}</h3>
+                                        <span className="text-[9px] font-mono opacity-40 uppercase">{section.list.length} items</span>
+                                    </div>
                                     <form onSubmit={(e) => addSkill(e, section.cat)} className="flex gap-2">
                                         <input type="text" value={section.value} onChange={(e) => section.setValue(e.target.value)} placeholder={`Add ${section.title}...`}
                                             className="flex-1 px-3 py-2 bg-white/5 border border-white/10 text-white text-xs font-mono focus:outline-none focus:border-red-500" />
@@ -464,15 +467,44 @@ const Admin = () => {
                                             <Plus size={12} /> Add
                                         </button>
                                     </form>
+                                    <details className="border border-white/5">
+                                        <summary className="cursor-pointer px-3 py-2 text-[10px] font-mono uppercase tracking-widest text-white/60 hover:text-white">Bulk add (comma or newline)</summary>
+                                        <div className="p-3 flex flex-col gap-2">
+                                            <textarea rows={3} value={section.bulk} onChange={(e) => section.setBulk(e.target.value)} placeholder="React, Vue, Svelte&#10;or one per line"
+                                                className="w-full px-3 py-2 bg-white/5 border border-white/10 text-white text-xs font-mono focus:outline-none focus:border-red-500" />
+                                            <button type="button" onClick={() => bulkAddSkills(section.bulk, section.cat)} className="self-end px-3 py-1.5 border border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-[10px] font-mono uppercase">Import batch</button>
+                                        </div>
+                                    </details>
                                     <div className="flex flex-wrap gap-2">
-                                        {section.list.map(skill => (
-                                            <div key={skill.id} className="group px-3 py-1.5 bg-white/5 border border-white/10 text-[11px] font-mono flex items-center gap-2 hover:border-red-500 transition-colors">
-                                                <span>{skill.name}</span>
-                                                <button onClick={() => removeSkill(skill.id, section.cat)} className="opacity-30 hover:opacity-100 hover:text-red-500"><Trash2 size={10} /></button>
-                                            </div>
-                                        ))}
+                                        {section.list.map(skill => {
+                                            const editing = editingSkillId === skill.id;
+                                            return (
+                                                <div key={skill.id} className="group px-3 py-1.5 bg-white/5 border border-white/10 text-[11px] font-mono flex items-center gap-2 hover:border-red-500 transition-colors">
+                                                    {editing ? (
+                                                        <>
+                                                            <input
+                                                                autoFocus
+                                                                value={editingSkillName}
+                                                                onChange={e => setEditingSkillName(e.target.value)}
+                                                                onKeyDown={e => { if (e.key === 'Enter') renameSkill(skill.id, editingSkillName, section.cat); if (e.key === 'Escape') setEditingSkillId(null); }}
+                                                                className="bg-transparent border-b border-red-500 outline-none w-24"
+                                                            />
+                                                            <button onClick={() => renameSkill(skill.id, editingSkillName, section.cat)} className="text-green-500 hover:opacity-70"><Check size={10} /></button>
+                                                            <button onClick={() => setEditingSkillId(null)} className="text-white/50 hover:text-red-500"><X size={10} /></button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <span>{skill.name}</span>
+                                                            <button onClick={() => { setEditingSkillId(skill.id); setEditingSkillName(skill.name); }} className="opacity-30 hover:opacity-100 hover:text-yellow-500"><Pencil size={10} /></button>
+                                                            <button onClick={() => removeSkill(skill.id, section.cat)} className="opacity-30 hover:opacity-100 hover:text-red-500"><Trash2 size={10} /></button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </motion.section>
+
                             ))}
                         </div>
 
