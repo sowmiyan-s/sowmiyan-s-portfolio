@@ -79,13 +79,16 @@ const Admin = () => {
         if (featuredIds.includes(repo.id)) {
             await supabase.from('featured_projects').delete().eq('github_repo_id', repo.id);
             setFeatured(prev => prev.filter(f => f.id !== repo.id));
+            toast({ title: 'Unfeatured', description: formatRepoName(repo.name) });
         } else {
-            if (featured.length >= 3) { alert('Max 3 featured projects. Unfeature one first.'); return; }
+            if (featured.length >= 3) { toast({ title: 'Limit reached', description: 'Max 3 featured projects.' }); return; }
             const position = featured.length;
             await supabase.from('featured_projects').insert({ github_repo_id: repo.id, repo_name: repo.name, position });
             setFeatured(prev => [...prev, { id: repo.id, repo_name: repo.name, position }]);
+            toast({ title: '★ Featured', description: formatRepoName(repo.name) });
         }
     };
+
 
     const moveFeatured = async (idx: number, dir: -1 | 1) => {
         const next = [...featured];
