@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { fetchRepos, GitHubRepo } from '@/lib/github';
 import { fetchChannelVideos, YouTubeVideo } from '@/lib/youtube';
 import { supabase } from '@/integrations/supabase/client';
 import { formatRepoName } from '@/lib/formatRepo';
+import { useRealtimeRefetch } from '@/hooks/useRealtimeRefetch';
+import { toast } from '@/hooks/use-toast';
 import TechNav from '@/components/TechNav';
 import Footer from '@/components/Footer';
 import CyberBackground from '@/components/CyberBackground';
 import PageHero from '@/components/PageHero';
 import { motion } from 'framer-motion';
-import { Star, Eye, EyeOff, Trash2, Plus, Search, Lock, ArrowUp, ArrowDown, RefreshCw, Youtube } from 'lucide-react';
+import { Star, Eye, EyeOff, Trash2, Plus, Search, Lock, ArrowUp, ArrowDown, RefreshCw, Youtube, Download, Upload, Pencil, Check, X, Radio } from 'lucide-react';
 
 const ADMIN_PASSWORD = "121212";
 const AUTH_KEY = "adminAuthenticated";
 type SortMode = "updated" | "stars" | "name";
+
 
 const Admin = () => {
     const [authed, setAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === "true");
