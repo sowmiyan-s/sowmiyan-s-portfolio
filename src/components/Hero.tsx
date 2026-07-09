@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ScrambleText from './ScrambleText';
+import UpvoteButton from './UpvoteButton';
 
 const Hero = () => {
     const containerRef = useRef<HTMLDivElement>(null);
