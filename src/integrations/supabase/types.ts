@@ -115,12 +115,7 @@ export type Database = {
       }
     }
     Views: {
-      votes_count: {
-        Row: {
-          count: number | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       [_ in never]: never
