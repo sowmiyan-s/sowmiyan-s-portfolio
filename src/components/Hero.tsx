@@ -23,8 +23,8 @@ const Hero = () => {
             
             <motion.div style={{ y, opacity }} className="max-w-7xl w-full flex flex-col items-start gap-8 md:gap-12 relative z-20 mt-12 md:mt-16">
                 <div className="flex flex-col items-start gap-4 md:gap-6 w-full text-left">
-                    <div className="relative group cursor-none w-full pr-2 overflow-hidden">
-                        <h1 className="text-[clamp(2rem,7vw,8rem)] font-heading font-black leading-[1] tracking-tighter text-white uppercase transition-all group-hover:scale-[1.02] whitespace-nowrap drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">
+                    <div className="relative w-full pr-2 overflow-hidden">
+                        <h1 className="text-[clamp(2rem,7vw,8rem)] font-heading font-black leading-[1] tracking-tighter text-white uppercase whitespace-nowrap drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">
                             <ScrambleText text="SOWMIYAN S" triggerOnView speed={0.5} delay={0.2} />
                         </h1>
                     </div>
