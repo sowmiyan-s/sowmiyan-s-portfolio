@@ -77,6 +77,21 @@ export type Database = {
         }
         Relationships: []
       }
+      site_votes: {
+        Row: {
+          created_at: string
+          voter_id: string
+        }
+        Insert: {
+          created_at?: string
+          voter_id: string
+        }
+        Update: {
+          created_at?: string
+          voter_id?: string
+        }
+        Relationships: []
+      }
       skills: {
         Row: {
           category: string
@@ -100,7 +115,12 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      votes_count: {
+        Row: {
+          count: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
