@@ -6,52 +6,81 @@ const map: Record<string, string> = {
   // languages
   python: "python",
   java: "openjdk",
-  sql: "mysql",
+  "java script": "javascript",
   javascript: "javascript",
+  js: "javascript",
   typescript: "typescript",
-  // AI/ML
-  llms: "openai",
+  ts: "typescript",
+  html: "html5",
+  "html5": "html5",
+  css: "css3",
+  "css3": "css3",
+  sql: "mysql",
+
+  // AI / ML
+  ai: "openai",
   llm: "openai",
+  llms: "openai",
   rag: "openai",
+  openai: "openai",
   "fine-tune": "huggingface",
   langchain: "langchain",
+  langflow: "langchain",
   crewai: "openai",
   mcp: "anthropic",
   "hugging face": "huggingface",
   huggingface: "huggingface",
   tensorflow: "tensorflow",
   pytorch: "pytorch",
+  claude: "anthropic",
+  ollama: "ollama",
+
   // web
   react: "react",
+  "react.js": "react",
+  reactjs: "react",
   "node.js": "nodedotjs",
   nodejs: "nodedotjs",
+  node: "nodedotjs",
+  "node js": "nodedotjs",
+  vite: "vite",
+  "tailwind": "tailwindcss",
+  "tailwind css": "tailwindcss",
+  tailwindcss: "tailwindcss",
+  bootstrap: "bootstrap",
+  bootstraps: "bootstrap",
+
   // data
   mongodb: "mongodb",
+  "mongo db": "mongodb",
+  mongo: "mongodb",
   mysql: "mysql",
   pandas: "pandas",
+  "power bi": "powerbi",
+
   // cloud / infra
   aws: "amazonwebservices",
+  "amazon(aws)": "amazonwebservices",
+  amazon: "amazonwebservices",
   vercel: "vercel",
   netlify: "netlify",
   docker: "docker",
   linux: "linux",
-  "tailwind css": "tailwindcss",
-  vite: "vite",
+
+  // tools
   vscode: "visualstudiocode",
-  claude: "anthropic",
+  "vs code": "visualstudiocode",
   figma: "figma",
   gigma: "figma",
   canva: "canva",
-  // tools
   git: "git",
   github: "github",
-  ollama: "ollama",
   n8n: "n8n",
-  "power bi": "powerbi",
 };
 
 export function getSkillIconUrl(name: string): string | null {
-  const slug = map[name.trim().toLowerCase()];
+  const key = name.trim().toLowerCase();
+  const slug = map[key] ?? map[key.replace(/[._-]/g, " ")];
   if (!slug) return null;
   return `https://cdn.simpleicons.org/${slug}/ffffff`;
 }
