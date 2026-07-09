@@ -1,59 +1,53 @@
-# Portfolio Polish — Motion, 3D, Cross-Platform
 
-## Goals
-1. Kill the sudden blink/flash between sections and route changes.
-2. Add refined 3D + advanced motion (not gimmicky) inspired by Framer templates.
-3. Consistent look on desktop, tablet, mobile.
+# Portfolio v3 — Approved + Upvote Button
 
-## 1. Fix the "sudden blink" (highest priority)
-Root causes in the current code:
-- `AnimatePresence` around a disabled loader still mounts/unmounts a full-screen black overlay in `App.tsx`.
-- Each page re-mounts its own `CyberBackground` (three.js `Canvas`), so route changes tear down and rebuild WebGL → 1-frame black flash.
-- `FrameAnimationBackground` swaps large frames without preloading.
-- Sections stack heavy `motion` `whileInView` with `once:false`, retriggering on scroll.
+Approved v3 phases (content depth, SEO, perf, admin auth, analytics, polish) plus a new lightweight social signal on the Hero.
 
-Fixes:
-- Remove the dead loader block from `App.tsx`.
-- Lift `CyberBackground` + `FrameAnimationBackground` into a single persistent `<Layout>` wrapper that lives above `<Routes>`, so the canvas never unmounts between routes.
-- Wrap `<Routes>` in framer-motion `AnimatePresence mode="wait"` with a 250ms crossfade page transition (opacity only, no y-shift) to eliminate hard cuts.
-- Add `<html style="background:#000">` + `#root{background:#000}` and set `color-scheme: dark` so the browser never paints a white frame before React mounts.
-- Preload the LCP hero frame with `<link rel="preload" as="image">` in `index.html`.
-- Convert `once:false` viewport animations to `once:true, amount:0.2`.
+## New: "Upvote Me" button next to name
 
-## 2. Advanced motion layer (Framer-template feel)
-Add, used sparingly:
-- **Lenis** smooth scroll (already-approved-style momentum) wired through a `SmoothScroll` provider — respects `prefers-reduced-motion`.
-- **framer-motion** `useScroll` + `useTransform` for parallax on Hero title, Skills grid, and HireMe.
-- **Magnetic buttons** + **cursor-follow spotlight** upgrade to existing `CustomCursor`.
-- **Text reveal** via `SplitText`-style component (per-word mask), replacing some `ScrambleText` uses on section headings for variety.
-- **View transitions** for project cards → detail page (shared layoutId on thumbnail).
+### UX
+- Small pill button beside the Hero name: `▲ 1,234` (emoji: ▲ or 🔥 — pick one; default ▲).
+- Click → count increments, button flips to active state `▼ 1,235` (unvote label on hover).
+- Click again → count decrements, back to inactive.
+- Optimistic UI; realtime updates so other visitors see the count tick live.
+- Subtle pop animation on click (framer-motion `scale` spring).
+- Respect `prefers-reduced-motion`.
 
-## 3. Three.js upgrades
-Replace/augment existing scenes with tasteful ones:
-- **Hero**: swap the flat particle rain for a subtle **instanced wireframe globe** with red latitude lines slowly rotating; mouse parallax; DPR clamped to `[1, 1.5]`; paused when tab hidden.
-- **Global background**: unified `SceneBackground.tsx` mounted once at the layout level; sections just adjust intensity via context (no remount).
-- **Projects slider**: hover tilt on cards using `react-three-fiber` distortion plane behind the featured project only (mobile falls back to a static gradient).
-- Add `<Suspense fallback={null}>` around every `Canvas` and lazy-load them with `React.lazy` so first paint is HTML, not WebGL.
+### Vote persistence (browser cookie)
+- On first vote, generate a `voter_id` (uuid) and store in a first-party cookie `sw_voter` (1-year expiry, `SameSite=Lax`).
+- Also mirror to `localStorage` as a fallback if cookies are blocked.
+- Server enforces one vote per `voter_id` via unique constraint. User can toggle (vote / unvote) anytime from the same browser.
+- Clearing cookies = ability to vote again (accepted trade-off; no auth required).
 
-## 4. Cross-platform / responsive pass
-- Detect `matchMedia('(hover:none)')` and disable custom cursor, Lenis, heavy shaders on touch devices.
-- Clamp typography with `clamp()` (already partial) across Skills, Projects, Footer.
-- Test breakpoints 360 / 768 / 1024 / 1440 with Playwright screenshots and fix overflow.
-- Add safe-area padding for iOS notches (`env(safe-area-inset-*)`).
-- Reduce `three` particle counts by 50% on `< md` and when `navigator.hardwareConcurrency <= 4`.
+### Data model
+Table `site_votes`:
+- `voter_id text primary key` (client-generated uuid)
+- `created_at timestamptz default now()`
 
-## 5. Cleanup
-- Remove unused `CyberBackground` duplicates from individual pages after layout lift.
-- Consolidate section vertical rhythm to `py-20 md:py-28`.
-- Drop the `bg-[linear-gradient(...)]` scanline duplication into a single `<Scanlines/>` component.
+RLS: `SELECT` public (only used for count aggregation via view), `INSERT` and `DELETE` public but only for a row where `voter_id = <request-provided id>`. To avoid trusting the client with arbitrary deletes on other rows, route writes through an edge function `vote` that:
+- `POST /vote { voter_id }` — inserts (idempotent on conflict do nothing) → returns new count.
+- `DELETE /vote { voter_id }` — removes that row → returns new count.
+- `GET /vote?voter_id=...` — returns `{ count, hasVoted }`.
 
-## Technical details
-New deps: `@studio-freight/lenis`, `three` (already in), `@react-three/fiber@^8.18`, `@react-three/drei@^9.122` (pin versions — required for React 18).
-New files: `src/components/layout/SiteLayout.tsx`, `src/components/three/SceneBackground.tsx`, `src/components/three/WireGlobe.tsx`, `src/components/SmoothScroll.tsx` (rewrite), `src/components/motion/RevealText.tsx`, `src/components/motion/MagneticButton.tsx`, `src/components/PageTransition.tsx`.
-Edited: `src/App.tsx`, `src/pages/*.tsx` (remove per-page backgrounds), `src/index.css`, `index.html`, `src/components/CustomCursor.tsx`, `src/components/Hero.tsx`.
+The table itself gets RLS with no public write policies; the edge function uses the service role. Public read policy on a `votes_count` view (`select count(*)::int as count from site_votes`).
 
-## Out of scope (ask if you want them)
-- Replacing framer-motion with GSAP (memory says never GSAP — keeping framer-motion + Lenis).
-- Redesigning content/copy.
+### Realtime
+- Enable Postgres changes on `site_votes` (REPLICA IDENTITY FULL, add to `supabase_realtime`).
+- Client subscribes and re-fetches the count on any change.
 
-Proceed with all of the above?
+### Files
+- Migration: create `site_votes` + view + RLS + realtime.
+- Edge function: `supabase/functions/vote/index.ts`.
+- New component: `src/components/UpvoteButton.tsx` (handles cookie, calls function, animates).
+- Wire into `src/components/Hero.tsx` inline with the name.
+- Admin panel: read-only "Total upvotes" stat in the analytics panel.
+
+## Rollout order (updated)
+1. **Upvote button** (small, self-contained, high-visibility win) — ships first.
+2. Performance + SEO.
+3. Case studies + README render.
+4. Server-auth admin + audit log.
+5. Analytics + reactions.
+6. Command palette + polish.
+
+Everything else from the previously approved v3 plan stays as-is.
