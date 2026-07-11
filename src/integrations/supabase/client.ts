@@ -60,6 +60,15 @@ function createStubSupabaseClient() {
     functions: {
       invoke: async () => ({ data: null, error: new Error('Supabase not configured') }),
     },
+    removeChannel: () => {},
+    channel: () => {
+      const channelStub = {
+        on: () => channelStub,
+        subscribe: () => channelStub,
+        unsubscribe: () => channelStub,
+      };
+      return channelStub;
+    },
   } as any;
 }
 
