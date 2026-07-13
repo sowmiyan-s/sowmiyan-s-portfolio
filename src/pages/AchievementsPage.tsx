@@ -6,7 +6,9 @@ import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import { certificatesList, Certificate } from '@/lib/certificates';
 import EbookShowcase from '@/components/EbookShowcase';
+import LeetCodeShowcase from '@/components/LeetCodeShowcase';
 import RedCrackPattern from '@/components/RedCrackPattern';
+import MarqueeSection from '@/components/MarqueeSection';
 
 const achievements = [
   { type: 'PATENT', title: 'SMART DUSTBIN', desc: 'Integrated IoT-based waste monitoring & automated collection protocol.', icon: '⚙️' },
@@ -75,6 +77,8 @@ const AchievementsPage = () => {
           </motion.div>
         </section>
 
+        <MarqueeSection />
+
         {/* Achievements Grid */}
         <section className="px-6 py-16">
           <div className="max-w-7xl mx-auto">
@@ -107,8 +111,17 @@ const AchievementsPage = () => {
           </div>
         </section>
 
+        <MarqueeSection />
+
         {/* eBook Showcase */}
         <EbookShowcase />
+
+        <MarqueeSection />
+
+        {/* LeetCode Showcase */}
+        <LeetCodeShowcase />
+
+        <MarqueeSection />
 
         {/* Certifications */}
         <RedCrackPattern>
@@ -176,6 +189,8 @@ const AchievementsPage = () => {
           </div>
         </section>
         </RedCrackPattern>
+
+        <MarqueeSection />
 
         {/* Education */}
         <section className="px-6 py-16 border-t border-foreground/5">

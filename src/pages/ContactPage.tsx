@@ -13,8 +13,8 @@ const offeringCards = [
         desc: "Ready to join dynamic engineering teams. Passionate about bringing advanced Generative AI and robust Full-Stack architectures to your codebase.",
         icon: Briefcase,
         color: "text-red-500",
-        actionText: "Request Resume",
-        actionUrl: "mailto:sowmisowmiyan58@gmail.com?subject=Job%20Inquiry%20-%20AI%20Engineer",
+        actionText: "View Resume",
+        actionUrl: "https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing",
         features: [
             "AI Engineer / Full-Stack",
             "LLM & Multi-Agent systems",
@@ -261,6 +261,27 @@ const ContactPage = () => {
 
                 <section className="relative w-full py-20 md:py-28 px-4 sm:px-6 flex flex-col items-center justify-center overflow-hidden">
                     <div className="relative z-10 max-w-6xl w-full mx-auto flex flex-col items-center gap-6">
+
+                        {/* Direct Action Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full justify-center max-w-2xl mb-12">
+                            <motion.a
+                                href="mailto:sowmisowmiyan58@gmail.com"
+                                whileHover={{ y: -2 }}
+                                className="flex-1 px-6 md:px-10 py-4 md:py-5 border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-sm text-center flex items-center justify-center gap-3 rounded-xl cursor-pointer"
+                            >
+                                <ScrambleText text="Email Direct" triggerOnHover triggerOnView className="text-current" />
+                            </motion.a>
+
+                            <motion.a
+                                href="https://wa.me/919042561295"
+                                target="_blank"
+                                rel="noreferrer"
+                                whileHover={{ y: -2 }}
+                                className="flex-1 px-6 md:px-10 py-4 md:py-5 border border-red-600 bg-red-600/10 hover:bg-red-600 hover:text-white text-red-500 transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-sm text-center flex items-center justify-center gap-3 rounded-xl cursor-pointer"
+                            >
+                                <ScrambleText text="WhatsApp Direct" triggerOnHover triggerOnView className="text-current" />
+                            </motion.a>
+                        </div>
 
                         {/* Feature Cards Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full items-stretch">

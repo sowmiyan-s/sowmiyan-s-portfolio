@@ -23,13 +23,23 @@ const HireMeSection = () => {
                     </h2>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full justify-center max-w-xl">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full justify-center max-w-3xl">
                     <motion.a
                         href="mailto:sowmisowmiyan58@gmail.com"
                         whileHover={{ y: -2 }}
-                        className="flex-1 px-6 md:px-10 py-4 md:py-5 border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
+                        className="flex-1 px-6 md:px-8 py-4 md:py-5 border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-sm text-center flex items-center justify-center gap-3"
                     >
                         <ScrambleText text="Email Direct" triggerOnHover triggerOnView className="text-current" />
+                    </motion.a>
+
+                    <motion.a
+                        href="https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing"
+                        target="_blank"
+                        rel="noreferrer"
+                        whileHover={{ y: -2 }}
+                        className="flex-1 px-6 md:px-8 py-4 md:py-5 border border-red-600 bg-red-600 hover:bg-red-700 hover:text-white text-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-sm text-center flex items-center justify-center gap-3 shadow-[0_0_15px_rgba(220,38,38,0.35)]"
+                    >
+                        <ScrambleText text="View Resume" triggerOnHover triggerOnView className="text-current" />
                     </motion.a>
 
                     <motion.a
@@ -37,7 +47,7 @@ const HireMeSection = () => {
                         target="_blank"
                         rel="noreferrer"
                         whileHover={{ y: -2 }}
-                        className="flex-1 px-6 md:px-10 py-4 md:py-5 border border-red-600 bg-red-600/10 hover:bg-red-600 hover:text-white text-red-500 transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-base text-center flex items-center justify-center gap-3"
+                        className="flex-1 px-6 md:px-8 py-4 md:py-5 border border-red-600 bg-red-600/10 hover:bg-red-600/20 hover:text-red-400 text-red-500 transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-sm text-center flex items-center justify-center gap-3"
                     >
                         <ScrambleText text="WhatsApp" triggerOnHover triggerOnView className="text-current" />
                     </motion.a>
