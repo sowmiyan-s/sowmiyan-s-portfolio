@@ -280,6 +280,29 @@ const ProjectsSection = () => {
   const [repoRootUrl, setRepoRootUrl] = useState("");
   
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  const [junctionClicks, setJunctionClicks] = useState<Record<number, number>>({});
+  const handleJunctionClick = (idx: number) => {
+    const count = (junctionClicks[idx] || 0) + 1;
+    setJunctionClicks(prev => ({ ...prev, [idx]: count }));
+    
+    try {
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      osc.frequency.setValueAtTime(800 + (count * 150), audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    } catch(e){}
+
+    if (count >= 5) {
+      window.dispatchEvent(new CustomEvent('trigger-hacking-game'));
+      setJunctionClicks(prev => ({ ...prev, [idx]: 0 }));
+    }
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -529,11 +552,10 @@ const ProjectsSection = () => {
                 <motion.path
                   d={pathD}
                   fill="none"
-                  stroke="#ef4444"
                   strokeWidth={2.5}
                   strokeLinecap="square"
                   style={{ pathLength: springPathLength }}
-                  className="drop-shadow-[0_0_6px_rgba(239,68,68,0.7)]"
+                  className="stroke-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.7)]"
                 />
 
                 {/* Circuit Copper Pads (stepped bends) */}
@@ -545,17 +567,15 @@ const ProjectsSection = () => {
                       width={7}
                       height={7}
                       fill="none"
-                      stroke="#ef4444"
                       strokeWidth={1}
-                      className="opacity-40"
+                      className="stroke-red-500 opacity-40"
                     />
                     <rect
                       x={pad.x - 1}
                       y={pad.y - 1}
                       width={2}
                       height={2}
-                      fill="#ef4444"
-                      className="opacity-70 animate-pulse"
+                      className="fill-red-500 opacity-70 animate-pulse"
                     />
                   </g>
                 ))}
@@ -570,21 +590,23 @@ const ProjectsSection = () => {
                         cx={pt.x}
                         cy={pt.y}
                         r={12}
-                        fill="rgba(239, 68, 68, 0.04)"
-                        className="animate-ping"
+                        className="fill-red-500 opacity-[0.05] animate-ping"
                         style={{ transformOrigin: `${pt.x}px ${pt.y}px`, animationDuration: '4.5s' }}
                       />
                       {/* Technical Crosshairs */}
-                      <line x1={pt.x - 6} y1={pt.y} x2={pt.x + 6} y2={pt.y} stroke="rgba(239, 68, 68, 0.25)" strokeWidth={0.8} />
-                      <line x1={pt.x} y1={pt.y - 6} x2={pt.x} y2={pt.y + 6} stroke="rgba(239, 68, 68, 0.25)" strokeWidth={0.8} />
+                      <line x1={pt.x - 6} y1={pt.y} x2={pt.x + 6} y2={pt.y} strokeWidth={0.8} className="stroke-red-500 opacity-25" />
+                      <line x1={pt.x} y1={pt.y - 6} x2={pt.x} y2={pt.y + 6} strokeWidth={0.8} className="stroke-red-500 opacity-25" />
                       {/* Core Junction Node */}
                       <rect
                         x={pt.x - 2.5}
                         y={pt.y - 2.5}
                         width={5}
                         height={5}
-                        fill="#ef4444"
-                        className="animate-pulse"
+                        className="fill-red-500 animate-pulse cursor-pointer pointer-events-auto"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleJunctionClick(i);
+                        }}
                       />
                     </g>
                   );

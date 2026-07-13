@@ -1,6 +1,7 @@
 import { ReactNode, Suspense, lazy } from 'react';
 import SmoothScroll from '@/components/SmoothScroll';
 import HUDOverlay from '@/components/HUDOverlay';
+import ThemeAndEasterEgg from '@/components/ThemeAndEasterEgg';
 
 // Lazy-load heavy background layers so first paint is HTML, not WebGL.
 const CyberBackground = lazy(() => import('@/components/CyberBackground'));
@@ -19,6 +20,7 @@ const SiteLayout = ({ children }: { children: ReactNode }) => {
         <FrameAnimationBackground />
       </Suspense>
       <HUDOverlay />
+      <ThemeAndEasterEgg />
       <div className="relative z-10 w-full min-h-screen">
         {children}
       </div>

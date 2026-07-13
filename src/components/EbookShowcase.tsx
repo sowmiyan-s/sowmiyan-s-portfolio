@@ -27,6 +27,25 @@ const EbookShowcase = () => {
         "Anyone building web apps, data analysis, or automation",
     ];
 
+    const handleBookDoubleClick = () => {
+        try {
+            const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.15);
+            gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        } catch(e){}
+
+        window.dispatchEvent(new CustomEvent('trigger-hud-alert', { 
+            detail: { title: "KINDLE_SYNC", desc: "SYNCING SOWMIYAN'S PY-EBOOK DATABASE TO TARGET KINDLE DIRECT." } 
+        }));
+    };
+
     return (
         <section className="px-6 py-16 border-t border-foreground/5">
             <div className="max-w-7xl mx-auto">
@@ -56,6 +75,7 @@ const EbookShowcase = () => {
                         {/* Book Cover */}
                         <div className="lg:col-span-4 flex flex-col items-center gap-5">
                             <motion.div
+                                onDoubleClick={handleBookDoubleClick}
                                 className="relative w-56 md:w-64 aspect-[1/1.45] shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_30px_rgba(220,38,38,0.2)] rounded-r-lg overflow-hidden border-y border-r border-white/15 cursor-pointer group"
                                 style={{ perspective: 1000 }}
                                 whileHover={{ rotateY: -12, scale: 1.02 }}

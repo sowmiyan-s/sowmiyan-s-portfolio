@@ -65,6 +65,36 @@ const UpvoteButton = () => {
     setBusy(true);
     const voterId = ensureVoterId();
     const willVote = !voted;
+    
+    // Play sound feedback and dispatch HUD alert
+    try {
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      if (willVote) {
+        osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.15);
+        gainNode.gain.setValueAtTime(0.03, audioCtx.currentTime);
+      } else {
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + 0.25);
+        gainNode.gain.setValueAtTime(0.03, audioCtx.currentTime);
+      }
+      
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.3);
+    } catch(e){}
+
+    window.dispatchEvent(new CustomEvent('trigger-hud-alert', { 
+      detail: { 
+        title: willVote ? "NETWORK_BOOST" : "NETWORK_DEGRADE", 
+        desc: willVote ? "MAIN ENCRYPTION SCORE NOMINATED (+1 UPVOTE)." : "MAIN ENCRYPTION SCORE DECREASED (-1 UPVOTE)." 
+      } 
+    }));
+
     // optimistic
     setVoted(willVote);
     setCount((c) => c + (willVote ? 1 : -1));

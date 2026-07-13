@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, MapPin, Linkedin, Instagram, Phone, PenTool, Twitter, Youtube } from 'lucide-react';
 import ScrambleText from './ScrambleText';
 import MarqueeSection from './MarqueeSection';
 
 const Footer = () => {
+    const [copyrightText, setCopyrightText] = useState("© 2026 Sowmiyan S");
+
+    const handleCopyrightClick = () => {
+        try {
+            const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+            gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        } catch(e){}
+
+        const isReplicant = copyrightText.includes("MATRIX");
+        setCopyrightText(isReplicant ? "© 2026 Sowmiyan S" : "© 2026 MADE BY A REPLICANT IN THE MATRIX.");
+        window.dispatchEvent(new CustomEvent('trigger-hud-alert', { 
+            detail: { 
+                title: isReplicant ? "REALITY_RESTORED" : "REALITY_CHECK", 
+                desc: isReplicant ? "MATRIX INTRUSION RESOLVED // BACK TO BASELINE." : "MATRIX SIGNAL DETECTED // INTEGRITY COMPROMISED." 
+            } 
+        }));
+    };
+
     return (
         <>
             <MarqueeSection />
@@ -69,8 +95,11 @@ const Footer = () => {
                         <p className="text-xs font-mono opacity-70 leading-relaxed">
                             <ScrambleText text="Building intelligent systems from Tamil Nadu, India." triggerOnView speed={0.15} />
                         </p>
-                        <span className="text-[10px] font-mono opacity-40 tracking-widest uppercase italic mt-auto">
-                            <ScrambleText text="© 2026 Sowmiyan S" triggerOnView speed={0.1} />
+                        <span 
+                            onClick={handleCopyrightClick}
+                            className="text-[10px] font-mono opacity-40 tracking-widest uppercase italic mt-auto cursor-pointer select-none hover:text-red-500 transition-colors"
+                        >
+                            <ScrambleText text={copyrightText} key={copyrightText} triggerOnView speed={0.1} />
                         </span>
                     </div>
                 </div>

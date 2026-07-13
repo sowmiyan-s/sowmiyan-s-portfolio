@@ -15,6 +15,19 @@ const navItems = [
 const TechNav = () => {
     const location = useLocation();
     const [open, setOpen] = useState(false);
+    const [clickCount, setClickCount] = useState(0);
+
+    const handleStatusClick = () => {
+        const next = clickCount + 1;
+        setClickCount(next);
+        if (next >= 3) {
+            window.dispatchEvent(new CustomEvent('trigger-status-egg'));
+            setClickCount(0);
+        }
+        // Auto reset click count
+        const timer = setTimeout(() => setClickCount(0), 1500);
+        return () => clearTimeout(timer);
+    };
 
     const isActive = (path: string) => {
         if (path === '/') return location.pathname === '/';
@@ -44,9 +57,12 @@ const TechNav = () => {
                 </div>
 
                 {/* Mobile: brand + hamburger */}
-                <Link to="/" className="md:hidden text-white font-heading font-black text-sm tracking-widest">
+                <span 
+                    onClick={handleStatusClick}
+                    className="md:hidden text-white font-heading font-black text-sm tracking-widest cursor-pointer select-none"
+                >
                     SOWMIYAN<span className="text-red-600">.S</span>
-                </Link>
+                </span>
                 <button
                     onClick={() => setOpen(v => !v)}
                     className="md:hidden text-white p-2 pointer-events-auto"
@@ -57,7 +73,10 @@ const TechNav = () => {
 
                 {/* Right: status + resume (desktop) */}
                 <div className="hidden lg:flex items-center gap-6 lg:flex-1 justify-end">
-                    <div className="flex flex-col text-right items-end opacity-70">
+                    <div 
+                        onClick={handleStatusClick}
+                        className="flex flex-col text-right items-end opacity-70 cursor-pointer select-none"
+                    >
                         <span className="text-[7px] font-mono uppercase text-red-500/80">Status_Operational</span>
                         <div className="flex gap-2 items-center">
                             <div className="w-1 h-1 bg-red-600 animate-pulse rounded-full" />

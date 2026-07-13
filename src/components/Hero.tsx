@@ -13,6 +13,25 @@ const Hero = () => {
     const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
     const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
+    const handleTitleClick = () => {
+        try {
+            const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.4);
+            gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        } catch(e){}
+
+        window.dispatchEvent(new CustomEvent('trigger-hud-alert', { 
+            detail: { title: "SYSTEM_ACCESS", desc: "MAIN IDENTITY SCRAMBLED // WELCOME SYSTEM OPERATOR." } 
+        }));
+    };
+
     return (
         <section id="home" ref={containerRef} className="relative min-h-screen flex items-center justify-start pt-20 pb-12 px-4 md:px-16 overflow-hidden z-10 w-full bg-transparent">
             {/* Background: scanlines */}
@@ -24,7 +43,10 @@ const Hero = () => {
             <motion.div style={{ y, opacity }} className="max-w-7xl w-full flex flex-col items-start gap-8 md:gap-12 relative z-20 mt-12 md:mt-16">
                 <div className="flex flex-col items-start gap-4 md:gap-6 w-full text-left">
                     <div className="relative w-full pr-2 overflow-hidden">
-                        <h1 className="text-[clamp(2rem,7vw,8rem)] font-heading font-black leading-[1] tracking-tighter text-white uppercase whitespace-nowrap drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">
+                        <h1 
+                            onClick={handleTitleClick}
+                            className="text-[clamp(2rem,7vw,8rem)] font-heading font-black leading-[1] tracking-tighter text-white uppercase whitespace-nowrap drop-shadow-[0_0_25px_rgba(255,255,255,0.3)] cursor-pointer select-none"
+                        >
                             <ScrambleText text="SOWMIYAN S" triggerOnView speed={0.5} delay={0.2} />
                         </h1>
                     </div>

@@ -73,7 +73,7 @@ const ContactPage = () => {
                     --black: hsl(0, 0%, 0%);
                     --paragraph: hsl(0, 0%, 83%);
                     --line: hsl(0, 0%, 20%);
-                    --primary: hsl(0, 84%, 60%);
+                    --primary: hsl(var(--theme-color));
 
                     position: relative;
                     display: flex;
@@ -121,17 +121,17 @@ const ContactPage = () => {
                         radial-gradient(at 88% 40%, #050505 0px, transparent 85%),
                         radial-gradient(at 49% 30%, #050505 0px, transparent 85%),
                         radial-gradient(at 14% 26%, #050505 0px, transparent 85%),
-                        radial-gradient(at 0% 64%, rgba(220, 38, 38, 0.15) 0px, transparent 85%),
-                        radial-gradient(at 41% 94%, rgba(220, 38, 38, 0.25) 0px, transparent 85%),
-                        radial-gradient(at 100% 99%, rgba(220, 38, 38, 0.35) 0px, transparent 85%);
+                        radial-gradient(at 0% 64%, hsla(var(--theme-color), 0.15) 0px, transparent 85%),
+                        radial-gradient(at 41% 94%, hsla(var(--theme-color), 0.2) 0px, transparent 85%),
+                        radial-gradient(at 100% 99%, hsla(var(--theme-color), 0.25) 0px, transparent 85%);
                     box-shadow: 0px -16px 24px 0px rgba(255, 255, 255, 0.05) inset;
                     z-index: 2;
                     pointer-events: none;
                 }
 
                 .contact-card-container:hover {
-                    border-color: rgba(220, 38, 38, 0.4);
-                    box-shadow: 0px 0px 30px rgba(220, 38, 38, 0.15);
+                    border-color: hsla(var(--theme-color), 0.4);
+                    box-shadow: 0px 0px 30px hsla(var(--theme-color), 0.15);
                 }
 
                 .contact-card-container .card__border {
@@ -164,7 +164,7 @@ const ContactPage = () => {
                     height: 200%;
                     background-image: conic-gradient(
                         transparent,
-                        hsl(0, 84%, 60%) 10%,
+                        hsl(var(--theme-color)) 10%,
                         transparent 30%
                     );
                     animation: rotate-card-border 6s linear infinite;
@@ -182,8 +182,8 @@ const ContactPage = () => {
                     width: 100%;
                     background-image: linear-gradient(
                         0deg,
-                        rgba(220, 38, 38, 1) 0%,
-                        rgba(239, 68, 68, 1) 100%
+                        hsla(var(--theme-color), 0.9) 0%,
+                        hsl(var(--theme-color)) 100%
                     );
                     font-size: 0.8rem;
                     font-weight: 700;

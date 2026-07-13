@@ -39,6 +39,49 @@ const LeetCodeShowcase = () => {
   const [calendarStr, setCalendarStr] = useState("");
   const [loading, setLoading] = useState(true);
   const [isLive, setIsLive] = useState(false);
+  const [displaySolved, setDisplaySolved] = useState<number | null>(null);
+  const [isOverclocked, setIsOverclocked] = useState(false);
+
+  const triggerOverclock = () => {
+    if (isOverclocked) return;
+    setIsOverclocked(true);
+    
+    window.dispatchEvent(new CustomEvent('trigger-hud-alert', { 
+      detail: { title: "OVERCLOCK_WARNING", desc: "LEETCODE PROCESSOR OVERCLOCKED // THERMAL CORE SURGE." } 
+    }));
+
+    try {
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.linearRampToValueAtTime(1800, audioCtx.currentTime + 1.2);
+      gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 1.2);
+    } catch(e){}
+
+    let current = data.solvedProblem;
+    const interval = setInterval(() => {
+      current += Math.floor(Math.random() * 400) + 100;
+      if (current >= 9999) {
+        current = 9999;
+        clearInterval(interval);
+        
+        setTimeout(() => {
+          setIsOverclocked(false);
+          setDisplaySolved(null);
+          window.dispatchEvent(new CustomEvent('trigger-hud-alert', { 
+            detail: { title: "SYSTEM_RESTORED", desc: "LEETCODE CORE COOLING STABLE // PROCESSOR ONLINE." } 
+          }));
+        }, 2000);
+      }
+      setDisplaySolved(current);
+    }, 45);
+  };
 
   useEffect(() => {
     // Pre-populate with mock calendar first
@@ -252,24 +295,26 @@ const LeetCodeShowcase = () => {
                     cy="50"
                     r="40"
                     fill="transparent"
-                    stroke="#ef4444"
                     strokeWidth="6"
                     strokeDasharray={251.2}
                     initial={{ strokeDashoffset: 251.2 }}
                     animate={{ strokeDashoffset: 251.2 - (251.2 * totalPercent) / 100 }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
                     strokeLinecap="round"
-                    className="drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
+                    className="stroke-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
                   />
                 </svg>
 
                 {/* Inner Content */}
-                <div className="flex flex-col items-center text-center justify-center z-10">
-                  <span className="text-4xl md:text-5xl font-heading font-black text-white leading-none">
-                    {data.solvedProblem}
+                <div 
+                  onDoubleClick={triggerOverclock}
+                  className={`flex flex-col items-center text-center justify-center z-10 cursor-pointer select-none transition-all duration-300 ${isOverclocked ? 'text-amber-500 font-bold scale-110 drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}`}
+                >
+                  <span className={`text-4xl md:text-5xl font-heading font-black leading-none ${isOverclocked ? 'text-amber-500' : 'text-white'}`}>
+                    {displaySolved ?? data.solvedProblem}
                   </span>
-                  <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mt-1.5">
-                    PROBLEMS SOLVED
+                  <span className={`text-[10px] font-mono uppercase tracking-wider mt-1.5 ${isOverclocked ? 'text-amber-500/70' : 'text-muted-foreground'}`}>
+                    {isOverclocked ? 'OVERCLOCK ACTIVE' : 'PROBLEMS SOLVED'}
                   </span>
                 </div>
               </div>

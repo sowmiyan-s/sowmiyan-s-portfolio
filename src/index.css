@@ -187,7 +187,6 @@
   }
 }
 
-/* Three.js Canvas Container */
 #canvas-container {
   position: fixed;
   top: 0;
@@ -196,5 +195,124 @@
   height: 100%;
   z-index: 2;
   pointer-events: none;
+}
+
+/* Show standard browser mouse cursor inside all modals, decrypters, and prose blocks */
+[data-lenis-prevent="true"], [data-lenis-prevent="true"] *, .prose, .prose *, button, a, [role="button"] {
+  cursor: auto !important;
+}
+
+/* Multicolor Theme overrides for Tailwind Red classes */
+:root {
+  --theme-color: 0 100% 50%; /* Default Red */
+}
+
+[data-theme="blue"] {
+  --theme-color: 217 91% 60%; /* Cobalt Blue */
+}
+
+[data-theme="green"] {
+  --theme-color: 142 70% 45%; /* Matrix Green */
+}
+
+[data-theme="purple"] {
+  --theme-color: 270 91% 65%; /* Neon Purple */
+}
+
+[data-theme="yellow"] {
+  --theme-color: 35 92% 50%; /* Gold Orange */
+}
+
+/* Force primary, accent, ring to match the theme color */
+:root {
+  --primary: var(--theme-color) !important;
+  --accent: var(--theme-color) !important;
+  --ring: var(--theme-color) !important;
+}
+
+/* Force standard Tailwind red classes to follow the theme color */
+.text-red-500, .text-red-600, .text-primary {
+  color: hsl(var(--theme-color)) !important;
+}
+.bg-red-500, .bg-red-600, .bg-primary {
+  background-color: hsl(var(--theme-color)) !important;
+}
+.border-red-500, .border-red-600, .border-primary {
+  border-color: hsl(var(--theme-color)) !important;
+}
+.fill-red-500, .fill-red-600 {
+  fill: hsl(var(--theme-color)) !important;
+}
+.stroke-red-500, .stroke-red-600 {
+  stroke: hsl(var(--theme-color)) !important;
+}
+
+/* Scrollbar thumbs and selections */
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--theme-color)) !important;
+}
+::selection {
+  background: hsl(var(--theme-color)) !important;
+  color: white !important;
+}
+
+/* Glowing shadow adjustments for components */
+.shadow-red, .shadow-\[0_0_15px_rgba\(220\,38\,38\,0\.35\)\] {
+  box-shadow: 0 0 15px hsla(var(--theme-color), 0.35) !important;
+}
+.shadow-\[0_0_15px_rgba\(220\,38\,38\,0\.15\)\] {
+  box-shadow: 0 0 15px hsla(var(--theme-color), 0.15) !important;
+}
+.shadow-\[0_0_8px_rgba\(239\,68\,68\,0\.5\)\] {
+  box-shadow: 0 0 8px hsla(var(--theme-color), 0.5) !important;
+}
+.shadow-\[0_0_8px_rgba\(239\,68\,68\,0\.6\)\] {
+  box-shadow: 0 0 8px hsla(var(--theme-color), 0.6) !important;
+}
+.shadow-\[0_0_8px_\#ef4444\] {
+  box-shadow: 0 0 8px hsl(var(--theme-color)) !important;
+}
+.shadow-\[0_0_30px_rgba\(239\,68\,68\,0\.1\)\] {
+  box-shadow: 0 0 30px hsla(var(--theme-color), 0.1) !important;
+}
+.drop-shadow-\[0_0_8px_rgba\(239\,68\,68\,0\.5\)\] {
+  filter: drop-shadow(0 0 8px hsla(var(--theme-color), 0.5)) !important;
+}
+.drop-shadow-\[0_0_6px_rgba\(239\,68\,68\,0\.7\)\] {
+  filter: drop-shadow(0 0 6px hsla(var(--theme-color), 0.7)) !important;
+}
+
+/* Background/opacity utilities */
+.bg-red-600\/10, .bg-red-500\/10 {
+  background-color: hsla(var(--theme-color), 0.1) !important;
+}
+.bg-red-600\/20, .bg-red-500\/20 {
+  background-color: hsla(var(--theme-color), 0.2) !important;
+}
+.border-red-500\/30, .border-red-600\/30 {
+  border-color: hsla(var(--theme-color), 0.3) !important;
+}
+.border-red-500\/40, .border-red-600\/40 {
+  border-color: hsla(var(--theme-color), 0.4) !important;
+}
+
+/* Easter Egg Animations */
+@keyframes barrel-roll {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-barrel-roll {
+  animation: barrel-roll 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes screen-glitch {
+  0% { filter: hue-rotate(0deg) skew(0deg); opacity: 1; }
+  20% { filter: hue-rotate(90deg) skew(5deg); opacity: 0.95; }
+  40% { filter: hue-rotate(180deg) skew(-5deg); opacity: 0.9; }
+  60% { filter: hue-rotate(270deg) skew(8deg); opacity: 0.95; }
+  80% { filter: hue-rotate(360deg) skew(-2deg); opacity: 1; }
+}
+.glitch-filter-active {
+  animation: screen-glitch 0.4s linear infinite;
 }
 
