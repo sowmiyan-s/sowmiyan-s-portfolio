@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pulse-profile-craft.lovable.app/sitemap.xml
+Sitemap: https://sowmiyan-s.vercel.app/sitemap.xml
