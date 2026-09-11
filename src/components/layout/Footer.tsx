@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mail, MapPin, Linkedin, Instagram, Phone, PenTool, Twitter, Youtube } from 'lucide-react';
-import ScrambleText from './ScrambleText';
-import MarqueeSection from './MarqueeSection';
+import ScrambleText from '@/components/common/ScrambleText';
+import MarqueeSection from '@/components/sections/MarqueeSection';
 
 const Footer = () => {
     return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import ScrambleText from './ScrambleText';
+import ScrambleText from '@/components/common/ScrambleText';
 
 interface PageHeroProps {
   sectionNumber: string;

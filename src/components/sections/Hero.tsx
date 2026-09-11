@@ -2,8 +2,8 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Mail, FileText, MapPin } from 'lucide-react';
-import ScrambleText from './ScrambleText';
-import UpvoteButton from './UpvoteButton';
+import ScrambleText from '@/components/common/ScrambleText';
+import UpvoteButton from '@/components/common/UpvoteButton';
 
 const RESUME_URL = "https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing";
 

@@ -6,9 +6,9 @@ import { Github, Star, GitFork, Terminal } from "lucide-react";
 import { fetchRepos, readCachedRepos, fallbackRepos } from "@/lib/github";
 import { fetchHiddenProjectIds } from "@/lib/projectSettings";
 import { formatRepoName } from "@/lib/formatRepo";
-import UnifiedLoader from "./UnifiedLoader";
+import UnifiedLoader from "@/components/common/UnifiedLoader";
 import { waitCompleteLoop } from "@/lib/loadingUtils";
-import ScrambleText from "./ScrambleText";
+import ScrambleText from "@/components/common/ScrambleText";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 

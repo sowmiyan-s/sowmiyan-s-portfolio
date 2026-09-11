@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { certificatesList, Certificate } from '@/lib/certificates';
-import ShapeGrid from '@/components/ShapeGrid';
+import ShapeGrid from '@/components/effects/ShapeGrid';
 
 const achievements = [
     { type: 'PATENT', title: 'SMART DUSTBIN (IOT-01)', desc: 'IoT waste monitoring & automated collection protocol.', hash: 'PAT-7729-AX' },

@@ -1,19 +1,19 @@
 import React, { Suspense, lazy } from 'react';
-import Hero from "@/components/Hero";
-import TechNav from "@/components/TechNav";
-import Footer from "@/components/Footer";
-import BlogSection from "@/components/BlogSection";
-import SkillsSection from "@/components/SkillsSection";
-import HireMeSection from "@/components/HireMeSection";
-import ContentCreationSection from "@/components/ContentCreationSection";
-import PopularProjectsSlider from "@/components/PopularProjectsSlider";
-import SEOKeywords from "@/components/SEOKeywords";
-import SEO from "@/components/SEO";
-import MarqueeSection from "@/components/MarqueeSection";
-import CyberGridBackground from "@/components/CyberGridBackground";
-import { useThemeColors } from "@/lib/useThemeColors";
+import Hero from "@/components/sections/Hero";
+import TechNav from "@/components/layout/TechNav";
+import Footer from "@/components/layout/Footer";
+import BlogSection from "@/components/sections/BlogSection";
+import SkillsSection from "@/components/sections/SkillsSection";
+import HireMeSection from "@/components/sections/HireMeSection";
+import ContentCreationSection from "@/components/sections/ContentCreationSection";
+import PopularProjectsSlider from "@/components/sections/PopularProjectsSlider";
+import SEOKeywords from "@/components/common/SEOKeywords";
+import SEO from "@/components/common/SEO";
+import MarqueeSection from "@/components/sections/MarqueeSection";
+import CyberGridBackground from "@/components/effects/CyberGridBackground";
+import { useThemeColors } from "@/hooks/useThemeColors";
 
-const GridScan = lazy(() => import("@/components/GridScan"));
+const GridScan = lazy(() => import("@/components/effects/GridScan"));
 
 const Home = () => {
     const { primary, rgbaPrimary } = useThemeColors();

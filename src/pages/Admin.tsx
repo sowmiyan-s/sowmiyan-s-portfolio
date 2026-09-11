@@ -10,11 +10,11 @@ import {
 } from '@/lib/projectSettings';
 import { verifyAdminPassword, setAdminPassword, clearAdminPassword, getAdminPassword } from '@/lib/adminApi';
 import { toast } from '@/hooks/use-toast';
-import TechNav from '@/components/TechNav';
-import Footer from '@/components/Footer';
-import CyberBackground from '@/components/CyberBackground';
-import PageHero from '@/components/PageHero';
-import UnifiedLoader from '@/components/UnifiedLoader';
+import TechNav from '@/components/layout/TechNav';
+import Footer from '@/components/layout/Footer';
+import CyberBackground from '@/components/effects/CyberBackground';
+import PageHero from '@/components/layout/PageHero';
+import UnifiedLoader from '@/components/common/UnifiedLoader';
 import { waitCompleteLoop } from '@/lib/loadingUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 

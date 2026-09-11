@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import TopographicBackground from './TopographicBackground';
-import ScrambleText from './ScrambleText';
+import TopographicBackground from '@/components/effects/TopographicBackground';
+import ScrambleText from '@/components/common/ScrambleText';
 
 const HireMeSection = () => {
     return (

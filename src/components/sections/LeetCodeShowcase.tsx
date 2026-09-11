@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
-import ScrambleText from './ScrambleText';
+import ScrambleText from '@/components/common/ScrambleText';
 
 // Fallback static data in case LeetCode API is rate-limited or offline
 const FALLBACK_DATA = {

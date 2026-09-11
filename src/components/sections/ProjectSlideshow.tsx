@@ -5,7 +5,7 @@ import { fetchHiddenProjectIds, fetchPageFeaturedProjects } from '@/lib/projectS
 import { formatRepoName } from '@/lib/formatRepo';
 import { useNavigate } from 'react-router-dom';
 import { Github, ChevronRight, ExternalLink } from 'lucide-react';
-import ScrambleText from './ScrambleText';
+import ScrambleText from '@/components/common/ScrambleText';
 import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 const ProjectSlideshow = () => {

@@ -4,12 +4,12 @@ import { fetchReadme } from '@/lib/github';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { motion } from 'framer-motion';
-import TechNav from '@/components/TechNav';
-import Footer from '@/components/Footer';
+import TechNav from '@/components/layout/TechNav';
+import Footer from '@/components/layout/Footer';
 import { ArrowLeft, Github, ExternalLink, BookOpen } from 'lucide-react';
-import SEOKeywords from '@/components/SEOKeywords';
-import SEO from '@/components/SEO';
-import UnifiedLoader from '@/components/UnifiedLoader';
+import SEOKeywords from '@/components/common/SEOKeywords';
+import SEO from '@/components/common/SEO';
+import UnifiedLoader from '@/components/common/UnifiedLoader';
 import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 import { formatRepoName } from '@/lib/formatRepo';

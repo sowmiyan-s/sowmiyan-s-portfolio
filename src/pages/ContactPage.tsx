@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Check, Copy, Send, Loader2, Mail, Phone, MapPin, Github, Linkedin, FileText, Sparkles, MessageSquare, User } from 'lucide-react';
-import TechNav from '@/components/TechNav';
-import Footer from '@/components/Footer';
-import Ferrofluid from '@/components/Ferrofluid';
-import SEOKeywords from '@/components/SEOKeywords';
-import SEO from '@/components/SEO';
+import TechNav from '@/components/layout/TechNav';
+import Footer from '@/components/layout/Footer';
+import Ferrofluid from '@/components/effects/Ferrofluid';
+import SEOKeywords from '@/components/common/SEOKeywords';
+import SEO from '@/components/common/SEO';
 import { toast } from '@/hooks/use-toast';
 
 const RESUME_URL = "https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing";

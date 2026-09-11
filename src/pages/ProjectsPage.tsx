@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import TechNav from '@/components/TechNav';
-import Footer from '@/components/Footer';
-import ProjectsSection from '@/components/ProjectsSection';
-import ProjectPattern from '@/components/ProjectPattern';
-import ProjectSlideshow from '@/components/ProjectSlideshow';
-import SEOKeywords from '@/components/SEOKeywords';
-import SEO from '@/components/SEO';
+import TechNav from '@/components/layout/TechNav';
+import Footer from '@/components/layout/Footer';
+import ProjectsSection from '@/components/sections/ProjectsSection';
+import ProjectPattern from '@/components/effects/ProjectPattern';
+import ProjectSlideshow from '@/components/sections/ProjectSlideshow';
+import SEOKeywords from '@/components/common/SEOKeywords';
+import SEO from '@/components/common/SEO';
 import { motion } from 'framer-motion';
 
 const ProjectsPage = () => {

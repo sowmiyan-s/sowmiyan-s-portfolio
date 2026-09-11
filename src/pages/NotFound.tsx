@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import CyberBackground from '@/components/CyberBackground';
-import TechNav from '@/components/TechNav';
+import CyberBackground from '@/components/effects/CyberBackground';
+import TechNav from '@/components/layout/TechNav';
 
 const NotFound = () => {
   const location = useLocation();

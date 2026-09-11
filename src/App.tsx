@@ -5,9 +5,9 @@ import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
 import SiteLayout from "@/components/layout/SiteLayout";
-import PageTransition from "@/components/PageTransition";
+import PageTransition from "@/components/layout/PageTransition";
 import { ECG_LOOP_DURATION_MS } from "@/lib/loadingUtils";
 
 // Helper: wrap a lazy import so the Suspense fallback always displays
@@ -31,7 +31,7 @@ const NotFound = lazyWithMinLoop(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
 
-import UnifiedLoader from "@/components/UnifiedLoader";
+import UnifiedLoader from "@/components/common/UnifiedLoader";
 
 const PageLoader = () => (
     <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 bg-transparent">

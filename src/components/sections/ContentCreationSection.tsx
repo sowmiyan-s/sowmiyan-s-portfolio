@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { fetchChannelVideos, YouTubeVideo } from '@/lib/youtube';
-import ScrambleText from './ScrambleText';
+import ScrambleText from '@/components/common/ScrambleText';
 import { Instagram, Youtube, Linkedin, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const socialIcons: Record<string, any> = {

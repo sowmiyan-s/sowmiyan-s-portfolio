@@ -1,16 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import TechNav from '@/components/TechNav';
-import Footer from '@/components/Footer';
+import TechNav from '@/components/layout/TechNav';
+import Footer from '@/components/layout/Footer';
 import { certificatesList, Certificate } from '@/lib/certificates';
-import EbookShowcase from '@/components/EbookShowcase';
-import LeetCodeShowcase from '@/components/LeetCodeShowcase';
-import ShapeGrid from '@/components/ShapeGrid';
-import SEOKeywords from '@/components/SEOKeywords';
-import SEO from '@/components/SEO';
-import { useThemeColors } from '@/lib/useThemeColors';
+import EbookShowcase from '@/components/sections/EbookShowcase';
+import LeetCodeShowcase from '@/components/sections/LeetCodeShowcase';
+import ShapeGrid from '@/components/effects/ShapeGrid';
+import SEOKeywords from '@/components/common/SEOKeywords';
+import SEO from '@/components/common/SEO';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { Search, Award, BookOpen, FileText, Cpu, CheckCircle2, Download, X, ExternalLink, GraduationCap } from 'lucide-react';
-import ScrambleText from '@/components/ScrambleText';
+import ScrambleText from '@/components/common/ScrambleText';
 
 interface AchievementItem {
   type: string;

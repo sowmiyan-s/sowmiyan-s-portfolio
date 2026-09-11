@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRealtimeRefetch } from '@/hooks/useRealtimeRefetch';
 import { Github, Star, GitFork } from 'lucide-react';
 import AccordionGallery from './AccordionGallery';
-import UnifiedLoader from './UnifiedLoader';
+import UnifiedLoader from '@/components/common/UnifiedLoader';
 import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 const socialImg = (repo: string) =>

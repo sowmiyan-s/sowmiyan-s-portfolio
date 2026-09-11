@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import SmoothScroll from '@/components/SmoothScroll';
-import ThemeAndEasterEgg from '@/components/ThemeAndEasterEgg';
-import MysteryButterfly from '@/components/MysteryButterfly';
-import CouncilCursor from '@/components/CouncilCursor';
+import SmoothScroll from '@/components/common/SmoothScroll';
+import ThemeAndEasterEgg from '@/components/common/ThemeAndEasterEgg';
+import MysteryButterfly from '@/components/effects/MysteryButterfly';
+import CouncilCursor from '@/components/common/CouncilCursor';
 
 const SiteLayout = ({ children }: { children: ReactNode }) => {
   return (
