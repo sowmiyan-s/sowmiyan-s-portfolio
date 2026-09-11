@@ -6,7 +6,6 @@ import { formatRepoName } from '@/lib/formatRepo';
 import { useNavigate } from 'react-router-dom';
 import { Github, ChevronRight, ExternalLink } from 'lucide-react';
 import ScrambleText from '@/components/common/ScrambleText';
-import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 const ProjectSlideshow = () => {
   const navigate = useNavigate();
@@ -56,8 +55,6 @@ const ProjectSlideshow = () => {
     } catch (err) {
       console.error("Failed to fetch featured projects:", err);
     } finally {
-      // Ensure ECG pulse animation completes at least 1 full loop
-      await waitCompleteLoop(startTime);
       setLoading(false);
       isLoadingRef.current = false;
     }

@@ -195,7 +195,7 @@ const ThemeAndEasterEgg = () => {
     setSecretCode(target);
     setTriesLeft(5);
     setGameStatus('playing');
-    setLog(["INITIALIZING ACCESS OVERRIDE...", "DECRYPT SYSTEM FIREWALL PASSWORD TO GAIN ROOT ACCESS.", "MATCH 4/4 CHARACTERS TO BREACH THE FIREWALL."]);
+    setLog(["ACCESS CHALLENGE", "Find the 4-character code to unlock the secret theme.", "Match 4/4 characters to unlock."]);
     setGameOpen(true);
   }, []);
 
@@ -412,9 +412,8 @@ const ThemeAndEasterEgg = () => {
   // ─── Developer Console hack() ──────────────────────────────────────────
   useEffect(() => {
     (window as any).hack = () => {
-      console.log("%c[FIREWALL_BYPASS] Initializing decryption...", "color: #ef4444; font-weight: bold;");
       startHackingGame();
-      return "Decryption console initialized.";
+      return "Game started.";
     };
     return () => { delete (window as any).hack; };
   }, [startHackingGame]);
@@ -469,7 +468,7 @@ const ThemeAndEasterEgg = () => {
             >
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
                 <span className="text-[9px] font-mono text-red-500 font-bold uppercase tracking-widest flex items-center gap-1">
-                  <ShieldAlert size={10} /> SYS_CONFIG // THEME
+                  <ShieldAlert size={10} /> THEME SETTINGS
                 </span>
                 <button onClick={() => setPanelOpen(false)} className="text-white/40 hover:text-red-500 transition-colors">
                   <X size={12} />
@@ -505,7 +504,7 @@ const ThemeAndEasterEgg = () => {
                 onClick={() => { setPanelOpen(false); playSynthBeep(850, 0.1, "sine"); startHackingGame(); }}
                 className="mt-1.5 py-1.5 bg-red-600 text-white font-mono text-[8px] font-bold uppercase tracking-widest rounded hover:bg-red-700 transition-colors text-center shadow-[0_0_10px_rgba(239,68,68,0.4)] animate-pulse"
               >
-                [ SYSTEM BYPASS ]
+                [ THEME CHALLENGE ]
               </button>
 
               {/* Hint */}

@@ -8,7 +8,6 @@ import { useRealtimeRefetch } from '@/hooks/useRealtimeRefetch';
 import { Github, Star, GitFork } from 'lucide-react';
 import AccordionGallery from './AccordionGallery';
 import UnifiedLoader from '@/components/common/UnifiedLoader';
-import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 const socialImg = (repo: string) =>
     `https://opengraph.githubassets.com/1/sowmiyan-s/${repo}`;
@@ -57,8 +56,6 @@ const PopularProjectsSlider = () => {
 
             setProjects(matched);
         } finally {
-            // Ensure ECG pulse animation completes at least 1 full loop
-            await waitCompleteLoop(startTime);
             setLoading(false);
             isLoadingRef.current = false;
         }
@@ -114,7 +111,7 @@ const PopularProjectsSlider = () => {
     if (loading) {
         return (
             <section className="w-full py-16 flex items-center justify-center">
-                <UnifiedLoader text="LOADING FEATURED PROJECTS..." size="sm" />
+                <UnifiedLoader size="sm" />
             </section>
         );
     }

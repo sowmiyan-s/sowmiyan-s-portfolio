@@ -336,19 +336,19 @@ const LeetCodeShowcase = () => {
               {/* Monospace System Specs */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white/[0.02] border border-white/5 p-4 rounded-sm font-mono text-[10px] uppercase tracking-wider text-white/50">
                 <div className="flex flex-col gap-1 border-l border-white/10 pl-3">
-                  <span className="text-white/30 text-[9px]">[SYS_STATUS]</span>
+                  <span className="text-white/30 text-[9px]">Status</span>
                   <span className="text-emerald-500 font-bold">ONLINE</span>
                 </div>
                 <div className="flex flex-col gap-1 border-l border-white/10 pl-3">
-                  <span className="text-white/30 text-[9px]">[GLOBAL_RANK]</span>
+                  <span className="text-white/30 text-[9px]">Global Rank</span>
                   <span className="text-white font-bold">#{data.ranking.toLocaleString()}</span>
                 </div>
                 <div className="flex flex-col gap-1 border-l border-white/10 pl-3">
-                  <span className="text-white/30 text-[9px]">[REPUTATION]</span>
+                  <span className="text-white/30 text-[9px]">Reputation</span>
                   <span className="text-white font-bold">{data.reputation}</span>
                 </div>
                 <div className="flex flex-col gap-1 border-l border-white/10 pl-3">
-                  <span className="text-white/30 text-[9px]">[PROFILE_ID]</span>
+                  <span className="text-white/30 text-[9px]">Profile</span>
                   <span className="text-red-500 font-bold">{data.username}</span>
                 </div>
               </div>

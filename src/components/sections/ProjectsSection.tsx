@@ -7,7 +7,6 @@ import { fetchRepos, readCachedRepos, fallbackRepos } from "@/lib/github";
 import { fetchHiddenProjectIds } from "@/lib/projectSettings";
 import { formatRepoName } from "@/lib/formatRepo";
 import UnifiedLoader from "@/components/common/UnifiedLoader";
-import { waitCompleteLoop } from "@/lib/loadingUtils";
 import ScrambleText from "@/components/common/ScrambleText";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -380,8 +379,6 @@ const ProjectsSection = () => {
     } catch (err) {
       console.error("Failed to load projects:", err);
     } finally {
-      // Ensure ECG pulse animation completes at least 1 full loop
-      await waitCompleteLoop(startTime);
       setLoading(false);
       isLoadingRef.current = false;
     }
@@ -571,7 +568,7 @@ const ProjectsSection = () => {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-40">
-            <UnifiedLoader text="LOADING PROJECT PORTFOLIO..." size="md" />
+            <UnifiedLoader size="md" />
           </div>
         ) : projects.length > 0 ? (
           <div ref={containerRef} className="relative w-full py-12">
@@ -699,7 +696,7 @@ const ProjectsSection = () => {
                             <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
                             [RELEASED]
                           </div>
-                          <span>SYS_TIME // {project.date}</span>
+                          <span>{project.date}</span>
                         </div>
                       )}
                     </div>
@@ -719,7 +716,7 @@ const ProjectsSection = () => {
                             <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
                             [RELEASED]
                           </div>
-                          <span>SYS_TIME // {project.date}</span>
+                          <span>{project.date}</span>
                         </div>
                       )}
                     </div>
@@ -768,7 +765,7 @@ const ProjectsSection = () => {
               <div className="flex justify-between items-center border-b border-white/5 pb-4 mb-6 z-10">
                 <div className="flex flex-col gap-1">
                   <span className="text-[10px] font-mono text-red-500 font-bold uppercase tracking-widest">
-                    MAINFRAME_DECRYPT // {selectedProject.name}
+                    REPOSITORY // {selectedProject.name}
                   </span>
                   <h3 className="font-heading font-black text-xl md:text-2xl uppercase tracking-tight text-white leading-none">
                     {selectedProject.title}
@@ -789,7 +786,7 @@ const ProjectsSection = () => {
               >
                 {loadingReadme ? (
                   <div className="flex flex-col items-center justify-center py-20">
-                    <UnifiedLoader text="DECRYPTING PROJECT DATABASE..." size="sm" />
+                    <UnifiedLoader size="sm" />
                   </div>
                 ) : (
                   <div className="prose prose-invert max-w-none text-white/80 font-sans prose-pre:bg-neutral-950 prose-pre:border prose-pre:border-white/10 prose-headings:text-white prose-headings:font-heading prose-headings:uppercase prose-headings:tracking-tight prose-a:text-red-500 hover:prose-a:text-red-400 prose-code:text-red-400 prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:before:content-none prose-code:after:content-none">
@@ -801,9 +798,9 @@ const ProjectsSection = () => {
               </div>
 
               {/* Modal Footer Info */}
-              <div className="flex justify-between items-center border-t border-white/5 pt-4 mt-6 text-[8px] font-mono text-white/20 z-10">
-                <span>RECON_AXIS_STATE // DECRYPTED_OK</span>
-                <span>DECRYPTED_AT // {new Date().toLocaleTimeString()}</span>
+              <div className="flex justify-between items-center border-t border-white/5 pt-4 mt-6 text-[8px] font-mono text-white/30 z-10">
+                <span>REPOSITORY // {selectedProject.name}</span>
+                <span>UPDATED // {selectedProject.date}</span>
               </div>
             </motion.div>
           </div>

@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import SmoothScroll from '@/components/common/SmoothScroll';
 import ThemeAndEasterEgg from '@/components/common/ThemeAndEasterEgg';
-import MysteryButterfly from '@/components/effects/MysteryButterfly';
 import CouncilCursor from '@/components/common/CouncilCursor';
 
 const SiteLayout = ({ children }: { children: ReactNode }) => {
@@ -10,7 +9,6 @@ const SiteLayout = ({ children }: { children: ReactNode }) => {
       <CouncilCursor size={38} />
       <SmoothScroll />
       <ThemeAndEasterEgg />
-      <MysteryButterfly />
 
 
 

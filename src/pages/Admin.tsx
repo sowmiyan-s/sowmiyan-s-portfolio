@@ -15,7 +15,6 @@ import Footer from '@/components/layout/Footer';
 import CyberBackground from '@/components/effects/CyberBackground';
 import PageHero from '@/components/layout/PageHero';
 import UnifiedLoader from '@/components/common/UnifiedLoader';
-import { waitCompleteLoop } from '@/lib/loadingUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Star, Eye, EyeOff, Search, Lock, ArrowUp, ArrowDown, 
@@ -119,8 +118,6 @@ const Admin = () => {
             const fullRepoList = mergeAllRepos([]);
             setRepos(fullRepoList);
         } finally {
-            // Ensure ECG pulse animation completes at least 1 full loop
-            await waitCompleteLoop(startTime);
             setLoading(false);
         }
     };
@@ -329,7 +326,7 @@ const Admin = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6">
-                <UnifiedLoader text="LOADING REPOSITORY CONTROLS..." size="md" />
+                <UnifiedLoader size="md" />
             </div>
         );
     }

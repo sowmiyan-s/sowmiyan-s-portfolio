@@ -10,7 +10,6 @@ import { ArrowLeft, Github, ExternalLink, BookOpen } from 'lucide-react';
 import SEOKeywords from '@/components/common/SEOKeywords';
 import SEO from '@/components/common/SEO';
 import UnifiedLoader from '@/components/common/UnifiedLoader';
-import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 import { formatRepoName } from '@/lib/formatRepo';
 
@@ -21,12 +20,9 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     const load = async () => {
-      const startTime = Date.now();
       if (id) {
         const data = await fetchReadme(id);
         setReadme(data);
-        // Ensure ECG pulse animation completes at least 1 full loop
-        await waitCompleteLoop(startTime);
         setLoading(false);
       }
     };
@@ -38,7 +34,7 @@ const ProjectDetail = () => {
 
   if (loading) return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6">
-      <UnifiedLoader text="LOADING PROJECT DOCUMENTATION..." size="md" />
+      <UnifiedLoader size="md" />
     </div>
   );
 

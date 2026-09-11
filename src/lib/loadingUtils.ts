@@ -13,14 +13,9 @@ export const ECG_LOOP_DURATION_MS = 2500;
  * @returns Promise that resolves when the current loop completes cleanly
  */
 export const waitCompleteLoop = async (
-    startTime: number, 
-    loopDuration: number = ECG_LOOP_DURATION_MS
+    _startTime?: number, 
+    _loopDuration?: number
 ): Promise<void> => {
-    const elapsed = Date.now() - startTime;
-    // Guarantee at least 1 full loop. If elapsed exceeds 1 loop, wait until current loop finishes.
-    const target = Math.max(loopDuration, Math.ceil(elapsed / loopDuration) * loopDuration);
-    const delay = Math.max(0, target - elapsed);
-    if (delay > 0) {
-        await new Promise(resolve => setTimeout(resolve, delay));
-    }
+    // Instant resolution — no artificial delay
+    return Promise.resolve();
 };

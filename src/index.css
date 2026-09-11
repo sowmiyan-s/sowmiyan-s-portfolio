@@ -419,22 +419,6 @@ input, textarea {
   --tw-gradient-stops: var(--tw-gradient-from), hsla(var(--theme-color), 0.5) var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
 }
 
-/* Mystery Butterfly Animations */
-@keyframes butterfly-float {
-  0%, 100% { transform: translateY(0px) rotate(-3deg); }
-  50% { transform: translateY(-8px) rotate(3deg); }
-}
-.butterfly-float {
-  animation: butterfly-float 3s ease-in-out infinite;
-}
-
-@keyframes butterfly-flap {
-  0%, 100% { transform: scaleX(1); }
-  50% { transform: scaleX(0.3); }
-}
-.butterfly-wings {
-  animation: butterfly-flap 0.3s ease-in-out infinite;
-}
 
 /* Easter Egg Animations */
 @keyframes barrel-roll {

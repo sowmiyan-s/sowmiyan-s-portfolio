@@ -21,7 +21,6 @@ export { default as Ferrofluid } from './effects/Ferrofluid';
 export { default as Galaxy } from './effects/Galaxy';
 export { default as GlassSurface } from './effects/GlassSurface';
 export { default as GridScan } from './effects/GridScan';
-export { default as MysteryButterfly } from './effects/MysteryButterfly';
 export { default as ProjectPattern } from './effects/ProjectPattern';
 export { default as ShapeGrid } from './effects/ShapeGrid';
 export { default as TopographicBackground } from './effects/TopographicBackground';

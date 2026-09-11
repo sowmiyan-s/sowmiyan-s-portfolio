@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { fetchMediumPosts, MediumPost } from '@/lib/medium';
 import UnifiedLoader from '@/components/common/UnifiedLoader';
-import { waitCompleteLoop } from '@/lib/loadingUtils';
 import ScrambleText from '@/components/common/ScrambleText';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -52,8 +51,6 @@ const BlogSection = () => {
             } catch (e) {
                 setPosts(fallbackMediumPosts);
             } finally {
-                // Ensure ECG pulse animation completes at least 1 full loop
-                await waitCompleteLoop(startTime);
                 setLoading(false);
             }
         };
@@ -113,7 +110,7 @@ const BlogSection = () => {
 
     if (loading) return (
         <div className="py-32 flex flex-col items-center justify-center bg-transparent">
-            <UnifiedLoader text="LOADING ARTICLES..." size="md" />
+            <UnifiedLoader size="md" />
         </div>
     );
 
