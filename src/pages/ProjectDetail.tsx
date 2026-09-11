@@ -9,6 +9,10 @@ import Footer from '@/components/Footer';
 import { ArrowLeft, Github, ExternalLink, BookOpen } from 'lucide-react';
 import SEOKeywords from '@/components/SEOKeywords';
 import SEO from '@/components/SEO';
+import UnifiedLoader from '@/components/UnifiedLoader';
+import { waitCompleteLoop } from '@/lib/loadingUtils';
+
+import { formatRepoName } from '@/lib/formatRepo';
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,9 +21,12 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     const load = async () => {
+      const startTime = Date.now();
       if (id) {
         const data = await fetchReadme(id);
         setReadme(data);
+        // Ensure ECG pulse animation completes at least 1 full loop
+        await waitCompleteLoop(startTime);
         setLoading(false);
       }
     };
@@ -27,12 +34,11 @@ const ProjectDetail = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  const formattedTitle = id ? id.replace(/[-_]/g, ' ') : 'Project';
+  const formattedTitle = id ? formatRepoName(id) : 'Project';
 
   if (loading) return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-3">
-      <div className="w-8 h-8 rounded-full border-2 border-red-500/20 border-t-red-500 animate-spin" />
-      <span className="font-mono text-xs text-white/60 tracking-widest uppercase">Loading Project Documentation...</span>
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6">
+      <UnifiedLoader text="LOADING PROJECT DOCUMENTATION..." size="md" />
     </div>
   );
 

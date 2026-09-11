@@ -3,16 +3,18 @@ import { useRealtimeRefetch } from "@/hooks/useRealtimeRefetch";
 
 import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { Github, Star, GitFork, Terminal } from "lucide-react";
-import { fetchRepos } from "@/lib/github";
+import { fetchRepos, readCachedRepos, fallbackRepos } from "@/lib/github";
 import { fetchHiddenProjectIds } from "@/lib/projectSettings";
 import { formatRepoName } from "@/lib/formatRepo";
-import RadarLoader from "./RadarLoader";
+import UnifiedLoader from "./UnifiedLoader";
+import { waitCompleteLoop } from "@/lib/loadingUtils";
 import ScrambleText from "./ScrambleText";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 
 const parseInlineMarkdown = (text: string): string => {
+  if (!text) return "";
   let html = text;
   // Bold **text**
   html = html.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
@@ -51,6 +53,7 @@ const renderHtmlTable = (headers: string[], rows: string[][]): string => {
 };
 
 const convertMarkdownTablesToHtml = (markdown: string): string => {
+  if (!markdown || typeof markdown !== "string") return "";
   const lines = markdown.split("\n");
   const processedLines: string[] = [];
   let inTable = false;
@@ -135,6 +138,8 @@ const ProjectCard = ({ project, index, side, onClick }: { project: any, index: n
     ["rgba(255, 255, 255, 0.08)", "rgba(239, 68, 68, 0.85)"]
   );
 
+  const ambientGlowOpacity = useTransform(smoothProgress, [0.2, 0.8], [0, 0.2]);
+
   const formattedIndex = (index + 1).toString().padStart(2, '0');
 
   // Asymmetric sci-fi corner cuts (chamfers)
@@ -168,7 +173,7 @@ const ProjectCard = ({ project, index, side, onClick }: { project: any, index: n
 
         {/* Subtle Ambient Accent Glow */}
         <motion.div
-          style={{ opacity: useTransform(smoothProgress, [0.2, 0.8], [0, 0.2]) }}
+          style={{ opacity: ambientGlowOpacity }}
           className="absolute inset-0 bg-gradient-to-t from-red-950/40 via-red-900/10 to-transparent pointer-events-none z-0"
         />
 
@@ -275,9 +280,42 @@ const ProjectCard = ({ project, index, side, onClick }: { project: any, index: n
   );
 };
 
+const formatProjectsList = (repoList: any[]) => {
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  return repoList
+    .sort((a, b) => {
+      const timeA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+      const timeB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+      return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
+    })
+    .map(repo => {
+      const dateObj = repo.updated_at ? new Date(repo.updated_at) : new Date();
+      const validDate = isNaN(dateObj.getTime()) ? new Date() : dateObj;
+      const year = validDate.getFullYear().toString();
+      const monthName = months[validDate.getMonth()] || "JAN";
+
+      return {
+        id: repo.id,
+        year,
+        name: repo.name,
+        title: formatRepoName(repo.name) || repo.name,
+        date: `${monthName} ${year}`,
+        description: repo.description || "Open-source application and software repository.",
+        tech: repo.language ? [repo.language] : ['System'],
+        github: repo.html_url || `https://github.com/sowmiyan-s/${repo.name}`,
+        stars: repo.stargazers_count || 0,
+        forks: repo.forks_count || 0
+      };
+    });
+};
+
 const ProjectsSection = () => {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<any[]>(() => {
+    const cached = readCachedRepos();
+    const source = cached.length > 0 ? cached : fallbackRepos;
+    return formatProjectsList(source);
+  });
+  const [loading, setLoading] = useState(false);
   const [dotPoints, setDotPoints] = useState<{ x: number; y: number }[]>([]);
   
   // Modal states for Decoded Markdown README
@@ -288,6 +326,9 @@ const ProjectsSection = () => {
   const [repoRootUrl, setRepoRootUrl] = useState("");
   
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Guard to prevent concurrent load calls from causing glitch loops
+  const isLoadingRef = useRef(false);
   
   const [junctionClicks, setJunctionClicks] = useState<Record<number, number>>({});
   const handleJunctionClick = (idx: number) => {
@@ -313,40 +354,36 @@ const ProjectsSection = () => {
   };
 
   const load = useCallback(async () => {
-    setLoading(true);
+    // Prevent concurrent loads from causing glitch loops
+    if (isLoadingRef.current) return;
+    isLoadingRef.current = true;
+    const startTime = Date.now();
+
     try {
       const [data, hiddenIds] = await Promise.all([
         fetchRepos(),
         fetchHiddenProjectIds(),
       ]);
-      const visible = data.filter((r) => !hiddenIds.includes(r.id));
+      
+      let visible = data.filter((r) => !hiddenIds.includes(r.id));
+      if (visible.length === 0 && data.length > 0) {
+        visible = data;
+      }
+      if (visible.length === 0 && fallbackRepos.length > 0) {
+        visible = fallbackRepos;
+      }
 
-      const formatted = visible
-        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-        .map(repo => {
-          const dateObj = new Date(repo.updated_at);
-          const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-          const year = dateObj.getFullYear().toString();
-
-          return {
-            id: repo.id,
-            year,
-            name: repo.name,
-            title: formatRepoName(repo.name),
-            date: `${months[dateObj.getMonth()]} ${year}`,
-            description: repo.description || "No description provided.",
-            tech: repo.language ? [repo.language] : ['System'],
-            github: repo.html_url,
-            stars: repo.stargazers_count,
-            forks: repo.forks_count
-          };
-        });
-
-      setProjects(formatted);
+      const formatted = formatProjectsList(visible);
+      if (formatted.length > 0) {
+        setProjects(formatted);
+      }
     } catch (err) {
       console.error("Failed to load projects:", err);
     } finally {
+      // Ensure ECG pulse animation completes at least 1 full loop
+      await waitCompleteLoop(startTime);
       setLoading(false);
+      isLoadingRef.current = false;
     }
   }, []);
 
@@ -458,7 +495,7 @@ const ProjectsSection = () => {
 
   const pads = getCircuitPads();
 
-  // Fetches README file details from GitHub API when card is clicked
+  // Fetches README file details directly without consuming API rate limits
   const openProjectModal = async (project: any) => {
     setSelectedProject(project);
     setReadmeText("");
@@ -466,39 +503,33 @@ const ProjectsSection = () => {
     setReadmeBaseUrl("");
     setRepoRootUrl("");
     try {
-      const readmeRes = await fetch(`https://api.github.com/repos/sowmiyan-s/${project.name}/readme`);
-      if (readmeRes.ok) {
-        const readmeData = await readmeRes.json();
-        if (readmeData.download_url) {
-          const downloadUrl = readmeData.download_url;
-          
-          // Get directory containing README
-          const lastSlashIdx = downloadUrl.lastIndexOf("/");
-          const dirUrl = downloadUrl.substring(0, lastSlashIdx + 1);
-          setReadmeBaseUrl(dirUrl);
-
-          // Get repo root raw URL
-          const parts = downloadUrl.split("/");
-          const branch = parts[5] || "main";
-          const rootUrl = `https://raw.githubusercontent.com/sowmiyan-s/${project.name}/${branch}/`;
-          setRepoRootUrl(rootUrl);
-
-          const rawRes = await fetch(downloadUrl);
-          if (rawRes.ok) {
-            const rawText = await rawRes.text();
-            setReadmeText(convertMarkdownTablesToHtml(rawText));
-          } else {
-            setReadmeText("# Decrypt Error\nFailed to download raw README content.");
-          }
-        } else {
-          setReadmeText("# Decrypt Error\nREADME download source could not be resolved.");
-        }
-      } else {
-        setReadmeText(convertMarkdownTablesToHtml(`# ${project.title}\n\n${project.description}\n\n*No README.md document found in the repository.*`));
+      // 1. Try main branch from raw.githubusercontent.com
+      const rawRes = await fetch(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/main/README.md`);
+      if (rawRes.ok) {
+        const rawText = await rawRes.text();
+        setReadmeBaseUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/main/`);
+        setRepoRootUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/main/`);
+        setReadmeText(convertMarkdownTablesToHtml(rawText));
+        setLoadingReadme(false);
+        return;
       }
+
+      // 2. Try master branch
+      const masterRes = await fetch(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/master/README.md`);
+      if (masterRes.ok) {
+        const rawText = await masterRes.text();
+        setReadmeBaseUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/master/`);
+        setRepoRootUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/master/`);
+        setReadmeText(convertMarkdownTablesToHtml(rawText));
+        setLoadingReadme(false);
+        return;
+      }
+
+      // 3. Fallback: Clean formatted project documentation
+      setReadmeText(convertMarkdownTablesToHtml(`# ${project.title}\n\n${project.description}\n\n*Direct source code available at: [${project.github}](${project.github})*`));
     } catch (e) {
       console.error(e);
-      setReadmeText("# Connection Error\nCould not fetch README database from GitHub API.");
+      setReadmeText(convertMarkdownTablesToHtml(`# ${project.title}\n\n${project.description}\n\n*Direct source code available at: [${project.github}](${project.github})*`));
     } finally {
       setLoadingReadme(false);
     }
@@ -539,9 +570,8 @@ const ProjectsSection = () => {
         </div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-40 gap-6">
-            <RadarLoader />
-            <p className="font-mono text-xs uppercase tracking-widest text-white/50 animate-pulse text-center">Loading Project Portfolio...</p>
+          <div className="flex flex-col items-center justify-center py-40">
+            <UnifiedLoader text="LOADING PROJECT PORTFOLIO..." size="md" />
           </div>
         ) : projects.length > 0 ? (
           <div ref={containerRef} className="relative w-full py-12">
@@ -654,7 +684,7 @@ const ProjectsSection = () => {
                 const isEven = index % 2 === 0;
                 return (
                   <div
-                    key={project.id}
+                    key={`${project.id}-${project.name}-${index}`}
                     className="grid grid-cols-1 md:grid-cols-[1fr_100px_1fr] items-center relative w-full"
                   >
                     {/* Left Column */}
@@ -758,11 +788,8 @@ const ProjectsSection = () => {
                 className="flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-red-600/30 scrollbar-track-transparent z-10 text-left"
               >
                 {loadingReadme ? (
-                  <div className="flex flex-col items-center justify-center py-20 gap-4">
-                    <div className="w-8 h-8 rounded-full border-4 border-red-500/20 border-t-red-600 animate-spin" />
-                    <p className="font-mono text-[9px] uppercase tracking-widest text-red-500 animate-pulse">
-                      Decrypting project database...
-                    </p>
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <UnifiedLoader text="DECRYPTING PROJECT DATABASE..." size="sm" />
                   </div>
                 ) : (
                   <div className="prose prose-invert max-w-none text-white/80 font-sans prose-pre:bg-neutral-950 prose-pre:border prose-pre:border-white/10 prose-headings:text-white prose-headings:font-heading prose-headings:uppercase prose-headings:tracking-tight prose-a:text-red-500 hover:prose-a:text-red-400 prose-code:text-red-400 prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:before:content-none prose-code:after:content-none">

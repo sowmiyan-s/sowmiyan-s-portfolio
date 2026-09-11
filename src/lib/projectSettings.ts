@@ -32,6 +32,16 @@ function writeCache(key: string, value: unknown) {
   }
 }
 
+/** Write to cache WITHOUT dispatching events — use for read-triggered syncs
+ *  to prevent circular reload loops */
+function writeCacheSilent(key: string, value: unknown) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn("Failed to cache portfolio config:", e);
+  }
+}
+
 export function getLocalHiddenIds(): number[] {
   return readCache<number[]>(LS_HIDDEN_KEY, []);
 }
@@ -59,7 +69,7 @@ export async function fetchHiddenProjectIds(): Promise<number[]> {
     if (!error && data && Array.isArray(data)) {
       const ids = data.map((r: any) => r.github_repo_id as number);
       if (ids.length > 0 || getLocalHiddenIds().length === 0) {
-        writeCache(LS_HIDDEN_KEY, ids);
+        writeCacheSilent(LS_HIDDEN_KEY, ids);
         return ids;
       }
     }
@@ -85,7 +95,7 @@ export async function fetchHomeFeaturedProjects(): Promise<FeaturedProject[]> {
         position: (r.position ?? 0) as number,
       })).slice(0, 3);
       if (remote.length > 0 || getLocalHomeFeatured().length === 0) {
-        writeCache(LS_HOME_FEATURED_KEY, remote);
+        writeCacheSilent(LS_HOME_FEATURED_KEY, remote);
         return remote;
       }
     }
@@ -111,7 +121,7 @@ export async function fetchPageFeaturedProjects(): Promise<FeaturedProject[]> {
         position: (r.position ?? 0) as number,
       })).slice(0, 5);
       if (remote.length > 0 || getLocalPageFeatured().length === 0) {
-        writeCache(LS_PAGE_FEATURED_KEY, remote);
+        writeCacheSilent(LS_PAGE_FEATURED_KEY, remote);
         return remote;
       }
     }

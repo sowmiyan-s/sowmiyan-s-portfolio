@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { fetchMediumPosts, MediumPost } from '@/lib/medium';
-import RadarLoader from './RadarLoader';
+import UnifiedLoader from './UnifiedLoader';
+import { waitCompleteLoop } from '@/lib/loadingUtils';
 import ScrambleText from './ScrambleText';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -44,12 +45,15 @@ const BlogSection = () => {
 
     useEffect(() => {
         const load = async () => {
+            const startTime = Date.now();
             try {
                 const data = await fetchMediumPosts();
                 setPosts(data.length > 0 ? data : fallbackMediumPosts);
             } catch (e) {
                 setPosts(fallbackMediumPosts);
             } finally {
+                // Ensure ECG pulse animation completes at least 1 full loop
+                await waitCompleteLoop(startTime);
                 setLoading(false);
             }
         };
@@ -108,9 +112,8 @@ const BlogSection = () => {
     };
 
     if (loading) return (
-        <div className="py-32 flex flex-col items-center justify-center gap-6 bg-transparent">
-            <RadarLoader />
-            <p className="font-mono text-xs uppercase tracking-widest text-white/50 animate-pulse text-center">Loading articles...</p>
+        <div className="py-32 flex flex-col items-center justify-center bg-transparent">
+            <UnifiedLoader text="LOADING ARTICLES..." size="md" />
         </div>
     );
 

@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { useRealtimeRefetch } from '@/hooks/useRealtimeRefetch';
 import { Github, Star, GitFork } from 'lucide-react';
 import AccordionGallery from './AccordionGallery';
+import UnifiedLoader from './UnifiedLoader';
+import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 const socialImg = (repo: string) =>
     `https://opengraph.githubassets.com/1/sowmiyan-s/${repo}`;
@@ -21,13 +23,22 @@ const normalizeRepoKey = (name: string) =>
     name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const PopularProjectsSlider = () => {
-    const [projects, setProjects] = useState<GitHubRepo[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [projects, setProjects] = useState<GitHubRepo[]>(() => {
+        return TARGET_PROJECT_KEYS.map((key) => {
+            return fallbackRepos.find((r) => normalizeRepoKey(r.name) === key);
+        }).filter(Boolean) as GitHubRepo[];
+    });
+    const [loading, setLoading] = useState(false);
     const [index, setIndex] = useState(0);
     const navigate = useNavigate();
     const touchStartX = useRef<number | null>(null);
+    const isLoadingRef = useRef(false);
 
     const load = useCallback(async () => {
+        // Prevent concurrent loads from causing glitch loops
+        if (isLoadingRef.current) return;
+        isLoadingRef.current = true;
+        const startTime = Date.now();
         try {
             const [repos, hidden] = await Promise.all([
                 fetchRepos(),
@@ -46,7 +57,10 @@ const PopularProjectsSlider = () => {
 
             setProjects(matched);
         } finally {
+            // Ensure ECG pulse animation completes at least 1 full loop
+            await waitCompleteLoop(startTime);
             setLoading(false);
+            isLoadingRef.current = false;
         }
     }, []);
 
@@ -100,9 +114,7 @@ const PopularProjectsSlider = () => {
     if (loading) {
         return (
             <section className="w-full py-16 flex items-center justify-center">
-                <p className="text-[10px] font-mono tracking-[0.5em] text-red-500 animate-pulse uppercase">
-                    Loading Featured Projects
-                </p>
+                <UnifiedLoader text="LOADING FEATURED PROJECTS..." size="sm" />
             </section>
         );
     }

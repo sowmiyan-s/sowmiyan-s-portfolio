@@ -8,24 +8,34 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SiteLayout from "@/components/layout/SiteLayout";
 import PageTransition from "@/components/PageTransition";
+import { ECG_LOOP_DURATION_MS } from "@/lib/loadingUtils";
+
+// Helper: wrap a lazy import so the Suspense fallback always displays
+// for at least 1 full ECG heartbeat animation loop (2.5s)
+const lazyWithMinLoop = (factory: () => Promise<{ default: React.ComponentType<any> }>) =>
+    lazy(() =>
+        Promise.all([
+            factory(),
+            new Promise(resolve => setTimeout(resolve, ECG_LOOP_DURATION_MS)),
+        ]).then(([moduleExport]) => moduleExport)
+    );
 
 // Lazy-loaded pages for high performance and fast initial load
-const Home = lazy(() => import("./pages/Home.tsx"));
-const AchievementsPage = lazy(() => import("./pages/AchievementsPage.tsx"));
-const ProjectsPage = lazy(() => import("./pages/ProjectsPage.tsx"));
-const ContactPage = lazy(() => import("./pages/ContactPage.tsx"));
-const Admin = lazy(() => import("./pages/Admin.tsx"));
-const ProjectDetail = lazy(() => import("./pages/ProjectDetail.tsx"));
-const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+const Home = lazyWithMinLoop(() => import("./pages/Home.tsx"));
+const AchievementsPage = lazyWithMinLoop(() => import("./pages/AchievementsPage.tsx"));
+const ProjectsPage = lazyWithMinLoop(() => import("./pages/ProjectsPage.tsx"));
+const ContactPage = lazyWithMinLoop(() => import("./pages/ContactPage.tsx"));
+const Admin = lazyWithMinLoop(() => import("./pages/Admin.tsx"));
+const ProjectDetail = lazyWithMinLoop(() => import("./pages/ProjectDetail.tsx"));
+const NotFound = lazyWithMinLoop(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
 
+import UnifiedLoader from "@/components/UnifiedLoader";
+
 const PageLoader = () => (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 bg-transparent">
-        <div className="w-8 h-8 rounded-full border-2 border-red-600/30 border-t-red-600 animate-spin" />
-        <span className="text-[10px] font-mono uppercase tracking-widest text-red-500/80 animate-pulse">
-            INITIALIZING CORE...
-        </span>
+    <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 bg-transparent">
+        <UnifiedLoader text="INITIALIZING CORE..." size="md" />
     </div>
 );
 

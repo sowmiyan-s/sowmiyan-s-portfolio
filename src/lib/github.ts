@@ -1,6 +1,11 @@
 const GITHUB_USERNAME = 'sowmiyan-s';
 const API_BASE = 'https://api.github.com';
 const CACHE_KEY = 'sw_cached_repos';
+const CACHE_TS_KEY = 'sw_cached_repos_ts';
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+// In-flight fetch guard to prevent concurrent duplicate requests
+let inFlightFetch: Promise<GitHubRepo[]> | null = null;
 
 export interface GitHubRepo {
   id: number;
@@ -368,7 +373,7 @@ export const fallbackRepos: GitHubRepo[] = [
     forks_count: 0
   },
   {
-    id: 1342524820,
+    id: 1342524821,
     name: "Bulk-Resume-Analyzer",
     description: "AI-powered bulk resume analysis and candidate screening platform.",
     html_url: "https://github.com/sowmiyan-s/Bulk-Resume-Analyzer",
@@ -417,83 +422,141 @@ function mergeRepoLists(primary: GitHubRepo[], secondary: GitHubRepo[]): GitHubR
       map.set(r.name.toLowerCase(), r);
     }
   }
-  return Array.from(map.values()).sort((a, b) => 
-    new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-  );
+  return Array.from(map.values()).sort((a, b) => {
+    const timeA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+    const timeB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+    return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
+  });
 }
 
 export const clearRepoCache = () => {
   try {
     localStorage.removeItem(CACHE_KEY);
+    localStorage.removeItem(CACHE_TS_KEY);
   } catch {}
 };
 
-export const fetchRepos = async (forceRefresh = false): Promise<GitHubRepo[]> => {
-  // Read cache first if available and not forced
-  let cached: GitHubRepo[] = [];
+/** Check whether the cache is still fresh (within TTL window) */
+function isCacheFresh(): boolean {
+  try {
+    const ts = localStorage.getItem(CACHE_TS_KEY);
+    if (!ts) return false;
+    return Date.now() - Number(ts) < CACHE_TTL_MS;
+  } catch {
+    return false;
+  }
+}
+
+export function readCachedRepos(): GitHubRepo[] {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (raw) {
-      cached = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch {}
+  return [];
+}
 
+export const fetchRepos = async (forceRefresh = false): Promise<GitHubRepo[]> => {
+  const cached = readCachedRepos();
   const mergedFallback = mergeRepoLists(cached, fallbackRepos);
 
-  // If we already have a rich cached list and forceRefresh is false, return it immediately
-  if (!forceRefresh && cached.length >= fallbackRepos.length) {
+  // Return cached data immediately if cache is fresh and not force-refreshing
+  if (!forceRefresh && cached.length > 0 && isCacheFresh()) {
     return mergedFallback;
   }
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-  try {
-    const allFetched: GitHubRepo[] = [];
-    let page = 1;
-    let keepGoing = true;
-
-    while (keepGoing && page <= 5) {
-      const response = await fetch(`${API_BASE}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100&page=${page}&type=all`, {
-        signal: controller.signal,
-        headers: {
-          'Accept': 'application/vnd.github.v3+json',
-        }
-      });
-
-      if (!response.ok) {
-        keepGoing = false;
-        break;
-      }
-
-      const batch: GitHubRepo[] = await response.json();
-      if (Array.isArray(batch) && batch.length > 0) {
-        allFetched.push(...batch);
-        if (batch.length < 100) {
-          keepGoing = false;
-        } else {
-          page++;
-        }
-      } else {
-        keepGoing = false;
-      }
+  // Deduplicate: if a fetch is already in-flight, wait for it instead of firing another
+  if (inFlightFetch) {
+    try {
+      return await inFlightFetch;
+    } catch {
+      return mergedFallback;
     }
-
-    clearTimeout(timeoutId);
-
-    if (allFetched.length > 0) {
-      const fullList = mergeRepoLists(allFetched, fallbackRepos);
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify(fullList));
-      } catch {}
-      return fullList;
-    }
-  } catch (error) {
-    clearTimeout(timeoutId);
-    console.warn("GitHub fetch notice:", (error as Error).message);
   }
 
-  return mergedFallback;
+  const doFetch = async (): Promise<GitHubRepo[]> => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    try {
+      const allFetched: GitHubRepo[] = [];
+      let page = 1;
+      let keepGoing = true;
+
+      while (keepGoing && page <= 5) {
+        const response = await fetch(
+          `${API_BASE}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100&page=${page}&type=all`,
+          {
+            signal: controller.signal,
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+          }
+        );
+
+        // Handle rate limiting (403/429) — don't retry, cache and use fallback
+        if (response.status === 403 || response.status === 429) {
+          console.warn('GitHub API rate limit reached, using cached/fallback data.');
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(mergedFallback));
+            localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+          } catch {}
+          keepGoing = false;
+          break;
+        }
+
+        if (!response.ok) {
+          keepGoing = false;
+          break;
+        }
+
+        const batch: GitHubRepo[] = await response.json();
+        if (Array.isArray(batch) && batch.length > 0) {
+          allFetched.push(...batch);
+          if (batch.length < 100) {
+            keepGoing = false;
+          } else {
+            page++;
+          }
+        } else {
+          keepGoing = false;
+        }
+      }
+
+      clearTimeout(timeoutId);
+
+      if (allFetched.length > 0) {
+        const fullList = mergeRepoLists(allFetched, fallbackRepos);
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(fullList));
+          localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+        } catch {}
+        return fullList;
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      console.warn('GitHub fetch notice:', (error as Error).message);
+    }
+
+    // On any failure or abort, ensure fallback data is cached
+    if (mergedFallback.length > 0) {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(mergedFallback));
+        localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+      } catch {}
+    }
+
+    return mergedFallback;
+  };
+
+  // Set the in-flight guard and clean it up when done
+  inFlightFetch = doFetch();
+  try {
+    const result = await inFlightFetch;
+    return result;
+  } finally {
+    inFlightFetch = null;
+  }
 };
 
 export const fetchReadme = async (repoName: string): Promise<string> => {

@@ -1,16 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fetchRepos, GitHubRepo } from '@/lib/github';
+import { fetchRepos, readCachedRepos, fallbackRepos, GitHubRepo } from '@/lib/github';
 import { fetchHiddenProjectIds, fetchPageFeaturedProjects } from '@/lib/projectSettings';
-import { Github, ChevronRight } from 'lucide-react';
+import { formatRepoName } from '@/lib/formatRepo';
+import { useNavigate } from 'react-router-dom';
+import { Github, ChevronRight, ExternalLink } from 'lucide-react';
 import ScrambleText from './ScrambleText';
+import { waitCompleteLoop } from '@/lib/loadingUtils';
 
 const ProjectSlideshow = () => {
-  const [featuredProjects, setFeaturedProjects] = useState<GitHubRepo[]>([]);
+  const navigate = useNavigate();
+  const [featuredProjects, setFeaturedProjects] = useState<GitHubRepo[]>(() => {
+    const cached = readCachedRepos();
+    const source = cached.length > 0 ? cached : fallbackRepos;
+    return source.slice(0, 5);
+  });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const isLoadingRef = useRef(false);
 
   const load = useCallback(async () => {
+    // Prevent concurrent loads from causing glitch loops
+    if (isLoadingRef.current) return;
+    isLoadingRef.current = true;
+    const startTime = Date.now();
     try {
       const [data, featured, hiddenIds] = await Promise.all([
         fetchRepos(),
@@ -19,20 +32,34 @@ const ProjectSlideshow = () => {
       ]);
 
       const featuredIds = featured.map((f) => f.id);
-      const visibleRepos = data.filter(repo => !hiddenIds.includes(repo.id));
+      let visibleRepos = data.filter(repo => !hiddenIds.includes(repo.id));
+      if (visibleRepos.length === 0 && data.length > 0) {
+        visibleRepos = data;
+      }
+      if (visibleRepos.length === 0 && fallbackRepos.length > 0) {
+        visibleRepos = fallbackRepos;
+      }
 
       let filtered = visibleRepos.filter(repo => featuredIds.includes(repo.id));
       if (!filtered.length) {
         filtered = visibleRepos
-          .sort((a, b) => b.stargazers_count - a.stargazers_count)
+          .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
           .slice(0, 5);
       }
+      if (!filtered.length && fallbackRepos.length > 0) {
+        filtered = fallbackRepos.slice(0, 5);
+      }
 
-      setFeaturedProjects(filtered);
+      if (filtered.length > 0) {
+        setFeaturedProjects(filtered);
+      }
     } catch (err) {
       console.error("Failed to fetch featured projects:", err);
     } finally {
+      // Ensure ECG pulse animation completes at least 1 full loop
+      await waitCompleteLoop(startTime);
       setLoading(false);
+      isLoadingRef.current = false;
     }
   }, []);
 
@@ -42,7 +69,6 @@ const ProjectSlideshow = () => {
     return () => window.removeEventListener('portfolio-config-changed', load);
   }, [load]);
 
-
   useEffect(() => {
     if (featuredProjects.length <= 1) return;
 
@@ -51,12 +77,11 @@ const ProjectSlideshow = () => {
     }, 10000); // 10 seconds
 
     return () => clearInterval(interval);
-  }, [featuredProjects]);
+  }, [featuredProjects.length]);
 
-  if (loading) return null;
-  if (featuredProjects.length === 0) return null;
+  const current = featuredProjects[currentIndex] || featuredProjects[0] || fallbackRepos[0];
+  if (!current) return null;
 
-  const current = featuredProjects[currentIndex];
   const imageUrl = `https://opengraph.githubassets.com/1/sowmiyan-s/${current.name}`;
 
   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % featuredProjects.length);
@@ -113,7 +138,7 @@ const ProjectSlideshow = () => {
                   alt={current.name} 
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    (e.currentTarget as HTMLImageElement).src = '/og-image.png';
                   }}
                 />
                 
@@ -148,7 +173,6 @@ const ProjectSlideshow = () => {
                           ★ {current.stargazers_count}
                         </span>
                       )}
-                      {/* @ts-ignore */}
                       {current.forks_count > 0 && (
                         <span className="text-xs font-mono text-white/70 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full flex items-center gap-1">
                           ⑂ {current.forks_count}
@@ -160,7 +184,7 @@ const ProjectSlideshow = () => {
                   {/* Project Title */}
                   <div className="flex flex-col gap-1.5">
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-heading font-black text-white uppercase tracking-tight leading-tight">
-                      {current.name.replace(/-/g, ' ')}
+                      {formatRepoName(current.name)}
                     </h3>
                   </div>
 
@@ -194,12 +218,19 @@ const ProjectSlideshow = () => {
                       href={current.html_url} 
                       target="_blank" 
                       rel="noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-red-600 hover:bg-white hover:text-black transition-all duration-200 text-white font-bold text-xs font-mono uppercase tracking-wider rounded-xl shadow-lg group/btn"
+                      className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-white hover:text-black transition-all duration-200 text-white font-bold text-xs font-mono uppercase tracking-wider rounded-xl shadow-lg group/btn"
                     >
                       <Github size={15} />
-                      <span>View Repository</span>
+                      <span>Code</span>
                       <ChevronRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
                     </a>
+
+                    <button
+                      onClick={() => navigate(`/project/${current.name}`)}
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/15 hover:border-red-500 text-white font-bold text-xs font-mono uppercase tracking-wider rounded-xl transition-all"
+                    >
+                      <span>Details →</span>
+                    </button>
 
                     {/* Prev / Next Slide Arrows */}
                     <div className="flex items-center gap-1.5 shrink-0">
