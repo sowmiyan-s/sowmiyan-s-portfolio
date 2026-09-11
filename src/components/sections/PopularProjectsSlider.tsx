@@ -9,8 +9,23 @@ import { Github, Star, GitFork } from 'lucide-react';
 import AccordionGallery from './AccordionGallery';
 import UnifiedLoader from '@/components/common/UnifiedLoader';
 
-const socialImg = (repo: string) =>
-    `https://opengraph.githubassets.com/1/sowmiyan-s/${repo}`;
+// Custom preview photos for the home page featured projects (stored in /projects/)
+const HOME_PROJECT_PREVIEWS: Record<string, string> = {
+    crewlyze: '/projects/crewlyze.png',
+    guardrag: '/projects/guardrag.png',
+    weshare: '/projects/weshare.png',
+};
+
+const getProjectPreview = (repoName: string): string => {
+    const key = normalizeRepoKey(repoName);
+    if (HOME_PROJECT_PREVIEWS[key]) {
+        return HOME_PROJECT_PREVIEWS[key];
+    }
+    if (key.includes('crewlyze')) return HOME_PROJECT_PREVIEWS.crewlyze;
+    if (key.includes('guard') || key.includes('rag')) return HOME_PROJECT_PREVIEWS.guardrag;
+    if (key.includes('share')) return HOME_PROJECT_PREVIEWS.weshare;
+    return `https://opengraph.githubassets.com/1/sowmiyan-s/${repoName}`;
+};
 
 // Strictly show only 3 slides in exact order:
 // 1. crewlyze
@@ -97,7 +112,7 @@ const PopularProjectsSlider = () => {
     // Exactly 3 gallery items for the React Bits AccordionGallery
     const galleryItems = useMemo(() => {
         return projects.map((p) => ({
-            image: socialImg(p.name),
+            image: getProjectPreview(p.name),
             label: formatRepoName(p.name),
             link: `/project/${p.name}`,
             alt: formatRepoName(p.name),
@@ -186,7 +201,7 @@ const PopularProjectsSlider = () => {
                             {/* Full-width GitHub OpenGraph Image (1200:630 Exact Fit) */}
                             <div className="relative w-full aspect-[1200/630] bg-[#0d1117] overflow-hidden border-b border-white/10 flex items-center justify-center">
                                 <img
-                                    src={socialImg(current.name)}
+                                    src={getProjectPreview(current.name)}
                                     alt={formatRepoName(current.name)}
                                     loading="eager"
                                     className="w-full h-full object-contain"

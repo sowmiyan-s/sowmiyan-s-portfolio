@@ -1,6 +1,6 @@
 // Edge function: privileged admin writes. Password-gated, executes with the service role
 // so the public tables can keep strict RLS (no anonymous writes).
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from "@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

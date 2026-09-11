@@ -65,6 +65,28 @@ export const fallbackRepos: GitHubRepo[] = [
     forks_count: 2
   },
   {
+    id: 1189549319,
+    name: "GUARD-RAG",
+    description: "GUARD-RAG is a RAG chatbot tool that runs as a Python package and operates completely offline. Interact with sensitive enterprise documents with complete privacy and zero data leakage.",
+    html_url: "https://github.com/sowmiyan-s/GUARD-RAG",
+    homepage: "",
+    stargazers_count: 0,
+    language: "Python",
+    updated_at: "2026-08-18T18:03:56Z",
+    forks_count: 0
+  },
+  {
+    id: 1228673102,
+    name: "We-Share",
+    description: "We Share is an open-source desktop app for instant file transfers with or without a Wi-Fi router.",
+    html_url: "https://github.com/sowmiyan-s/We-Share",
+    homepage: "",
+    stargazers_count: 0,
+    language: "C#",
+    updated_at: "2026-08-18T18:03:56Z",
+    forks_count: 0
+  },
+  {
     id: 1027273319,
     name: "Data-Structures",
     description: "Data Structures and Algorithms for Interview Preparation.",

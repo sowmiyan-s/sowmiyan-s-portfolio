@@ -1,5 +1,5 @@
 // Edge function: manage site upvotes. Allows one vote per voter_id per 24 hours.
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from "@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
