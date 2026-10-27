@@ -21,11 +21,7 @@ const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
 
-const PageLoader = () => (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 bg-transparent">
-        <UnifiedLoader size="md" />
-    </div>
-);
+const PageLoader = () => null;
 
 const AnimatedRoutes = () => {
     const location = useLocation();

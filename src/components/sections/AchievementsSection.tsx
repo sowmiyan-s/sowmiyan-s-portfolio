@@ -4,11 +4,11 @@ import { certificatesList, Certificate } from '@/lib/certificates';
 import ShapeGrid from '@/components/effects/ShapeGrid';
 
 const achievements = [
-    { type: 'PATENT', title: 'SMART DUSTBIN (IOT-01)', desc: 'IoT waste monitoring & automated collection protocol.', hash: 'PAT-7729-AX' },
-    { type: 'AWARD', title: 'HACKATHON // RUNNER UP', desc: 'Secured 2nd prize in inter-college coding sprint.', hash: 'AWD-9104-BR' },
-    { type: 'WORKSHOP', title: 'INTEL_LEAD // GEN AI', desc: 'Generative AI technical session for 50+ students.', hash: 'WKS-2231-LD' },
-    { type: 'BOOK', title: 'CORE_DOCS // AUTHOR', desc: 'Published "Python for Beginners" technical manual.', hash: 'PUB-1102-BK' },
-    { type: 'PAPER', title: 'OSINT_RSCH // CYBER CRIME', desc: 'Research paper published in IJCRT (Threat Vectors).', hash: 'RSR-5541-IJ' }
+    { type: 'PATENT', title: 'Smart Waste Monitoring System (IoT)', desc: 'IoT automated fill-level telemetry & route optimization protocol.', meta: 'Patent Filed • 2025' },
+    { type: 'AWARD', title: 'Inter-College Hackathon — Runner Up', desc: 'Secured 2nd prize in a 24-hour rapid prototyping sprint.', meta: '2nd Place • 2024' },
+    { type: 'WORKSHOP', title: 'Generative AI Workshop Lead', desc: 'Conducted hands-on technical session on LLM workflows for 50+ students.', meta: 'Lead Instructor • 2024' },
+    { type: 'AUTHOR', title: 'Python for Beginners Technical Guide', desc: 'Published comprehensive manual covering core programming & logic.', meta: 'Published Guide • 2024' },
+    { type: 'RESEARCH', title: 'Cyber Threat Analysis & OSINT Research', desc: 'Peer-reviewed research paper published in IJCRT covering threat vectors.', meta: 'IJCRT Journal • 2024' }
 ];
 
 const AchievementsSection = () => {
@@ -20,8 +20,8 @@ const AchievementsSection = () => {
                 <div className="flex justify-between items-center py-6 border-y border-white/10 mb-8 bg-black/40 px-8 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-1 h-full bg-red-600" />
                     <div className="flex flex-col">
-                        <span className="text-[10px] opacity-40 font-mono tracking-[0.5em]">02 // SERVICE RECORDS</span>
-                        <h2 className="text-4xl md:text-6xl font-heading font-black text-white uppercase tracking-tight">ACCOLADES AND RECORDS</h2>
+                        <span className="text-[10px] opacity-40 font-mono tracking-[0.3em] uppercase">Milestones & Honors</span>
+                        <h2 className="text-4xl md:text-6xl font-heading font-black text-white uppercase tracking-tight">ACCOLADES & RECOGNITIONS</h2>
                     </div>
                 </div>
                 <div className="w-full h-1 bg-red-600 mt-2" />
@@ -38,7 +38,7 @@ const AchievementsSection = () => {
                                     <h3 className="text-sm font-heading font-black uppercase text-white group-hover:text-red-500 transition-colors">{item.title}</h3>
                                     <p className="text-[11px] font-mono text-white/60 leading-normal">{item.desc}</p>
                                 </div>
-                                <span className="text-[9px] font-mono text-white/30 group-hover:text-red-500/60 transition-colors shrink-0">{item.hash}</span>
+                                <span className="text-[10px] font-mono text-white/40 group-hover:text-red-400 transition-colors shrink-0">{item.meta}</span>
                             </div>
                         ))}
                     </div>
@@ -58,7 +58,7 @@ const AchievementsSection = () => {
                                 />
                             </div>
                             <div className="flex justify-between items-center border-l-2 border-red-600 pl-4 pr-2 relative z-10">
-                                <span className="text-xs font-mono opacity-40 uppercase tracking-widest">Validated_Certifications</span>
+                                <span className="text-xs font-mono text-white/50 uppercase tracking-widest">Featured Certifications</span>
                                 <Link 
                                     to="/achievements" 
                                     className="text-[10px] font-mono text-red-500 hover:text-white uppercase tracking-wider transition-colors flex items-center gap-1 font-bold"
@@ -89,7 +89,7 @@ const AchievementsSection = () => {
                         </div>
 
                         <div className="flex flex-col gap-4 border-t border-white/10 pt-8">
-                            <span className="text-xs font-mono opacity-40 uppercase tracking-widest">Education_History</span>
+                            <span className="text-xs font-mono text-white/50 uppercase tracking-widest">Education</span>
                             <div className="flex flex-col gap-1">
                                 <h3 className="font-heading font-bold uppercase text-lg">B.Tech in AI & DS</h3>
                                 <p className="text-xs font-mono opacity-60">V.S.B. College of Engineering, Coimbatore</p>

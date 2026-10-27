@@ -10,7 +10,6 @@ import PopularProjectsSlider from "@/components/sections/PopularProjectsSlider";
 import SEOKeywords from "@/components/common/SEOKeywords";
 import SEO from "@/components/common/SEO";
 import MarqueeSection from "@/components/sections/MarqueeSection";
-import CyberGridBackground from "@/components/effects/CyberGridBackground";
 import { useThemeColors } from "@/hooks/useThemeColors";
 
 const GridScan = lazy(() => import("@/components/effects/GridScan"));
@@ -19,8 +18,7 @@ const Home = () => {
     const { primary, rgbaPrimary } = useThemeColors();
 
     return (
-        <div className="relative min-h-screen bg-transparent text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
-            <CyberGridBackground />
+        <div className="relative min-h-screen bg-[#070709] text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
             <SEO 
                 title="Sowmiyan S — AI Engineer & Full Stack Systems Developer"
                 description="Official portfolio of Sowmiyan S. Autonomous AI agents, multi-agent frameworks, production full-stack systems, research publications, and open-source software."
@@ -34,6 +32,7 @@ const Home = () => {
                     <Hero />
                 </div>
 
+                {/* Primary Capabilities Ticker */}
                 <MarqueeSection />
 
                 {/* Skills Section */}
@@ -41,21 +40,15 @@ const Home = () => {
                     <SkillsSection />
                 </div>
 
-                <MarqueeSection />
-
                 {/* Blog Section */}
                 <div className="relative w-full z-30">
                     <BlogSection />
                 </div>
 
-                <MarqueeSection />
-
                 {/* Popular Projects Section */}
                 <div id="popular-projects-slider" className="relative bg-transparent w-full z-40">
                     <PopularProjectsSlider />
                 </div>
-
-                <MarqueeSection />
 
                 {/* Bound By Code Section with React Bits GridScan Background */}
                 <div className="relative w-full overflow-hidden bg-[#0a0a0a]/80 z-50 py-10 md:py-16">
@@ -80,7 +73,17 @@ const Home = () => {
                     </div>
                 </div>
 
-                <MarqueeSection />
+                {/* Closing Callout Marquee */}
+                <MarqueeSection 
+                    items={[
+                        'OPEN FOR IMPACTFUL ROLES',
+                        'PRODUCTION AI SYSTEMS',
+                        'FULL-STACK ARCHITECTURES',
+                        'AVAILABLE WORLDWIDE',
+                        'LET\'S BUILD TOGETHER'
+                    ]} 
+                    speed="55s"
+                />
 
                 {/* Hire Me Section */}
                 <div className="relative w-full z-[60] bg-transparent">

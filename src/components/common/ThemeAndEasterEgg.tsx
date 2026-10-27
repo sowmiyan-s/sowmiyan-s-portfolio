@@ -54,8 +54,8 @@ const playWinChime = () => {
 };
 
 const playLoseBuzz = () => {
-  setTimeout(() => playSynthBeep(120, 0.25, "sawtooth"), 0);
-  setTimeout(() => playSynthBeep(90, 0.35, "sawtooth"), 100);
+  setTimeout(() => playSynthBeep(220, 0.12, "sine"), 0);
+  setTimeout(() => playSynthBeep(180, 0.15, "sine"), 80);
 };
 
 const getMatchCount = (guess: string, target: string) => {
