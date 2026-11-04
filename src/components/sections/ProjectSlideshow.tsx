@@ -4,8 +4,7 @@ import { fetchRepos, readCachedRepos, fallbackRepos, GitHubRepo } from '@/lib/gi
 import { fetchHiddenProjectIds, fetchPageFeaturedProjects } from '@/lib/projectSettings';
 import { formatRepoName } from '@/lib/formatRepo';
 import { useNavigate } from 'react-router-dom';
-import { Github, ChevronRight, ExternalLink } from 'lucide-react';
-import ScrambleText from '@/components/common/ScrambleText';
+import { Github, ChevronRight, ExternalLink, ArrowUpRight, Star } from 'lucide-react';
 
 const ProjectSlideshow = () => {
   const navigate = useNavigate();
@@ -19,10 +18,8 @@ const ProjectSlideshow = () => {
   const isLoadingRef = useRef(false);
 
   const load = useCallback(async () => {
-    // Prevent concurrent loads from causing glitch loops
     if (isLoadingRef.current) return;
     isLoadingRef.current = true;
-    const startTime = Date.now();
     try {
       const [data, featured, hiddenIds] = await Promise.all([
         fetchRepos(),
@@ -71,7 +68,7 @@ const ProjectSlideshow = () => {
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % featuredProjects.length);
-    }, 10000); // 10 seconds
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [featuredProjects.length]);
@@ -84,190 +81,120 @@ const ProjectSlideshow = () => {
   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % featuredProjects.length);
   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + featuredProjects.length) % featuredProjects.length);
 
-  const isMobile = typeof window !== 'undefined' && (
-    window.innerWidth <= 768 ||
-    (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches)
-  );
-
   return (
-    <section className="relative w-full overflow-hidden bg-transparent py-4 md:py-8">
-      {/* Section Header */}
-      <div className="max-w-[95vw] mx-auto px-2 sm:px-4 mb-4 md:mb-6 flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse" />
-          <span className="text-[10px] md:text-xs font-mono text-red-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em]">
-            FEATURED PROJECTS
-          </span>
+    <div className="w-full">
+      {/* Slideshow Card - Neo-Brutalist Frame */}
+      <div className="relative w-full bg-white border-2 border-zinc-900 shadow-brutal overflow-hidden">
+        {/* Top Progress Line */}
+        <div className="w-full h-1.5 bg-stone-200 relative z-20">
+          <motion.div 
+            key={currentIndex}
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: 10, ease: "linear" }}
+            className="h-full bg-red-600"
+          />
         </div>
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-heading font-black text-white uppercase tracking-tight leading-none">
-          <ScrambleText text="Popular Projects" />
-        </h2>
-      </div>
 
-      <div className="max-w-[95vw] mx-auto px-2 sm:px-4">
-        {/* Main Showcase Container */}
-        <div className="relative w-full border border-white/10 hover:border-white/20 bg-neutral-950/90 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl transition-all duration-300">
-          
-          {/* Top Continuous Progress Bar */}
-          <div className="w-full h-[3px] bg-white/5 relative z-40">
-            <motion.div 
-              key={currentIndex}
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
-              transition={{ duration: 10, ease: "linear" }}
-              className="h-full bg-red-600 shadow-[0_0_15px_#FF0000]"
-            />
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.id}
-              initial={{ opacity: 0, x: isMobile ? 0 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: isMobile ? 0 : -20 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="grid grid-cols-1 lg:grid-cols-12 min-h-[380px] md:min-h-[460px] w-full"
-            >
-              {/* ─── LEFT: Full-Width Aspect Ratio Media Preview (lg:col-span-7) ─── */}
-              <div className="lg:col-span-7 relative w-full h-[220px] sm:h-[300px] md:h-[380px] lg:h-full min-h-[220px] lg:min-h-[460px] bg-[#0d1117] overflow-hidden group flex items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10">
-                <img 
-                  src={imageUrl} 
-                  alt={current.name} 
-                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src = '/og-image.png';
-                  }}
-                />
-                
-                {/* Subtle Gradient Shade for Contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-
-                {/* Status Badges on Media */}
-                <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 flex items-center gap-2 z-10">
-                  <span className="bg-red-600 text-white font-mono text-[8px] sm:text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 uppercase tracking-widest font-bold rounded shadow-md">
-                    PROJECT {String(currentIndex + 1).padStart(2, '0')} / {String(featuredProjects.length).padStart(2, '0')}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-1 lg:grid-cols-12 min-h-[380px] w-full"
+          >
+            {/* Left Media Preview */}
+            <div className="lg:col-span-7 relative w-full h-[220px] sm:h-[300px] lg:h-full min-h-[220px] bg-stone-100 overflow-hidden flex items-center justify-center border-b lg:border-b-0 lg:border-r-2 border-zinc-900">
+              <img 
+                src={imageUrl} 
+                alt={current.name} 
+                className="w-full h-full object-cover object-center filter contrast-105"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = '/og-image.png';
+                }}
+              />
+              
+              {/* Badges */}
+              <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
+                <span className="bg-red-600 text-white font-sans text-xs px-2.5 py-1 uppercase tracking-wider font-bold border border-zinc-900 shadow-brutal-sm">
+                  PROJECT {String(currentIndex + 1).padStart(2, '0')} / {String(featuredProjects.length).padStart(2, '0')}
+                </span>
+                {current.language && (
+                  <span className="bg-white text-zinc-900 border border-zinc-900 text-xs px-2.5 py-1 font-bold uppercase shadow-brutal-sm">
+                    {current.language}
                   </span>
-                  {current.language && (
-                    <span className="bg-black/80 backdrop-blur-md border border-white/15 text-white/90 font-mono text-[8px] sm:text-[9px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded font-bold uppercase">
-                      {current.language}
+                )}
+              </div>
+            </div>
+
+            {/* Right Details Panel */}
+            <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between gap-5 bg-white">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between border-b-2 border-zinc-900 pb-3">
+                  <span className="text-xs font-sans font-bold text-red-600 uppercase tracking-wide">
+                    Featured Project
+                  </span>
+                  {current.stargazers_count > 0 && (
+                    <span className="inline-flex items-center gap-1 text-xs font-sans font-bold text-zinc-900 bg-stone-100 px-2 py-0.5 border border-zinc-900">
+                      <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
+                      <span>{current.stargazers_count}</span>
                     </span>
                   )}
                 </div>
+
+                <h3 className="text-2xl sm:text-3xl font-heading font-black text-zinc-950 uppercase tracking-tight">
+                  {formatRepoName(current.name)}
+                </h3>
+
+                <p className="text-sm text-zinc-600 font-sans leading-relaxed">
+                  {current.description || "Open-source software application built for modern engineering velocity."}
+                </p>
               </div>
 
-              {/* ─── RIGHT: Clear Project Intelligence & Details Panel (lg:col-span-5) ─── */}
-              <div className="lg:col-span-5 p-5 sm:p-7 md:p-8 flex flex-col justify-between gap-6 bg-gradient-to-b from-neutral-900/60 to-black/90">
-                <div className="flex flex-col gap-4">
-                  {/* Category / Star Stat */}
-                  <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3">
-                    <span className="text-xs font-mono text-red-500 font-bold uppercase tracking-wider">
-                      OPEN SOURCE PROJECT
-                    </span>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-4 border-t border-zinc-200">
+                <a 
+                  href={current.html_url} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-zinc-900 text-white text-xs font-sans font-bold uppercase tracking-wider border-2 border-zinc-900 shadow-brutal-sm transition-all"
+                >
+                  <Github size={15} />
+                  <span>GitHub</span>
+                  <ArrowUpRight size={14} />
+                </a>
 
-                    <div className="flex items-center gap-2">
-                      {current.stargazers_count > 0 && (
-                        <span className="text-xs font-mono text-white/90 bg-white/10 border border-white/15 px-2.5 py-1 rounded-full flex items-center gap-1 font-bold">
-                          ★ {current.stargazers_count}
-                        </span>
-                      )}
-                      {current.forks_count > 0 && (
-                        <span className="text-xs font-mono text-white/70 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full flex items-center gap-1">
-                          ⑂ {current.forks_count}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                <button
+                  onClick={() => navigate(`/project/${current.name}`)}
+                  className="px-4 py-2.5 bg-stone-100 hover:bg-white text-zinc-900 border-2 border-zinc-900 shadow-brutal-sm text-xs font-sans font-bold uppercase tracking-wider transition-all"
+                >
+                  <span>Readme →</span>
+                </button>
 
-                  {/* Project Title */}
-                  <div className="flex flex-col gap-1.5">
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-heading font-black text-white uppercase tracking-tight leading-tight">
-                      {formatRepoName(current.name)}
-                    </h3>
-                  </div>
-
-                  {/* Project Description */}
-                  <p className="text-xs sm:text-sm text-white/75 font-sans leading-relaxed">
-                    {current.description || "Open-source software application built for high performance and modern developer workflows."}
-                  </p>
-
-                  {/* Tech Specs Grid */}
-                  <div className="grid grid-cols-2 gap-2.5 pt-2">
-                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col gap-0.5">
-                      <span className="text-[10px] font-mono uppercase text-white/40 tracking-wider">Primary Language</span>
-                      <span className="text-xs sm:text-sm font-mono font-bold text-red-400 uppercase">
-                        {current.language || 'Multi-Stack'}
-                      </span>
-                    </div>
-
-                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col gap-0.5">
-                      <span className="text-[10px] font-mono uppercase text-white/40 tracking-wider">Visibility</span>
-                      <span className="text-xs sm:text-sm font-mono font-bold text-white/90">
-                        Public Repository
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer Controls & Call to Action */}
-                <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
-                  <div className="flex items-center justify-between gap-3">
-                    <a 
-                      href={current.html_url} 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-white hover:text-black transition-all duration-200 text-white font-bold text-xs font-mono uppercase tracking-wider rounded-xl shadow-lg group/btn"
-                    >
-                      <Github size={15} />
-                      <span>Code</span>
-                      <ChevronRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
-                    </a>
-
-                    <button
-                      onClick={() => navigate(`/project/${current.name}`)}
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/15 hover:border-red-500 text-white font-bold text-xs font-mono uppercase tracking-wider rounded-xl transition-all"
-                    >
-                      <span>Details →</span>
-                    </button>
-
-                    {/* Prev / Next Slide Arrows */}
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <button 
-                        onClick={prevSlide}
-                        className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 text-white flex items-center justify-center transition-all text-base font-bold"
-                        aria-label="Previous Slide"
-                      >
-                        ‹
-                      </button>
-                      <button 
-                        onClick={nextSlide}
-                        className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 text-white flex items-center justify-center transition-all text-base font-bold"
-                        aria-label="Next Slide"
-                      >
-                        ›
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Dot Indicators */}
-                  <div className="flex items-center justify-center gap-1.5 mt-1">
-                    {featuredProjects.map((_, idx) => (
-                      <button
-                        key={`dot-${idx}`}
-                        onClick={() => setCurrentIndex(idx)}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          currentIndex === idx ? 'w-6 bg-red-500' : 'w-1.5 bg-white/20 hover:bg-white/40'
-                        }`}
-                        aria-label={`Go to slide ${idx + 1}`}
-                      />
-                    ))}
-                  </div>
+                <div className="flex items-center gap-1.5 self-center sm:self-auto">
+                  <button 
+                    onClick={prevSlide}
+                    className="w-9 h-9 bg-white hover:bg-stone-100 border-2 border-zinc-900 shadow-brutal-sm text-zinc-900 flex items-center justify-center font-bold text-sm"
+                    aria-label="Previous Slide"
+                  >
+                    ‹
+                  </button>
+                  <button 
+                    onClick={nextSlide}
+                    className="w-9 h-9 bg-white hover:bg-stone-100 border-2 border-zinc-900 shadow-brutal-sm text-zinc-900 flex items-center justify-center font-bold text-sm"
+                    aria-label="Next Slide"
+                  >
+                    ›
+                  </button>
                 </div>
               </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
-    </section>
+    </div>
   );
 };
 

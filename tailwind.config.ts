@@ -77,6 +77,12 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        brutal: "4px 4px 0px #18181B",
+        "brutal-sm": "2px 2px 0px #18181B",
+        "brutal-accent": "4px 4px 0px hsl(var(--theme-color))",
+        "brutal-white": "4px 4px 0px #ffffff",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -94,12 +100,22 @@ export default {
           "0%": { transform: "translateY(-100%)" },
           "100%": { transform: "translateY(100vh)" },
         },
+        ticker: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "ticker-reverse": {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-up": "fade-up 0.6s ease-out forwards",
         "scan-line": "scan-line 8s linear infinite",
+        ticker: "ticker 35s linear infinite",
+        "ticker-reverse": "ticker-reverse 35s linear infinite",
       },
     },
   },

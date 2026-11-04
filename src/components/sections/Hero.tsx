@@ -37,7 +37,7 @@ const Hero = () => {
                 style={isMobile ? undefined : { opacity: bgOpacity }}
             >
                 <motion.img
-                    src="/bg-image.png"
+                    src="/images/sowmiyan.jpg"
                     alt="Sowmiyan S Hero"
                     aria-hidden="true"
                     decoding="async"

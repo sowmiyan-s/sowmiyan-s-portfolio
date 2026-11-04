@@ -6,35 +6,37 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 40 10% 98%; /* #FAFAF9 stone-50 */
+    --foreground: 240 6% 10%; /* #18181B zinc-900 */
 
-    --card: 0 0% 0%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 10%;
 
-    --popover: 0 0% 0%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 10%;
 
-    --primary: 0 100% 50%; /* Pure Red */
+    --primary: 0 84% 60%; /* Crimson Red #ef4444 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 40 10% 95%;
+    --secondary-foreground: 240 6% 10%;
 
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 70%;
+    --muted: 40 6% 93%;
+    --muted-foreground: 240 4% 46%;
 
-    --accent: 0 100% 50%;
+    --accent: 0 84% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 40 10% 98%;
 
-    --border: 0 0% 100%; /* White border */
-    --input: 0 0% 10%;
-    --ring: 0 100% 50%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 0 84% 60%;
 
-    --radius: 0; /* Sharp corners for premium tech look */
+    --radius: 0.5rem;
+    --border-hard: #18181B;
+    --border-soft: #E4E4E7;
   }
 }
 
@@ -207,12 +209,36 @@
     text-shadow: 0 0 4px rgba(255, 0, 0, 0.25);
   }
 
-  .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  .shadow-brutal {
+    box-shadow: 4px 4px 0px #18181B;
   }
 
-  .glass-strong {
-    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  .shadow-brutal-sm {
+    box-shadow: 2px 2px 0px #18181B;
+  }
+
+  .shadow-brutal-accent {
+    box-shadow: 4px 4px 0px hsl(var(--theme-color));
+  }
+
+  .border-brutal {
+    border: 2px solid #18181B;
+  }
+
+  .border-brutal-thick {
+    border: 3px solid #18181B;
+  }
+
+  .editorial-rule {
+    height: 2px;
+    background-color: #18181B;
+    width: 100%;
+  }
+
+  .editorial-rule-red {
+    height: 2px;
+    background-color: hsl(var(--theme-color));
+    width: 100%;
   }
 
   .tactical-grid {

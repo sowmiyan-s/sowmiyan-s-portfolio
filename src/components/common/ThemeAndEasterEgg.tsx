@@ -452,10 +452,10 @@ const ThemeAndEasterEgg = () => {
       <div className="hidden md:flex fixed bottom-4 left-4 z-40 items-center gap-2">
         <button
           onClick={() => { setPanelOpen(!panelOpen); playSynthBeep(650, 0.05, "sine"); }}
-          className="w-10 h-10 rounded-full bg-black border border-red-500/30 flex items-center justify-center text-red-500 hover:border-red-500 hover:bg-red-950/20 transition-all shadow-[0_0_12px_rgba(239,68,68,0.2)] focus:outline-none"
+          className="w-10 h-10 bg-white border-2 border-zinc-900 shadow-brutal-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 flex items-center justify-center text-zinc-900 transition-all focus:outline-none"
           title="System configuration"
         >
-          <Settings size={18} className={panelOpen ? 'animate-spin' : ''} />
+          <Settings size={18} className={panelOpen ? 'animate-spin text-red-600' : ''} />
         </button>
 
         <AnimatePresence>
@@ -464,14 +464,14 @@ const ThemeAndEasterEgg = () => {
               initial={{ opacity: 0, x: -20, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: -20, scale: 0.95 }}
-              className="bg-black/95 border border-red-500/30 p-4 rounded-xl flex flex-col gap-3 shadow-[0_0_20px_rgba(239,68,68,0.25)] backdrop-blur-xl w-60 z-50 text-left pointer-events-auto"
+              className="bg-white border-2 border-zinc-900 p-4 shadow-brutal w-64 z-50 text-left pointer-events-auto text-zinc-900"
             >
-              <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                <span className="text-[9px] font-mono text-red-500 font-bold uppercase tracking-widest flex items-center gap-1">
-                  <ShieldAlert size={10} /> THEME SETTINGS
+              <div className="flex justify-between items-center border-b-2 border-zinc-900 pb-2 mb-2">
+                <span className="text-[10px] font-mono text-red-600 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                  <ShieldAlert size={12} /> THEME PALETTE
                 </span>
-                <button onClick={() => setPanelOpen(false)} className="text-white/40 hover:text-red-500 transition-colors">
-                  <X size={12} />
+                <button onClick={() => setPanelOpen(false)} className="text-zinc-500 hover:text-red-600 transition-colors">
+                  <X size={14} />
                 </button>
               </div>
 
@@ -483,16 +483,16 @@ const ThemeAndEasterEgg = () => {
                       changeTheme(theme.id);
                       setPanelOpen(false);
                     }}
-                    className={`flex items-center justify-between px-3 py-1.5 border rounded-md font-mono text-[9px] uppercase tracking-wider transition-all duration-300
+                    className={`flex items-center justify-between px-3 py-2 border-2 border-zinc-900 font-mono text-[10px] font-bold uppercase tracking-wider transition-all
                       ${activeTheme === theme.id
-                        ? 'border-red-500 bg-red-600/10 text-white font-bold'
-                        : 'border-white/5 bg-white/20 text-white/60 hover:border-white/20 hover:text-white'
+                        ? 'bg-zinc-900 text-white shadow-none'
+                        : 'bg-white text-zinc-900 hover:bg-stone-100 shadow-brutal-sm'
                       }
                     `}
                   >
                     <span>{theme.name}</span>
                     <span
-                      className="w-2 h-2 rounded-full border border-white/25"
+                      className="w-3 h-3 border border-zinc-900"
                       style={{ backgroundColor: theme.color }}
                     />
                   </button>
@@ -502,13 +502,13 @@ const ThemeAndEasterEgg = () => {
               {/* Launch Game */}
               <button
                 onClick={() => { setPanelOpen(false); playSynthBeep(850, 0.1, "sine"); startHackingGame(); }}
-                className="mt-1.5 py-1.5 bg-red-600 text-white font-mono text-[8px] font-bold uppercase tracking-widest rounded hover:bg-red-700 transition-colors text-center shadow-[0_0_10px_rgba(239,68,68,0.4)] animate-pulse"
+                className="mt-1.5 py-2 bg-gradient-to-r from-red-600 to-rose-600 text-white font-mono text-[8px] font-bold uppercase tracking-widest rounded-lg hover:from-red-700 hover:to-rose-700 transition-all text-center shadow-[0_4px_15px_rgba(239,68,68,0.25)]"
               >
                 [ THEME CHALLENGE ]
               </button>
 
               {/* Hint */}
-              <p className="text-[7px] font-mono text-white/20 text-center uppercase tracking-widest leading-relaxed">
+              <p className="text-[7px] font-mono text-zinc-400 text-center uppercase tracking-widest leading-relaxed">
                 Type "cheats" anywhere for secrets
               </p>
             </motion.div>
@@ -693,12 +693,12 @@ const ThemeAndEasterEgg = () => {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-20 left-4 z-[9999] bg-[#070707] border border-red-500/50 px-5 py-3 shadow-[0_0_15px_rgba(239,68,68,0.3)] rounded-md font-mono max-w-sm pointer-events-none text-left"
+            className="fixed bottom-20 left-4 z-[9999] bg-white border-2 border-zinc-900 px-5 py-3 shadow-brutal font-mono max-w-sm pointer-events-none text-left"
           >
-            <div className="text-[10px] text-red-500 font-bold uppercase tracking-widest mb-1 flex items-center gap-1">
-              <ShieldAlert size={10} className="animate-pulse" /> {alert.title}
+            <div className="text-[10px] text-red-600 font-bold uppercase tracking-widest mb-1 flex items-center gap-1.5">
+              <ShieldAlert size={12} className="animate-pulse" /> {alert.title}
             </div>
-            <div className="text-[9px] text-white/70 uppercase leading-relaxed font-bold">
+            <div className="text-[10px] text-zinc-900 uppercase leading-relaxed font-bold">
               {alert.desc}
             </div>
           </motion.div>

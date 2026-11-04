@@ -10,7 +10,6 @@ export { default as AchievementsSection } from './sections/AchievementsSection';
 export { default as LeetCodeShowcase } from './sections/LeetCodeShowcase';
 export { default as EbookShowcase } from './sections/EbookShowcase';
 export { default as ProjectSlideshow } from './sections/ProjectSlideshow';
-export { default as MarqueeSection } from './sections/MarqueeSection';
 export { default as AccordionGallery } from './sections/AccordionGallery';
 
 // Effects & Backgrounds

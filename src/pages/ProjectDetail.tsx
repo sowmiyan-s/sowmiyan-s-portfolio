@@ -6,11 +6,10 @@ import rehypeRaw from 'rehype-raw';
 import { motion } from 'framer-motion';
 import TechNav from '@/components/layout/TechNav';
 import Footer from '@/components/layout/Footer';
-import { ArrowLeft, Github, ExternalLink, BookOpen } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 import SEOKeywords from '@/components/common/SEOKeywords';
 import SEO from '@/components/common/SEO';
 import UnifiedLoader from '@/components/common/UnifiedLoader';
-
 import { formatRepoName } from '@/lib/formatRepo';
 
 const ProjectDetail = () => {
@@ -33,34 +32,63 @@ const ProjectDetail = () => {
   const formattedTitle = id ? formatRepoName(id) : 'Project';
 
   if (loading) return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-[#FAFAF9] flex flex-col items-center justify-center p-6">
       <UnifiedLoader size="md" />
     </div>
   );
 
   return (
-    <div className="relative min-h-screen bg-transparent text-white overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#FAFAF9] text-zinc-900 selection:bg-red-600 selection:text-white font-sans overflow-x-hidden">
       <SEO 
         title={`${formattedTitle} — Technical Repository & Documentation | Sowmiyan S`}
-        description={`Technical architecture, implementation details, and documentation for ${formattedTitle} open-source project by Sowmiyan S.`}
+        description={`Technical architecture and documentation for ${formattedTitle} open-source project by Sowmiyan S.`}
         canonical={`https://www.sowmiyan.me/project/${id || ''}`}
         ogType="article"
       />
       <SEOKeywords />
       <TechNav />
 
-      <main className="relative z-10 pt-28 md:pt-36 pb-20 px-4 sm:px-6 md:px-8">
+      {/* Decorative Dragon & Cloud Watermarks */}
+      <div 
+        className="absolute right-0 top-32 w-[380px] sm:w-[480px] pointer-events-none opacity-[0.04] select-none"
+        aria-hidden="true"
+      >
+        <img
+          src="/images/decorations/dragon.png"
+          alt=""
+          className="w-full h-auto"
+        />
+      </div>
+
+      <div 
+        className="absolute -top-6 -left-6 w-32 sm:w-40 pointer-events-none opacity-[0.10] select-none"
+        aria-hidden="true"
+      >
+        <img
+          src="/images/decorations/cloud-white.png"
+          alt=""
+          className="w-full h-auto"
+        />
+      </div>
+
+      {/* Subtle Background Mesh */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(#18181B_1px,transparent_1px)] [background-size:24px_24px]" 
+        aria-hidden="true" 
+      />
+
+      <main className="relative z-10 pt-28 sm:pt-36 pb-20 px-4 sm:px-10 lg:px-16 max-w-5xl mx-auto flex flex-col gap-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl mx-auto flex flex-col gap-6"
+          transition={{ duration: 0.5 }}
+          className="flex flex-col gap-6"
         >
           {/* Breadcrumb Navigation */}
           <div>
             <Link 
               to="/projects" 
-              className="inline-flex items-center gap-2 text-xs font-mono text-white/70 hover:text-red-500 transition-colors uppercase tracking-wider py-1"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-zinc-900 shadow-brutal-sm text-xs font-sans font-bold text-zinc-900 hover:text-red-600 transition-colors uppercase tracking-wider"
             >
               <ArrowLeft size={14} />
               <span>Back to All Projects</span>
@@ -68,15 +96,8 @@ const ProjectDetail = () => {
           </div>
 
           {/* Project Header */}
-          <div className="flex flex-col gap-3 pb-6 border-b border-white/10">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-              <span className="text-[10px] font-mono text-red-500 uppercase tracking-[0.3em] font-bold">
-                Repository Documentation
-              </span>
-            </div>
-            
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-heading font-black text-white uppercase tracking-tight leading-tight">
+          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col gap-4">
+            <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-zinc-950 leading-tight">
               {formattedTitle}
             </h1>
 
@@ -85,10 +106,11 @@ const ProjectDetail = () => {
                 href={`https://github.com/sowmiyan-s/${id}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-mono text-xs font-bold uppercase tracking-wider rounded-full shadow-[0_0_15px_rgba(220,38,38,0.3)] transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-zinc-900 text-white font-sans text-xs font-bold uppercase tracking-wider border-2 border-zinc-900 shadow-brutal-sm transition-all"
               >
-                <Github size={14} />
+                <Github size={15} />
                 <span>View on GitHub</span>
+                <ArrowUpRight size={14} />
               </a>
             </div>
           </div>
@@ -97,24 +119,24 @@ const ProjectDetail = () => {
           <motion.article
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="prose prose-invert prose-red max-w-none bg-neutral-950/80 border border-white/10 rounded-2xl p-5 sm:p-8 md:p-10 backdrop-blur-xl shadow-2xl overflow-x-auto text-sm leading-relaxed font-sans"
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="prose prose-zinc prose-red max-w-none bg-white border-2 border-zinc-900 shadow-brutal p-6 sm:p-10 overflow-x-auto text-sm sm:text-base leading-relaxed font-sans"
           >
             <ReactMarkdown rehypePlugins={[rehypeRaw]}>{readme}</ReactMarkdown>
           </motion.article>
 
           {/* Bottom Action Card */}
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 py-6 border-t border-white/10">
-            <div className="flex flex-col gap-1 text-center sm:text-left">
-              <span className="text-[10px] font-mono text-white/50 uppercase tracking-widest">Source Repository</span>
-              <span className="text-xs font-heading font-bold text-white uppercase tracking-wider">{id}</span>
+          <div className="p-6 bg-zinc-950 text-white border-2 border-zinc-900 shadow-brutal flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col gap-0.5 text-center sm:text-left">
+              <span className="text-xs font-sans font-bold text-red-500 uppercase tracking-wider">Source Repository</span>
+              <span className="text-sm font-sans font-bold text-white uppercase">{id}</span>
             </div>
 
             <a
               href={`https://github.com/sowmiyan-s/${id}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 hover:border-red-500/50 text-white font-mono text-xs uppercase tracking-wider rounded-full transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-sans text-xs font-bold uppercase tracking-wider border-2 border-white shadow-[2px_2px_0px_#ffffff] transition-all"
             >
               <span>Explore Code on GitHub</span>
               <ExternalLink size={14} />
@@ -122,6 +144,7 @@ const ProjectDetail = () => {
           </div>
         </motion.div>
       </main>
+
       <Footer />
     </div>
   );

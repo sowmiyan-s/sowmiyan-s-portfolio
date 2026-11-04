@@ -1,286 +1,16 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useRealtimeRefetch } from "@/hooks/useRealtimeRefetch";
-
-import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "framer-motion";
-import { Github, Star, GitFork, Terminal } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Github, Star, GitFork, ArrowUpRight, FileText, Search, X } from "lucide-react";
 import { fetchRepos, readCachedRepos, fallbackRepos } from "@/lib/github";
 import { fetchHiddenProjectIds } from "@/lib/projectSettings";
 import { formatRepoName } from "@/lib/formatRepo";
 import UnifiedLoader from "@/components/common/UnifiedLoader";
-import ScrambleText from "@/components/common/ScrambleText";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-
-const parseInlineMarkdown = (text: string): string => {
-  if (!text) return "";
-  let html = text;
-  // Bold **text**
-  html = html.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-  // Italic *text*
-  html = html.replace(/\*(.*?)\*/g, "<em>$1</em>");
-  // Inline code `code`
-  html = html.replace(/`(.*?)`/g, "<code class='bg-white/5 px-1.5 py-0.5 rounded text-red-400 font-mono'>$1</code>");
-  // Links [text](url)
-  html = html.replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' class='text-red-500 hover:underline'>$1</a>");
-  return html;
-};
-
-const renderHtmlTable = (headers: string[], rows: string[][]): string => {
-  let html = `<div class="overflow-x-auto my-6 border border-white/10 rounded-lg bg-black/40"><table class="min-w-full divide-y divide-white/10 text-xs">`;
-  
-  // Headers
-  html += `<thead class="bg-white/5 font-mono text-[9px] uppercase tracking-wider text-red-500"><tr>`;
-  headers.forEach(header => {
-    html += `<th class="px-4 py-3 text-left font-bold border-b border-white/10">${parseInlineMarkdown(header)}</th>`;
-  });
-  html += `</tr></thead>`;
-  
-  // Body
-  html += `<tbody class="divide-y divide-white/5">`;
-  rows.forEach((row, rowIdx) => {
-    html += `<tr class="${rowIdx % 2 === 0 ? 'bg-transparent' : 'bg-white/[0.01]'}">`;
-    for (let c = 0; c < headers.length; c++) {
-      const cellContent = parseInlineMarkdown(row[c] || "");
-      html += `<td class="px-4 py-2 text-white/70">${cellContent}</td>`;
-    }
-    html += `</tr>`;
-  });
-  html += `</tbody></table></div>`;
-  
-  return html;
-};
-
-const convertMarkdownTablesToHtml = (markdown: string): string => {
-  if (!markdown || typeof markdown !== "string") return "";
-  const lines = markdown.split("\n");
-  const processedLines: string[] = [];
-  let inTable = false;
-  let tableHeaders: string[] = [];
-  let tableRows: string[][] = [];
-
-  const isSeparatorRow = (line: string): boolean => {
-    const trimmed = line.trim();
-    return trimmed.startsWith("|") && trimmed.endsWith("|") && /^[|:\-\s]+$/.test(trimmed);
-  };
-
-  const isTableLine = (line: string): boolean => {
-    const trimmed = line.trim();
-    return trimmed.startsWith("|") && trimmed.endsWith("|");
-  };
-
-  const parseCells = (line: string): string[] => {
-    const trimmed = line.trim();
-    const content = trimmed.slice(1, -1);
-    const cells = content.split(/(?<!\\)\|/);
-    return cells.map(c => c.trim().replace(/\\\|/g, "|"));
-  };
-
-  for (let i = 0; i < lines.length; i++) {
-    const currentLine = lines[i];
-
-    if (!inTable) {
-      if (isTableLine(currentLine) && i + 1 < lines.length && isSeparatorRow(lines[i + 1])) {
-        inTable = true;
-        tableHeaders = parseCells(currentLine);
-        tableRows = [];
-        i++; // Skip the separator row
-      } else {
-        processedLines.push(currentLine);
-      }
-    } else {
-      if (isTableLine(currentLine)) {
-        tableRows.push(parseCells(currentLine));
-      } else {
-        processedLines.push(renderHtmlTable(tableHeaders, tableRows));
-        inTable = false;
-        processedLines.push(currentLine);
-      }
-    }
-  }
-
-  if (inTable) {
-    processedLines.push(renderHtmlTable(tableHeaders, tableRows));
-  }
-
-  return processedLines.join("\n");
-};
-
-const ProjectCard = ({ project, index, side, onClick }: { project: any, index: number, side: "left" | "right", onClick: () => void }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  
-  // Track scroll position of this card relative to viewport
-  const { scrollYProgress: cardScroll } = useScroll({
-    target: cardRef,
-    offset: ["start end", "center center"]
-  });
-
-  const smoothProgress = useSpring(cardScroll, { stiffness: 80, damping: 20 });
-
-  // Animating the red filling height
-  const fillHeight = useTransform(smoothProgress, [0.1, 0.8], ["0%", "100%"]);
-  
-  // Glowing box-shadow red glow
-  const borderGlow = useTransform(
-    smoothProgress,
-    [0.3, 0.8],
-    [
-      "0 0 0px rgba(239, 68, 68, 0)",
-      "0 15px 40px rgba(239, 68, 68, 0.3)"
-    ]
-  );
-
-  // Border color transitions
-  const borderColor = useTransform(
-    smoothProgress,
-    [0.2, 0.8],
-    ["rgba(255, 255, 255, 0.08)", "rgba(239, 68, 68, 0.85)"]
-  );
-
-  const ambientGlowOpacity = useTransform(smoothProgress, [0.2, 0.8], [0, 0.2]);
-
-  const formattedIndex = (index + 1).toString().padStart(2, '0');
-
-  // Asymmetric sci-fi corner cuts (chamfers)
-  const clipPathStyle = side === "left"
-    ? "polygon(0% 0%, calc(100% - 20px) 0%, 100% 20px, 100% 100%, 20px 100%, 0% calc(100% - 20px))"
-    : "polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px)";
-
-  return (
-    <motion.div
-      ref={cardRef}
-      onClick={onClick}
-      style={{
-        boxShadow: borderGlow,
-        borderColor: borderColor,
-        clipPath: clipPathStyle
-      }}
-      className="relative w-full max-w-lg p-[1.5px] bg-white/10 overflow-hidden transition-all duration-300 group cursor-pointer"
-    >
-      {/* Inner Clipped Dark Container */}
-      <div 
-        style={{ clipPath: clipPathStyle }}
-        className="w-full h-full bg-[#050505]/95 p-4 sm:p-6 md:p-8 relative overflow-hidden flex flex-col z-10"
-      >
-        {/* Connection Dot (Desktop) */}
-        <div
-          id={`dot-${index}`}
-          className={`absolute w-3.5 h-3.5 rounded-full bg-black border-4 border-red-500 z-30 shadow-[0_0_10px_rgba(239,68,68,0.8)] hidden md:block
-            ${side === "left" ? "right-[-7px] top-1/2 -translate-y-1/2" : "left-[-7px] top-1/2 -translate-y-1/2"}
-          `}
-        />
-
-        {/* Subtle Ambient Accent Glow */}
-        <motion.div
-          style={{ opacity: ambientGlowOpacity }}
-          className="absolute inset-0 bg-gradient-to-t from-red-950/40 via-red-900/10 to-transparent pointer-events-none z-0"
-        />
-
-        {/* Card Content */}
-        <div className="relative z-10 flex flex-col h-full text-white">
-          
-          {/* Top Header Row: Category Badge and Date */}
-          <div className="flex justify-between items-center mb-2.5 sm:mb-4">
-            <span className="text-[10px] sm:text-xs font-mono text-red-500 font-bold uppercase tracking-wider">
-              {project.tech[0] ? `${project.tech[0]} PROJECT` : 'OPEN SOURCE'}
-            </span>
-            <span className="text-[9px] sm:text-[10px] font-mono tracking-widest text-white/50 uppercase bg-white/5 border border-white/10 px-2 py-0.5 rounded group-hover:border-red-500/30 group-hover:text-white transition-all duration-300">
-              {project.date}
-            </span>
-          </div>
-
-          {/* Project Title */}
-          <h3 className="text-lg sm:text-2xl md:text-3xl font-heading font-black uppercase tracking-tight mb-2 sm:mb-3 leading-tight text-white group-hover:text-red-400 transition-colors duration-300">
-            <ScrambleText text={project.title} triggerOnView />
-          </h3>
-
-          {/* Clean Real Stats & Specs */}
-          <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-            {project.stars > 0 && (
-              <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono bg-white/5 border border-white/10 px-2.5 py-1 rounded-md text-white/90">
-                <span className="text-yellow-400">★</span>
-                <span>{project.stars} Stars</span>
-              </div>
-            )}
-            {project.forks > 0 && (
-              <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono bg-white/5 border border-white/10 px-2.5 py-1 rounded-md text-white/70">
-                <span className="text-white/40">⑂</span>
-                <span>{project.forks} Forks</span>
-              </div>
-            )}
-            {project.tech[0] && (
-              <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono bg-red-950/40 border border-red-500/30 px-2.5 py-1 rounded-md text-red-400 font-bold uppercase">
-                <span>◈</span>
-                <span>{project.tech[0]}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Description */}
-          <p className="text-white/80 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-6 font-normal group-hover:text-white transition-colors duration-300 line-clamp-3 sm:line-clamp-none">
-            {project.description}
-          </p>
-
-          {/* Tech tags and social stats */}
-          <div className="mt-auto flex flex-col gap-2.5 sm:gap-4">
-            {/* Tech tags */}
-            <div className="flex flex-wrap gap-1.5">
-              {project.tech.map((t: string) => (
-                <span
-                  key={t}
-                  className="text-[10px] px-2.5 py-1 bg-white/5 border border-white/10 rounded-md font-mono text-white/80 font-medium uppercase tracking-wider group-hover:border-red-500/30 group-hover:text-red-300 transition-all duration-300"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-
-            {/* Footer link */}
-            <div className="flex items-center justify-end border-t border-white/10 pt-3.5 group-hover:border-red-500/30 transition-colors duration-300">
-              {/* Github Link */}
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="flex items-center justify-center px-4 py-2 rounded-lg bg-red-600 hover:bg-white hover:text-black border border-red-500 text-white font-bold transition-all shadow-md text-xs tracking-wider"
-              >
-                <Github size={13} className="mr-1.5" /> REPOSITORY
-              </a>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Decorative Grid Patterns */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover:opacity-[0.07] bg-tactical-grid z-0 transition-opacity duration-500" />
-        
-        {/* Scanning Scanline Effect */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(239,68,68,0.05)_50%)] bg-[length:100%_4px] pointer-events-none z-0" />
-        <motion.div
-          className="absolute left-0 right-0 h-[2px] bg-red-500/40 shadow-[0_0_8px_#ef4444] pointer-events-none z-0"
-          animate={{
-            top: ["0%", "100%", "0%"]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-
-        {/* Corner Brackets */}
-        <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t border-l border-white/10 group-hover:border-red-500/40 pointer-events-none transition-colors" />
-        <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t border-r border-white/10 group-hover:border-red-500/40 pointer-events-none transition-colors" />
-        <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b border-l border-white/10 group-hover:border-red-500/40 pointer-events-none transition-colors" />
-        <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b border-r border-white/10 group-hover:border-red-500/40 pointer-events-none transition-colors" />
-      </div>
-    </motion.div>
-  );
-};
-
 const formatProjectsList = (repoList: any[]) => {
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return repoList
     .sort((a, b) => {
       const timeA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
@@ -291,7 +21,7 @@ const formatProjectsList = (repoList: any[]) => {
       const dateObj = repo.updated_at ? new Date(repo.updated_at) : new Date();
       const validDate = isNaN(dateObj.getTime()) ? new Date() : dateObj;
       const year = validDate.getFullYear().toString();
-      const monthName = months[validDate.getMonth()] || "JAN";
+      const monthName = months[validDate.getMonth()] || "Jan";
 
       return {
         id: repo.id,
@@ -299,7 +29,7 @@ const formatProjectsList = (repoList: any[]) => {
         name: repo.name,
         title: formatRepoName(repo.name) || repo.name,
         date: `${monthName} ${year}`,
-        description: repo.description || "Open-source application and software repository.",
+        description: repo.description || "Open-source software application built for modern engineering.",
         tech: repo.language ? [repo.language] : ['System'],
         github: repo.html_url || `https://github.com/sowmiyan-s/${repo.name}`,
         stars: repo.stargazers_count || 0,
@@ -308,69 +38,39 @@ const formatProjectsList = (repoList: any[]) => {
     });
 };
 
-const ProjectsSection = () => {
+const filterCategories = [
+  { id: 'all', label: 'All Projects' },
+  { id: 'ai', label: 'Python & AI' },
+  { id: 'web', label: 'Web & Full Stack' },
+  { id: 'tools', label: 'Tools & Apps' },
+];
+
+export const ProjectsSection = () => {
   const [projects, setProjects] = useState<any[]>(() => {
     const cached = readCachedRepos();
     const source = cached.length > 0 ? cached : fallbackRepos;
     return formatProjectsList(source);
   });
   const [loading, setLoading] = useState(false);
-  const [dotPoints, setDotPoints] = useState<{ x: number; y: number }[]>([]);
-  
-  // Modal states for Decoded Markdown README
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  // Modal state
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [readmeText, setReadmeText] = useState("");
   const [loadingReadme, setLoadingReadme] = useState(false);
-  const [readmeBaseUrl, setReadmeBaseUrl] = useState("");
-  const [repoRootUrl, setRepoRootUrl] = useState("");
-  
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Guard to prevent concurrent load calls from causing glitch loops
-  const isLoadingRef = useRef(false);
-  
-  const [junctionClicks, setJunctionClicks] = useState<Record<number, number>>({});
-  const handleJunctionClick = (idx: number) => {
-    const count = (junctionClicks[idx] || 0) + 1;
-    setJunctionClicks(prev => ({ ...prev, [idx]: count }));
-    
-    try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      osc.frequency.setValueAtTime(800 + (count * 150), audioCtx.currentTime);
-      gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
-    } catch(e){}
-
-    if (count >= 5) {
-      window.dispatchEvent(new CustomEvent('trigger-hacking-game'));
-      setJunctionClicks(prev => ({ ...prev, [idx]: 0 }));
-    }
-  };
 
   const load = useCallback(async () => {
-    // Prevent concurrent loads from causing glitch loops
-    if (isLoadingRef.current) return;
-    isLoadingRef.current = true;
-    const startTime = Date.now();
-
     try {
+      setLoading(true);
       const [data, hiddenIds] = await Promise.all([
         fetchRepos(),
         fetchHiddenProjectIds(),
       ]);
       
       let visible = data.filter((r) => !hiddenIds.includes(r.id));
-      if (visible.length === 0 && data.length > 0) {
-        visible = data;
-      }
-      if (visible.length === 0 && fallbackRepos.length > 0) {
-        visible = fallbackRepos;
-      }
+      if (visible.length === 0 && data.length > 0) visible = data;
+      if (visible.length === 0 && fallbackRepos.length > 0) visible = fallbackRepos;
 
       const formatted = formatProjectsList(visible);
       if (formatted.length > 0) {
@@ -380,7 +80,6 @@ const ProjectsSection = () => {
       console.error("Failed to load projects:", err);
     } finally {
       setLoading(false);
-      isLoadingRef.current = false;
     }
   }, []);
 
@@ -389,418 +88,256 @@ const ProjectsSection = () => {
     window.addEventListener("portfolio-config-changed", load);
     return () => window.removeEventListener("portfolio-config-changed", load);
   }, [load]);
+
   useRealtimeRefetch(['hidden_projects'], load);
 
-
-  // Measure dot locations relative to parent container
-  const updateDots = useCallback(() => {
-    if (!containerRef.current || projects.length === 0) return;
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const points: { x: number; y: number }[] = [];
-
-    // 1. Top starting point
-    const startEl = document.getElementById("dot-start");
-    if (startEl) {
-      const rect = startEl.getBoundingClientRect();
-      points.push({
-        x: rect.left - containerRect.left + rect.width / 2,
-        y: rect.top - containerRect.top + rect.height / 2,
-      });
-    }
-
-    // 2. Middle points (along timeline nodes)
-    projects.forEach((_, index) => {
-      const isMobile = window.innerWidth < 768;
-      const elId = isMobile ? `dot-mobile-${index}` : `dot-${index}`;
-      const el = document.getElementById(elId);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        points.push({
-          x: rect.left - containerRect.left + rect.width / 2,
-          y: rect.top - containerRect.top + rect.height / 2,
-        });
-      }
-    });
-
-    // 3. Bottom ending point
-    const endEl = document.getElementById("dot-end");
-    if (endEl) {
-      const rect = endEl.getBoundingClientRect();
-      points.push({
-        x: rect.left - containerRect.left + rect.width / 2,
-        y: rect.top - containerRect.top + rect.height / 2,
-      });
-    }
-
-    setDotPoints(points);
-  }, [projects]);
-
-  // Handle window resizing and document load to redraw paths
-  useEffect(() => {
-    if (loading || projects.length === 0) return;
-
-    const timer = setTimeout(() => {
-      updateDots();
-    }, 150);
-
-    window.addEventListener("resize", updateDots);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", updateDots);
-    };
-  }, [loading, projects, updateDots]);
-
-  // Construct 90-degree stepped stepped circuit path
-  const generatePath = () => {
-    if (dotPoints.length < 2) return "";
-    let pathD = `M ${dotPoints[0].x} ${dotPoints[0].y}`;
-    for (let i = 0; i < dotPoints.length - 1; i++) {
-      const p1 = dotPoints[i];
-      const p2 = dotPoints[i + 1];
-      const dy = p2.y - p1.y;
-      
-      const midY = p1.y + dy * 0.5;
-      // Sharp stepped lines representing PCB layout traces
-      pathD += ` L ${p1.x} ${midY} L ${p2.x} ${midY} L ${p2.x} ${p2.y}`;
-    }
-    return pathD;
-  };
-
-  const pathD = generatePath();
-
-  // Scroll tracking for drawing line progress
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"]
-  });
-
-  const springPathLength = useSpring(scrollYProgress, { stiffness: 45, damping: 15 });
-
-  // Generate copper pads coordinates for the circuit trace bends
-  const getCircuitPads = () => {
-    const pads: { x: number; y: number }[] = [];
-    for (let i = 0; i < dotPoints.length - 1; i++) {
-      const p1 = dotPoints[i];
-      const p2 = dotPoints[i + 1];
-      const dy = p2.y - p1.y;
-      const midY = p1.y + dy * 0.5;
-      pads.push({ x: p1.x, y: midY });
-      pads.push({ x: p2.x, y: midY });
-    }
-    return pads;
-  };
-
-  const pads = getCircuitPads();
-
-  // Fetches README file details directly without consuming API rate limits
-  const openProjectModal = async (project: any) => {
+  const handleOpenReadme = async (project: any) => {
     setSelectedProject(project);
-    setReadmeText("");
     setLoadingReadme(true);
-    setReadmeBaseUrl("");
-    setRepoRootUrl("");
+    setReadmeText("");
+
     try {
-      // 1. Try main branch from raw.githubusercontent.com
-      const rawRes = await fetch(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/main/README.md`);
-      if (rawRes.ok) {
-        const rawText = await rawRes.text();
-        setReadmeBaseUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/main/`);
-        setRepoRootUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/main/`);
-        setReadmeText(convertMarkdownTablesToHtml(rawText));
-        setLoadingReadme(false);
+      const res = await fetch(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/main/README.md`);
+      if (res.ok) {
+        const text = await res.text();
+        setReadmeText(text);
         return;
       }
 
-      // 2. Try master branch
-      const masterRes = await fetch(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/master/README.md`);
-      if (masterRes.ok) {
-        const rawText = await masterRes.text();
-        setReadmeBaseUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/master/`);
-        setRepoRootUrl(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/master/`);
-        setReadmeText(convertMarkdownTablesToHtml(rawText));
-        setLoadingReadme(false);
+      const res2 = await fetch(`https://raw.githubusercontent.com/sowmiyan-s/${project.name}/master/README.md`);
+      if (res2.ok) {
+        const text2 = await res2.text();
+        setReadmeText(text2);
         return;
       }
 
-      // 3. Fallback: Clean formatted project documentation
-      setReadmeText(convertMarkdownTablesToHtml(`# ${project.title}\n\n${project.description}\n\n*Direct source code available at: [${project.github}](${project.github})*`));
-    } catch (e) {
-      console.error(e);
-      setReadmeText(convertMarkdownTablesToHtml(`# ${project.title}\n\n${project.description}\n\n*Direct source code available at: [${project.github}](${project.github})*`));
+      setReadmeText(`# ${project.title}\n\n${project.description}\n\n*View source on GitHub: [${project.github}](${project.github})*`);
+    } catch (err) {
+      setReadmeText(`# ${project.title}\n\n${project.description}\n\n*View source on GitHub: [${project.github}](${project.github})*`);
     } finally {
       setLoadingReadme(false);
     }
   };
 
-  // Custom renderer for ReactMarkdown to resolve relative images/gifs using absolute paths
-  const customRenderers = {
-    img: ({ src, alt, ...props }: any) => {
-      if (!src) return null;
-      const isAbsolute = src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:");
-      if (!isAbsolute) {
-        let resolved = src;
-        if (src.startsWith("/")) {
-          // Root relative (e.g. /docs/img.png)
-          resolved = `${repoRootUrl}${src.substring(1)}`;
-        } else {
-          // Folder relative (e.g. ./img.png or docs/img.png)
-          const cleanSrc = src.startsWith("./") ? src.substring(2) : src;
-          resolved = `${readmeBaseUrl}${cleanSrc}`;
-        }
-        return <img src={resolved} alt={alt} className="max-w-full h-auto rounded-lg my-4 border border-white/10 bg-black/40" {...props} />;
-      }
-      return <img src={src} alt={alt} className="max-w-full h-auto rounded-lg my-4 border border-white/10 bg-black/40" {...props} />;
-    }
-  };
+  const filteredProjects = useMemo(() => {
+    return projects.filter(p => {
+      const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.tech.some((t: string) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      if (!matchesSearch) return false;
+
+      if (activeCategory === 'all') return true;
+      const lower = (p.tech.join(" ") + " " + p.name + " " + p.description).toLowerCase();
+      if (activeCategory === 'ai') return /python|ai|rag|agent|crew|langchain|model|opencv/i.test(lower);
+      if (activeCategory === 'web') return /typescript|javascript|react|html|css|web|next/i.test(lower);
+      if (activeCategory === 'tools') return /c#|tool|cli|bot|desktop|share/i.test(lower);
+      return true;
+    });
+  }, [projects, searchQuery, activeCategory]);
 
   return (
-    <section id="projects-list" className="py-20 bg-transparent relative z-10">
-      <div className="container mx-auto px-6 max-w-7xl">
-        <div className="flex flex-col gap-4 mb-16">
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 bg-red-600 rounded-full animate-ping" />
-            <span className="text-xs font-mono text-red-600 font-bold uppercase tracking-[0.6em]">PROJECT PORTFOLIO</span>
-          </div>
-          <h2 className="text-4xl md:text-8xl font-heading font-black text-white uppercase tracking-tighter leading-none">
-            <ScrambleText text="All Projects" />
+    <section id="projects-list" className="w-full flex flex-col gap-8">
+      {/* Search & Category Filter Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b-2 border-zinc-900 pb-5">
+        <div>
+          <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-zinc-950">
+            ALL OPEN SOURCE REPOSITORIES
           </h2>
+          <p className="text-xs sm:text-sm text-zinc-600 font-sans mt-0.5">
+            Showing {filteredProjects.length} of {projects.length} repositories from GitHub.
+          </p>
         </div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-40">
-            <UnifiedLoader size="md" />
-          </div>
-        ) : projects.length > 0 ? (
-          <div ref={containerRef} className="relative w-full py-12">
-            
-            {/* Start Dot */}
-            <div id="dot-start" className="absolute top-0 md:left-1/2 md:-translate-x-1/2 left-6 w-2 h-2 opacity-0" />
-
-            {/* SVG Stepped Circuit Canvas */}
-            {pathD && (
-              <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible">
-                {/* Background Trace Track */}
-                <path
-                  d={pathD}
-                  fill="none"
-                  stroke="rgba(255, 255, 255, 0.12)"
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  strokeLinecap="round"
-                />
-
-                {/* Outer Laser Ambient Glow */}
-                <motion.path
-                  d={pathD}
-                  fill="none"
-                  strokeWidth={7}
-                  strokeLinecap="round"
-                  style={{ pathLength: springPathLength }}
-                  className="stroke-red-600/40 filter blur-[3px]"
-                />
-
-                {/* Main High-Visibility Laser Circuit Trace */}
-                <motion.path
-                  d={pathD}
-                  fill="none"
-                  strokeWidth={3.5}
-                  strokeLinecap="round"
-                  style={{ pathLength: springPathLength }}
-                  className="stroke-red-500 filter drop-shadow-[0_0_8px_rgba(239,68,68,1)] drop-shadow-[0_0_16px_rgba(239,68,68,0.6)]"
-                />
-
-                {/* Inner Bright Laser Core */}
-                <motion.path
-                  d={pathD}
-                  fill="none"
-                  strokeWidth={1.2}
-                  strokeLinecap="round"
-                  style={{ pathLength: springPathLength }}
-                  className="stroke-white/90"
-                />
-
-                {/* Circuit Copper Pads (stepped bends) */}
-                {pads.map((pad, idx) => (
-                  <g key={`pad-${idx}`}>
-                    <rect
-                      x={pad.x - 4}
-                      y={pad.y - 4}
-                      width={8}
-                      height={8}
-                      fill="none"
-                      strokeWidth={1.2}
-                      className="stroke-red-500 opacity-75 drop-shadow-[0_0_4px_#ef4444]"
-                    />
-                    <rect
-                      x={pad.x - 1.5}
-                      y={pad.y - 1.5}
-                      width={3}
-                      height={3}
-                      className="fill-white opacity-90 animate-pulse"
-                    />
-                  </g>
-                ))}
-
-                {/* Pulsing Active Junction Nodes */}
-                {dotPoints.map((pt, i) => {
-                  if (i === 0 || i === dotPoints.length - 1) return null;
-                  return (
-                    <g key={`junction-${i}`}>
-                      {/* Outer Ring Ping */}
-                      <circle
-                        cx={pt.x}
-                        cy={pt.y}
-                        r={12}
-                        className="fill-red-500 opacity-[0.05] animate-ping"
-                        style={{ transformOrigin: `${pt.x}px ${pt.y}px`, animationDuration: '4.5s' }}
-                      />
-                      {/* Technical Crosshairs */}
-                      <line x1={pt.x - 6} y1={pt.y} x2={pt.x + 6} y2={pt.y} strokeWidth={0.8} className="stroke-red-500 opacity-25" />
-                      <line x1={pt.x} y1={pt.y - 6} x2={pt.x} y2={pt.y + 6} strokeWidth={0.8} className="stroke-red-500 opacity-25" />
-                      {/* Core Junction Node */}
-                      <rect
-                        x={pt.x - 2.5}
-                        y={pt.y - 2.5}
-                        width={5}
-                        height={5}
-                        className="fill-red-500 animate-pulse cursor-pointer pointer-events-auto"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleJunctionClick(i);
-                        }}
-                      />
-                    </g>
-                  );
-                })}
-              </svg>
-            )}
-
-            {/* Projects Alternating Grid */}
-            <div className="relative z-10 flex flex-col gap-24 md:gap-36">
-              {projects.map((project, index) => {
-                const isEven = index % 2 === 0;
-                return (
-                  <div
-                    key={`${project.id}-${project.name}-${index}`}
-                    className="grid grid-cols-1 md:grid-cols-[1fr_100px_1fr] items-center relative w-full"
-                  >
-                    {/* Left Column */}
-                    <div className="flex justify-end pl-12 md:pl-0 md:pr-12 order-2 md:order-1 w-full relative">
-                      {isEven ? (
-                        <div className="relative w-full flex justify-end">
-                          <ProjectCard project={project} index={index} side="left" onClick={() => openProjectModal(project)} />
-                        </div>
-                      ) : (
-                        <div className="hidden md:flex flex-col items-end pr-8 self-center text-right w-full font-mono text-[10px] text-white/30 tracking-widest leading-relaxed">
-                          <div className="flex items-center gap-1.5 text-red-500/80 mb-1 font-bold">
-                            <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
-                            [RELEASED]
-                          </div>
-                          <span>{project.date}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Middle Space */}
-                    <div className="hidden md:block order-2" />
-
-                    {/* Right Column */}
-                    <div className="flex justify-start pl-12 md:pl-12 order-1 md:order-3 w-full relative">
-                      {!isEven ? (
-                        <div className="relative w-full flex justify-start">
-                          <ProjectCard project={project} index={index} side="right" onClick={() => openProjectModal(project)} />
-                        </div>
-                      ) : (
-                        <div className="hidden md:flex flex-col items-start pl-8 self-center text-left w-full font-mono text-[10px] text-white/30 tracking-widest leading-relaxed">
-                          <div className="flex items-center gap-1.5 text-red-500/80 mb-1 font-bold">
-                            <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
-                            [RELEASED]
-                          </div>
-                          <span>{project.date}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Mobile Dot Element */}
-                    <div
-                      id={`dot-mobile-${index}`}
-                      className="absolute left-6 top-6 w-3.5 h-3.5 rounded-full bg-black border-4 border-red-500 z-30 shadow-[0_0_10px_rgba(239,68,68,0.8)] block md:hidden"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* End Dot */}
-            <div id="dot-end" className="absolute bottom-0 md:left-1/2 md:-translate-x-1/2 left-6 w-2 h-2 opacity-0" />
-          </div>
-        ) : (
-          <div className="text-center py-40 border-2 border-dashed border-white/10 rounded-[3rem] bg-white/[0.01]">
-            <p className="font-mono text-xl text-red-600 uppercase tracking-widest mb-3 font-black">Timeline Axis Offline</p>
-            <p className="text-[10px] text-white/30 uppercase tracking-[0.5em]">No significant events found in the public repository archive.</p>
-          </div>
-        )}
+        {/* Search Bar */}
+        <div className="relative w-full sm:w-80">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by name, tech or keyword..."
+            className="w-full bg-white border-2 border-zinc-900 pl-10 pr-4 py-2.5 text-xs font-sans text-zinc-950 focus:outline-none focus:border-red-600 shadow-brutal-sm"
+          />
+        </div>
       </div>
 
-      {/* Decoded README Modal */}
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap gap-2">
+        {filterCategories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.id)}
+            className={`px-3.5 py-1.5 border-2 border-zinc-900 text-xs font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${
+              activeCategory === cat.id
+                ? 'bg-red-600 text-white shadow-brutal-sm'
+                : 'bg-white text-zinc-800 hover:bg-stone-100'
+            }`}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Projects Grid */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-24">
+          <UnifiedLoader size="md" />
+        </div>
+      ) : filteredProjects.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProjects.map((project, idx) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: Math.min(idx * 0.05, 0.4) }}
+              whileHover={{ y: -4 }}
+              className="bg-white border-2 border-zinc-900 shadow-brutal hover:shadow-brutal-lg hover:border-red-600 p-6 flex flex-col justify-between group transition-all"
+            >
+              <div>
+                {/* Header Row */}
+                <div className="flex items-center justify-between pb-3 mb-3 border-b-2 border-zinc-900">
+                  <span className="font-sans text-2xl font-black text-red-600">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+
+                  <div className="flex items-center gap-2">
+                    {project.stars > 0 && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-stone-100 border border-zinc-900 text-xs font-sans font-bold text-zinc-800">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
+                        <span>{project.stars}</span>
+                      </span>
+                    )}
+                    {project.forks > 0 && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-stone-100 border border-zinc-900 text-xs font-sans font-bold text-zinc-800">
+                        <GitFork className="w-3 h-3 text-zinc-600" />
+                        <span>{project.forks}</span>
+                      </span>
+                    )}
+                    <span className="px-2 py-0.5 bg-stone-100 border border-zinc-900 text-[11px] font-sans font-bold uppercase text-zinc-700">
+                      {project.date}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-zinc-950 group-hover:text-red-600 transition-colors mb-2 leading-tight">
+                  {project.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-sm text-zinc-600 font-sans leading-relaxed line-clamp-3 mb-4">
+                  {project.description}
+                </p>
+              </div>
+
+              {/* Bottom Tech & Links */}
+              <div className="pt-4 border-t border-zinc-200">
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {project.tech.map((t: string) => (
+                    <span
+                      key={t}
+                      className="px-2.5 py-0.5 bg-stone-100 border border-zinc-900 text-xs font-sans font-semibold text-zinc-800"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 bg-zinc-900 hover:bg-black text-white text-xs font-sans font-bold uppercase tracking-wide border-2 border-zinc-900 shadow-brutal-sm transition-all active:scale-95"
+                  >
+                    <Github className="w-3.5 h-3.5" />
+                    <span>GitHub</span>
+                    <ArrowUpRight className="w-3 h-3" />
+                  </a>
+
+                  <button
+                    onClick={() => handleOpenReadme(project)}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 bg-white hover:bg-stone-100 text-zinc-900 text-xs font-sans font-bold uppercase tracking-wide border-2 border-zinc-900 shadow-brutal-sm transition-all active:scale-95 cursor-pointer"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-red-600" />
+                    <span>Readme</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <div className="p-12 text-center bg-white border-2 border-zinc-900 shadow-brutal">
+          <p className="font-heading font-black text-lg text-zinc-800 uppercase">
+            No projects matched your search.
+          </p>
+          <button
+            onClick={() => { setSearchQuery(""); setActiveCategory("all"); }}
+            className="mt-3 px-4 py-2 bg-red-600 text-white font-sans text-xs font-bold uppercase border-2 border-zinc-900 shadow-brutal-sm"
+          >
+            Reset Filters
+          </button>
+        </div>
+      )}
+
+      {/* Readme Modal Dialog (Matching Neo-Brutalist Theme) */}
       <AnimatePresence>
         {selectedProject && (
-          <div 
-            onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
-          >
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
-              onClick={(e) => e.stopPropagation()}
-              data-lenis-prevent="true"
-              className="relative max-w-4xl w-full bg-[#050505] border border-red-500/30 p-6 md:p-8 shadow-2xl flex flex-col max-h-[85vh] rounded-xl overflow-hidden"
+              className="relative max-w-3xl w-full max-h-[85vh] bg-white border-3 border-zinc-900 shadow-brutal p-6 sm:p-8 flex flex-col justify-between overflow-hidden"
             >
-              {/* Scanline Sweep in Modal */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(239,68,68,0.01)_50%)] bg-[length:100%_4px] pointer-events-none" />
-
               {/* Modal Header */}
-              <div className="flex justify-between items-center border-b border-white/5 pb-4 mb-6 z-10">
-                <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-mono text-red-500 font-bold uppercase tracking-widest">
-                    REPOSITORY // {selectedProject.name}
+              <div className="flex items-center justify-between pb-4 border-b-2 border-zinc-900 mb-4 shrink-0">
+                <div>
+                  <span className="text-xs font-sans font-bold text-red-600 uppercase tracking-wide block">
+                    Documentation
                   </span>
-                  <h3 className="font-heading font-black text-xl md:text-2xl uppercase tracking-tight text-white leading-none">
+                  <h3 className="text-2xl font-black uppercase text-zinc-950">
                     {selectedProject.title}
                   </h3>
                 </div>
+
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="px-4 py-2 border border-red-600 text-[10px] font-mono text-red-500 hover:bg-red-600 hover:text-white transition-all uppercase tracking-widest font-bold rounded-md"
+                  className="p-2 bg-stone-100 hover:bg-stone-200 border-2 border-zinc-900 shadow-brutal-sm text-zinc-900 transition-colors"
                 >
-                  [ Close X ]
+                  <X size={18} />
                 </button>
               </div>
 
-              {/* Modal Body / Markdown Content */}
-              <div 
-                data-lenis-prevent="true"
-                className="flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-red-600/30 scrollbar-track-transparent z-10 text-left"
-              >
+              {/* Modal Content */}
+              <div className="overflow-y-auto pr-2 my-2 prose prose-zinc prose-red max-w-none text-sm leading-relaxed">
                 {loadingReadme ? (
-                  <div className="flex flex-col items-center justify-center py-20">
+                  <div className="flex flex-col items-center justify-center py-12">
                     <UnifiedLoader size="sm" />
+                    <span className="text-xs font-sans font-bold text-zinc-500 uppercase mt-2">Loading Readme...</span>
                   </div>
                 ) : (
-                  <div className="prose prose-invert max-w-none text-white/80 font-sans prose-pre:bg-neutral-950 prose-pre:border prose-pre:border-white/10 prose-headings:text-white prose-headings:font-heading prose-headings:uppercase prose-headings:tracking-tight prose-a:text-red-500 hover:prose-a:text-red-400 prose-code:text-red-400 prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:before:content-none prose-code:after:content-none">
-                    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={customRenderers}>
-                      {readmeText}
-                    </ReactMarkdown>
-                  </div>
+                  <ReactMarkdown rehypePlugins={[rehypeRaw]}>{readmeText}</ReactMarkdown>
                 )}
               </div>
 
-              {/* Modal Footer Info */}
-              <div className="flex justify-between items-center border-t border-white/5 pt-4 mt-6 text-[8px] font-mono text-white/30 z-10">
-                <span>REPOSITORY // {selectedProject.name}</span>
-                <span>UPDATED // {selectedProject.date}</span>
+              {/* Modal Footer */}
+              <div className="pt-4 border-t-2 border-zinc-900 flex items-center justify-between gap-3 shrink-0">
+                <span className="text-xs font-sans font-bold text-zinc-600 uppercase">
+                  {selectedProject.tech.join(" • ")}
+                </span>
+                <a
+                  href={selectedProject.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white font-sans text-xs font-bold uppercase border-2 border-zinc-900 shadow-brutal-sm"
+                >
+                  <span>Open on GitHub</span>
+                  <ArrowUpRight size={14} />
+                </a>
               </div>
             </motion.div>
           </div>
