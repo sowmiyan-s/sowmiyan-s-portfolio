@@ -163,6 +163,24 @@ export const JapaneseDragonWatermark: React.FC<{
 };
 
 /**
+ * Rotated Neo-Brutalist Sticker Badge
+ */
+export const StickerBadge: React.FC<{
+  text: string;
+  bg?: string;
+  textColor?: string;
+  rotateDeg?: number;
+  className?: string;
+}> = ({ text, bg = 'bg-white', textColor = 'text-zinc-950', rotateDeg = -2, className = '' }) => (
+  <span
+    style={{ transform: `rotate(${rotateDeg}deg)` }}
+    className={`inline-block px-3 py-1.5 border-2 border-zinc-900 shadow-brutal-sm font-mono text-xs font-black uppercase tracking-wider select-none ${bg} ${textColor} ${className}`}
+  >
+    {text}
+  </span>
+);
+
+/**
  * Editorial Kinetic Ribbon
  */
 export const KineticRibbon: React.FC<{
