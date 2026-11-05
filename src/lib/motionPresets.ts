@@ -46,6 +46,30 @@ export const slideRight: Variants = {
   },
 };
 
+export const slideUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+export const slideDown: Variants = {
+  hidden: { opacity: 0, y: -40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export const popIn: Variants = {
   hidden: { opacity: 0, scale: 0.9 },
   visible: {

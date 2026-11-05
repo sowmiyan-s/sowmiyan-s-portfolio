@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { fetchMediumPosts, MediumPost } from '@/lib/medium';
 import { ArrowUpRight, BookOpen } from 'lucide-react';
 import { sectionReveal, staggerContainer, viewportConfig } from '@/lib/motionPresets';
+import { FloatingCornerCloud } from '@/components/common/FloatingCornerCloud';
 
 const MEDIUM_PROFILE = 'https://medium.com/@sowmiyan_s_';
 
@@ -71,28 +72,19 @@ export const MediumBlogSection: React.FC = () => {
 
   return (
     <section id="blog" className="w-full py-16 sm:py-24 px-4 sm:px-10 lg:px-16 bg-white relative overflow-hidden">
-      {/* Subtle decorative cloud accents */}
-      <div 
-        className="absolute -top-6 -right-6 w-32 sm:w-40 pointer-events-none opacity-[0.12] select-none"
-        aria-hidden="true"
-      >
-        <img
-          src="/images/decorations/red-cloud.png"
-          alt=""
-          className="w-full h-auto"
-        />
-      </div>
-
-      <div 
-        className="absolute -bottom-8 -left-8 w-36 sm:w-44 pointer-events-none opacity-[0.10] select-none"
-        aria-hidden="true"
-      >
-        <img
-          src="/images/decorations/cloud-white.png"
-          alt=""
-          className="w-full h-auto"
-        />
-      </div>
+      {/* Floating Corner Clouds (Drifting Flight Animation) */}
+      <FloatingCornerCloud
+        position="top-right"
+        variant="red"
+        duration={8}
+        sizeClass="w-32 sm:w-44"
+      />
+      <FloatingCornerCloud
+        position="bottom-left"
+        variant="white"
+        duration={9}
+        sizeClass="w-36 sm:w-52"
+      />
 
       <div className="w-full max-w-7xl mx-auto relative z-10">
         {/* Header - Clean Styling (No Mini-Title Eyebrows) */}
@@ -124,24 +116,24 @@ export const MediumBlogSection: React.FC = () => {
           </a>
         </motion.div>
 
-        {/* 4 Articles Grid */}
+        {/* 4 Articles Grid (Optimized 2-Cols on Mobile, 4-Cols on Desktop) */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}
           variants={staggerContainer}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6"
         >
           {posts.slice(0, 4).map((post, index) => (
             <motion.article
               key={post.guid || index}
               variants={sectionReveal}
               whileHover={{ y: -4 }}
-              className="flex flex-col justify-between group bg-white border-2 border-zinc-900 shadow-brutal p-5 hover:border-red-600 transition-all"
+              className="flex flex-col justify-between group bg-white border-2 border-zinc-900 shadow-[3px_3px_0px_#18181B] sm:shadow-brutal p-2.5 sm:p-5 hover:border-red-600 transition-all"
             >
               <div>
                 {/* Article Thumbnail */}
-                <div className="w-full aspect-[16/10] bg-stone-100 border-2 border-zinc-900 overflow-hidden mb-4 relative">
+                <div className="w-full aspect-[16/10] bg-stone-100 border border-zinc-900 sm:border-2 overflow-hidden mb-2 sm:mb-4 relative">
                   <img
                     src={post.thumbnail || '/og-image.png'}
                     alt={post.title}
@@ -151,38 +143,38 @@ export const MediumBlogSection: React.FC = () => {
                     }}
                   />
                   {post.categories && post.categories.length > 0 && (
-                    <span className="absolute top-2 left-2 px-2 py-0.5 bg-red-600 text-white font-sans text-[10px] font-bold uppercase tracking-wider border border-white">
+                    <span className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 px-1.5 sm:px-2 py-0.5 bg-red-600 text-white font-sans text-[8px] sm:text-[10px] font-bold uppercase tracking-wider border border-white">
                       {post.categories[0]}
                     </span>
                   )}
                 </div>
 
                 {/* Date */}
-                <span className="text-xs font-sans font-bold text-zinc-500 uppercase tracking-wide block mb-1.5">
+                <span className="text-[10px] sm:text-xs font-sans font-bold text-zinc-500 uppercase tracking-wide block mb-1 sm:mb-1.5">
                   {post.pubDate}
                 </span>
 
                 {/* Title */}
-                <h3 className="font-heading font-black text-lg text-zinc-950 group-hover:text-red-600 transition-colors uppercase tracking-tight line-clamp-2 leading-snug mb-2">
+                <h3 className="font-heading font-black text-xs sm:text-lg text-zinc-950 group-hover:text-red-600 transition-colors uppercase tracking-tight line-clamp-2 leading-snug mb-1 sm:mb-2">
                   {post.title}
                 </h3>
 
-                {/* Description */}
-                <p className="font-sans text-xs text-zinc-600 leading-relaxed line-clamp-3 mb-4">
+                {/* Description (Visible on larger screens, compact on mobile) */}
+                <p className="hidden sm:block font-sans text-xs text-zinc-600 leading-relaxed line-clamp-3 mb-4">
                   {post.description}
                 </p>
               </div>
 
               {/* Action Link */}
-              <div className="pt-3 border-t border-zinc-200">
+              <div className="pt-2 sm:pt-3 border-t border-zinc-200">
                 <a
                   href={post.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-red-600 group-hover:translate-x-1 transition-transform uppercase"
+                  className="inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-sans font-bold text-red-600 group-hover:translate-x-1 transition-transform uppercase"
                 >
                   <span>Read Article</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </a>
               </div>
             </motion.article>

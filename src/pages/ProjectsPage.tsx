@@ -6,6 +6,7 @@ import ProjectsSection from '@/components/sections/ProjectsSection';
 import ProjectSlideshow from '@/components/sections/ProjectSlideshow';
 import SEOKeywords from '@/components/common/SEOKeywords';
 import SEO from '@/components/common/SEO';
+import { FloatingCornerCloud } from '@/components/common/FloatingCornerCloud';
 
 const headerEase = [0.22, 1, 0.36, 1] as const;
 
@@ -45,12 +46,21 @@ const ProjectsPage: React.FC = () => {
         <img src="/images/decorations/dragon.png" alt="" className="w-full h-auto" />
       </motion.div>
 
-      <div
-        className="absolute top-24 -left-8 w-36 sm:w-44 pointer-events-none opacity-[0.14] select-none z-0"
-        aria-hidden="true"
-      >
-        <img src="/images/decorations/red-cloud.png" alt="" className="w-full h-auto" />
-      </div>
+      {/* Floating Corner Clouds */}
+      <FloatingCornerCloud
+        position="custom"
+        className="top-24 -left-8"
+        variant="red"
+        duration={8}
+        sizeClass="w-36 sm:w-48"
+      />
+      <FloatingCornerCloud
+        position="custom"
+        className="top-40 -right-8"
+        variant="white"
+        duration={9}
+        sizeClass="w-40 sm:w-56"
+      />
 
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(#18181B_1px,transparent_1px)] [background-size:24px_24px] z-0"

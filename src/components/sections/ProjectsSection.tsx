@@ -122,9 +122,6 @@ export const ProjectsSection: React.FC = () => {
                           ({catProjects.length} projects)
                         </span>
                       </h2>
-                      <p className="font-sans text-xs sm:text-sm text-zinc-600 mt-1 max-w-2xl">
-                        {cat.subtitle}
-                      </p>
                     </div>
                   </div>
                 </div>

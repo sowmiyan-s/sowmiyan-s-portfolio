@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { fetchChannelVideos, fallbackVideos, YouTubeVideo } from '@/lib/youtube';
-import { Play, ArrowUpRight, Star } from 'lucide-react';
+import { Play, ArrowUpRight } from 'lucide-react';
 import { sectionReveal, staggerContainer, viewportConfig } from '@/lib/motionPresets';
+import { FloatingCornerCloud } from '@/components/common/FloatingCornerCloud';
 
 const YOUTUBE_URL = 'https://youtube.com/@bound-by-code';
-const INSTAGRAM_URL = 'https://instagram.com/sowmiyan.s_';
+const INSTAGRAM_URL = 'https://instagram.com/bound_by_code';
 const UDEMY_COURSE_URL = 'https://www.udemy.com/course/master-generative-ai-without-the-tech-overload/';
 
 export const BoundByCodeSection: React.FC = () => {
@@ -63,16 +64,21 @@ export const BoundByCodeSection: React.FC = () => {
         />
       </div>
 
-      <div 
-        className="absolute -bottom-10 -left-10 w-48 pointer-events-none opacity-[0.07] invert select-none"
-        aria-hidden="true"
-      >
-        <img
-          src="/images/decorations/cloud-white.png"
-          alt=""
-          className="w-full h-auto"
-        />
-      </div>
+      {/* Floating Corner Luminous White Clouds */}
+      <FloatingCornerCloud
+        position="bottom-left"
+        variant="white"
+        theme="dark"
+        duration={10}
+        sizeClass="w-44 sm:w-60"
+      />
+      <FloatingCornerCloud
+        position="top-right"
+        variant="white"
+        theme="dark"
+        duration={8.5}
+        sizeClass="w-36 sm:w-48"
+      />
 
       <div className="w-full max-w-7xl mx-auto relative z-10 flex flex-col gap-12 sm:gap-14">
         {/* ─── 00. Section Header: Channel Identity ─── */}
@@ -84,12 +90,15 @@ export const BoundByCodeSection: React.FC = () => {
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-purple-900/50"
         >
           <div className="flex items-center gap-4 sm:gap-6">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-black/60 border-2 border-purple-500/70 rounded-2xl p-1 shadow-[0_0_25px_rgba(168,85,247,0.35)] shrink-0 overflow-hidden group hover:scale-105 transition-transform">
-              <img
-                src="/images/boundbycode-logo.jpg"
-                alt="Bound By Code Channel Logo"
-                className="w-full h-full object-contain"
-              />
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 group">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-600 via-fuchsia-500 to-purple-400 blur-sm opacity-60 group-hover:opacity-100 transition-opacity" />
+              <div className="relative w-full h-full rounded-full border-2 border-purple-400/80 bg-zinc-950 p-1 overflow-hidden shadow-[0_0_25px_rgba(168,85,247,0.4)]">
+                <img
+                  src="/images/boundbycode-logo.jpg"
+                  alt="Bound By Code Channel Logo"
+                  className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
             </div>
 
             <div>
@@ -104,28 +113,14 @@ export const BoundByCodeSection: React.FC = () => {
               </h2>
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            <span className="px-3.5 py-1.5 rounded-full bg-purple-950/70 border border-purple-500/40 text-purple-200 font-sans text-xs font-bold uppercase tracking-wider">
-              Autonomous AI &amp; LLMs
-            </span>
-          </div>
         </motion.div>
 
         {/* ─── 01. YouTube Videos Showcase ─── */}
         <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-500">
-                {/* Official YouTube Red SVG */}
-                <svg className="w-4 h-4 fill-current text-red-500" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </div>
-              <h3 className="font-heading font-black text-lg sm:text-xl text-white uppercase tracking-tight">
-                Latest YouTube Videos
-              </h3>
-            </div>
+            <h3 className="font-heading font-black text-lg sm:text-xl text-white uppercase tracking-tight">
+              Latest YouTube Videos
+            </h3>
 
             <a
               href={YOUTUBE_URL}
@@ -143,7 +138,7 @@ export const BoundByCodeSection: React.FC = () => {
             whileInView="visible"
             viewport={viewportConfig}
             variants={staggerContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5"
           >
             {videos.slice(0, 4).map((video, idx) => (
               <motion.a
@@ -153,11 +148,11 @@ export const BoundByCodeSection: React.FC = () => {
                 rel="noreferrer"
                 variants={sectionReveal}
                 whileHover={{ y: -4 }}
-                className="bg-[#0b0517]/90 border border-purple-900/60 hover:border-purple-400/90 shadow-[0_4px_20px_rgba(0,0,0,0.8)] hover:shadow-[0_0_25px_rgba(168,85,247,0.35)] p-3 sm:p-3.5 rounded-xl group transition-all flex flex-col justify-between"
+                className="bg-[#0b0517]/90 border border-purple-900/60 hover:border-purple-400/90 shadow-[0_4px_20px_rgba(0,0,0,0.8)] hover:shadow-[0_0_25px_rgba(168,85,247,0.35)] p-2.5 sm:p-3.5 rounded-lg sm:rounded-xl group transition-all flex flex-col justify-between"
               >
                 <div>
                   {/* 16:9 Thumbnail with Overlay */}
-                  <div className="w-full aspect-[16/9] border border-purple-900/70 rounded-lg relative overflow-hidden mb-3 bg-black">
+                  <div className="w-full aspect-[16/9] border border-purple-900/70 rounded sm:rounded-lg relative overflow-hidden mb-2 sm:mb-3 bg-black">
                     <img
                       src={video.thumbnail}
                       alt={video.title}
@@ -166,28 +161,28 @@ export const BoundByCodeSection: React.FC = () => {
 
                     {/* Play Button Overlay with Violet Theme */}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-colors">
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-r from-purple-600 to-fuchsia-600 border border-white/80 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.7)] text-white group-hover:scale-110 transition-transform">
-                        <Play className="w-4 h-4 fill-white translate-x-0.5" />
+                      <div className="w-7 h-7 sm:w-11 sm:h-11 rounded-full bg-gradient-to-r from-purple-600 to-fuchsia-600 border border-white/80 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.7)] text-white group-hover:scale-110 transition-transform">
+                        <Play className="w-3 h-3 sm:w-4 sm:h-4 fill-white translate-x-0.5" />
                       </div>
                     </div>
 
-                    <span className="absolute top-2 left-2 bg-black/80 backdrop-blur-sm text-purple-200 border border-purple-500/50 font-sans text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
+                    <span className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-black/80 backdrop-blur-sm text-purple-200 border border-purple-500/50 font-sans text-[8px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded">
                       {video.category || 'TUTORIAL'}
                     </span>
                   </div>
 
                   {/* Video Title */}
-                  <h4 className="font-heading font-black text-sm text-white group-hover:text-fuchsia-300 uppercase tracking-tight line-clamp-2 leading-snug transition-colors mb-2">
+                  <h4 className="font-heading font-black text-xs sm:text-sm text-white group-hover:text-fuchsia-300 uppercase tracking-tight line-clamp-2 leading-snug transition-colors mb-1.5 sm:mb-2">
                     {video.title}
                   </h4>
                 </div>
 
                 {/* Card Footer Action */}
-                <div className="pt-2.5 mt-2 border-t border-purple-950/80 flex items-center justify-between font-sans text-xs">
-                  <span className="text-purple-300/70 font-sans text-[11px] font-semibold">Bound By Code</span>
-                  <span className="text-fuchsia-400 font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                <div className="pt-2 sm:pt-2.5 mt-1 sm:mt-2 border-t border-purple-950/80 flex items-center justify-between font-sans text-[10px] sm:text-xs">
+                  <span className="text-purple-300/70 font-sans text-[10px] sm:text-[11px] font-semibold hidden sm:inline">Bound By Code</span>
+                  <span className="text-fuchsia-400 font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5 sm:gap-1">
                     <span>Watch</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
+                    <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   </span>
                 </div>
               </motion.a>
@@ -195,85 +190,67 @@ export const BoundByCodeSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* ─── 02. Published Udemy Course Showcase ─── */}
+        {/* ─── 02. Published Udemy Course Showcase (Authentic Udemy Website Style) ─── */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}
           variants={sectionReveal}
-          className="w-full bg-gradient-to-br from-[#120726] via-[#1b0a38] to-[#0a0314] border-2 border-purple-500/50 hover:border-purple-400/90 shadow-[0_0_35px_rgba(168,85,247,0.22)] rounded-2xl p-6 sm:p-8 lg:p-10 relative overflow-hidden group transition-all duration-300"
+          className="w-full bg-[#1c1d1f] border border-zinc-700/80 shadow-2xl p-6 sm:p-8 lg:p-10 relative overflow-hidden transition-all"
         >
-          {/* Subtle Accent Glow */}
-          <div 
-            className="absolute -right-20 -top-20 w-80 h-80 bg-fuchsia-600/15 rounded-full blur-[100px] pointer-events-none" 
-            aria-hidden="true" 
-          />
-
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-            {/* Left Content Column */}
-            <div className="flex flex-col gap-4 max-w-3xl">
-              {/* Badge Row */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            {/* Left Content Column (Natural Udemy Layout) */}
+            <div className="flex flex-col gap-3.5 max-w-3xl">
+              {/* Udemy Badge & Meta Row */}
               <div className="flex flex-wrap items-center gap-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-900/60 border border-purple-400/60 rounded-full text-purple-200 text-xs font-bold uppercase tracking-wider">
-                  {/* Authentic Udemy SVG */}
-                  <svg className="w-4 h-4 fill-current text-[#A435F0]" viewBox="0 0 24 24">
+                {/* Udemy Logo */}
+                <div className="flex items-center gap-2">
+                  <svg className="w-6 h-6 fill-current text-[#a435f0]" viewBox="0 0 24 24">
                     <path d="M12 16.5c-3.1 0-5.6-2.5-5.6-5.6V3H2.8v7.9c0 5.1 4.1 9.2 9.2 9.2s9.2-4.1 9.2-9.2V3h-3.6v7.9c0 3.1-2.5 5.6-5.6 5.6zM15.4 0H8.6l3.4 3.4L15.4 0z"/>
                   </svg>
-                  <span>Published on Udemy</span>
+                  <span className="font-heading font-black text-white text-base tracking-tight">
+                    udemy
+                  </span>
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/15 border border-amber-500/40 rounded-full text-amber-300 text-xs font-bold uppercase tracking-wider">
-                  <div className="flex items-center text-amber-400">
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                  </div>
-                  <span>Masterclass</span>
-                </div>
+                {/* Authentic Published Course Badge */}
+                <span className="bg-[#a435f0]/20 text-[#d896ff] border border-[#a435f0]/50 font-sans font-bold text-[11px] uppercase tracking-wider px-2.5 py-0.5">
+                  Published Course
+                </span>
               </div>
 
-              {/* Course Title */}
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-white uppercase tracking-tight leading-tight">
+              {/* Course Title in Natural Title Case */}
+              <h3 className="text-2xl sm:text-3xl font-heading font-black text-white tracking-tight leading-snug">
                 Master Generative AI Without the Tech Overload
               </h3>
 
-              {/* Concise Visual Highlight Pills */}
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="px-3 py-1 bg-black/60 border border-purple-900/80 rounded-md text-xs font-sans font-semibold text-purple-200">
-                  ⚡ 100% Practical &amp; No-Code
-                </span>
-                <span className="px-3 py-1 bg-black/60 border border-purple-900/80 rounded-md text-xs font-sans font-semibold text-purple-200">
-                  🤖 Autonomous AI &amp; Multi-Agents
-                </span>
-                <span className="px-3 py-1 bg-black/60 border border-purple-900/80 rounded-md text-xs font-sans font-semibold text-purple-200">
-                  🎯 Prompt Engineering &amp; Workflows
-                </span>
-                <span className="px-3 py-1 bg-black/60 border border-purple-900/80 rounded-md text-xs font-sans font-semibold text-purple-200">
-                  📜 Certificate Included
-                </span>
-              </div>
-
-              <p className="font-sans text-xs sm:text-sm text-purple-300/80">
-                Instructor: <strong className="text-white">Sowmiyan S</strong> · Founder of Bound By Code
+              {/* Natural Course Subtitle */}
+              <p className="text-sm sm:text-base text-zinc-300 font-sans leading-relaxed">
+                A complete, practical roadmap to mastering Generative AI tools, prompt engineering strategies, and building autonomous workflows without complex technical jargon.
               </p>
+
+              {/* Creator & Course Specs */}
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-zinc-400 font-sans pt-1">
+                <span>Created by <strong className="text-white font-semibold">Sowmiyan S</strong></span>
+                <span>•</span>
+                <span>English</span>
+                <span>•</span>
+                <span>Full Lifetime Access</span>
+                <span>•</span>
+                <span>Certificate of Completion</span>
+              </div>
             </div>
 
-            {/* Right Action CTA Column */}
+            {/* Right Action CTA Column (Authentic Udemy Button Style) */}
             <div className="shrink-0 flex items-center">
               <a
                 href={UDEMY_COURSE_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-purple-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-sans text-sm sm:text-base font-bold uppercase tracking-wider rounded-xl shadow-[0_0_30px_rgba(192,132,252,0.45)] hover:shadow-[0_0_40px_rgba(192,132,252,0.7)] hover:-translate-y-0.5 active:translate-y-0 transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#a435f0] hover:bg-[#8710d8] text-white font-sans text-sm font-bold uppercase tracking-wider transition-colors shadow-lg"
               >
-                {/* Udemy Logo */}
-                <svg className="w-5 h-5 fill-current text-white shrink-0" viewBox="0 0 24 24">
-                  <path d="M12 16.5c-3.1 0-5.6-2.5-5.6-5.6V3H2.8v7.9c0 5.1 4.1 9.2 9.2 9.2s9.2-4.1 9.2-9.2V3h-3.6v7.9c0 3.1-2.5 5.6-5.6 5.6zM15.4 0H8.6l3.4 3.4L15.4 0z"/>
-                </svg>
-                <span>View Course on Udemy</span>
-                <ArrowUpRight className="w-5 h-5 shrink-0" />
+                <span>View on Udemy</span>
+                <ArrowUpRight className="w-4 h-4 shrink-0" />
               </a>
             </div>
           </div>
@@ -292,29 +269,29 @@ export const BoundByCodeSection: React.FC = () => {
             href={YOUTUBE_URL}
             target="_blank"
             rel="noreferrer"
-            className="bg-[#0c0517]/90 hover:bg-[#130726] border border-purple-900/60 hover:border-red-500/80 rounded-xl p-5 sm:p-6 shadow-[0_4px_25px_rgba(0,0,0,0.7)] hover:shadow-[0_0_35px_rgba(239,68,68,0.25)] transition-all duration-300 group flex items-center justify-between"
+            className="bg-[#121214] hover:bg-[#1a1a1d] border border-zinc-800 hover:border-zinc-700 p-5 sm:p-6 transition-all duration-200 group flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-red-600/15 border border-red-500/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-11 h-11 bg-red-600/10 border border-red-500/30 flex items-center justify-center shrink-0">
                 {/* Authentic YouTube SVG */}
-                <svg className="w-6 h-6 fill-current text-red-500" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 fill-current text-red-500" viewBox="0 0 24 24">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
               </div>
 
               <div>
-                <span className="font-sans text-[11px] font-bold text-red-400 uppercase tracking-widest block">
+                <span className="font-sans text-[11px] font-bold text-zinc-400 uppercase tracking-widest block">
                   YouTube Channel
                 </span>
-                <span className="font-heading font-black text-lg sm:text-xl text-white group-hover:text-red-300 transition-colors uppercase">
+                <span className="font-heading font-black text-lg text-white group-hover:text-red-400 transition-colors uppercase">
                   @bound-by-code
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg font-sans text-xs font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(220,38,38,0.4)] group-hover:translate-x-0.5 transition-all">
+            <div className="flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-sans text-xs font-bold uppercase tracking-wider transition-colors">
               <span>Subscribe</span>
-              <ArrowUpRight className="w-4 h-4 shrink-0" />
+              <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
             </div>
           </a>
 
@@ -323,12 +300,12 @@ export const BoundByCodeSection: React.FC = () => {
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noreferrer"
-            className="bg-[#0c0517]/90 hover:bg-[#130726] border border-purple-900/60 hover:border-fuchsia-500/80 rounded-xl p-5 sm:p-6 shadow-[0_4px_25px_rgba(0,0,0,0.7)] hover:shadow-[0_0_35px_rgba(217,70,239,0.25)] transition-all duration-300 group flex items-center justify-between"
+            className="bg-[#121214] hover:bg-[#1a1a1d] border border-zinc-800 hover:border-zinc-700 p-5 sm:p-6 transition-all duration-200 group flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-fuchsia-600/15 border border-fuchsia-500/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-11 h-11 bg-fuchsia-600/10 border border-fuchsia-500/30 flex items-center justify-center shrink-0">
                 {/* Authentic Instagram Multi-Color Gradient SVG */}
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
                   <defs>
                     <linearGradient id="igIconGradient" x1="0%" y1="100%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#f09433" />
@@ -346,18 +323,18 @@ export const BoundByCodeSection: React.FC = () => {
               </div>
 
               <div>
-                <span className="font-sans text-[11px] font-bold text-fuchsia-400 uppercase tracking-widest block">
+                <span className="font-sans text-[11px] font-bold text-zinc-400 uppercase tracking-widest block">
                   Instagram Profile
                 </span>
-                <span className="font-heading font-black text-lg sm:text-xl text-white group-hover:text-fuchsia-300 transition-colors uppercase">
-                  @sowmiyan.s_
+                <span className="font-heading font-black text-lg text-white group-hover:text-fuchsia-400 transition-colors uppercase">
+                  @bound_by_code
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-lg font-sans text-xs font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(192,132,252,0.4)] group-hover:translate-x-0.5 transition-all">
+            <div className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-sans text-xs font-bold uppercase tracking-wider transition-colors">
               <span>Follow</span>
-              <ArrowUpRight className="w-4 h-4 shrink-0" />
+              <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
             </div>
           </a>
         </motion.div>

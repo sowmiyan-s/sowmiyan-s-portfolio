@@ -15,9 +15,10 @@ import TechNav from '@/components/layout/TechNav';
 import Footer from '@/components/layout/Footer';
 import SEOKeywords from '@/components/common/SEOKeywords';
 import SEO from '@/components/common/SEO';
+import { FloatingCornerCloud } from '@/components/common/FloatingCornerCloud';
 import { toast } from '@/hooks/use-toast';
 
-const EMAIL = "sowmisowmiyan58@gmail.com";
+const EMAIL = "sowmiyan.s.dev@gmail.com";
 const WHATSAPP_URL = `https://wa.me/919042561295?text=${encodeURIComponent("Hi Sowmiyan, I saw your portfolio and would like to discuss an opportunity.")}`;
 
 const categories = [
@@ -145,7 +146,13 @@ const ContactPage: React.FC = () => {
       />
       <SEOKeywords />
 
-      {/* ─── Decorative Watermark ─── */}
+      {/* ─── Decorative Floating Clouds ─── */}
+      <FloatingCornerCloud
+        position="top-left"
+        variant="white"
+        duration={9}
+        sizeClass="w-36 sm:w-52"
+      />
       <motion.div
         style={{ y: cloudY }}
         className="absolute top-24 -right-12 w-48 sm:w-64 pointer-events-none opacity-[0.12] select-none z-0"
@@ -188,52 +195,55 @@ const ContactPage: React.FC = () => {
         </div>
       </header>
 
-      {/* ─── 01. Full-Bleed Edge-to-Edge Banner Image ─── */}
-      <section className="relative w-full border-b-3 border-zinc-900 overflow-hidden bg-zinc-950">
-        <img
-          src="/images/contact-banner.jpg"
-          alt="Sowmiyan S"
-          className="w-full h-[360px] sm:h-[500px] lg:h-[640px] object-cover object-center filter contrast-[1.03]"
-        />
+      {/* ─── 01. Edge-to-Edge Full-Width Photo Banner (Free, Out of Cards, 0px Margins) ─── */}
+      <section className="relative w-full border-b-3 border-zinc-900 overflow-hidden bg-black">
+        <div className="w-full h-[260px] sm:h-[380px] md:h-[460px] lg:h-[520px] xl:h-[580px] overflow-hidden">
+          <img
+            src="/images/contact-banner.jpg"
+            alt="Sowmiyan S"
+            style={{ imageRendering: '-webkit-optimize-contrast' }}
+            className="w-full h-full object-cover object-center filter contrast-[1.04] saturate-[1.02]"
+          />
+        </div>
       </section>
 
       {/* ─── Main Content ─── */}
-      <main className="relative z-10 w-full pt-12 sm:pt-16 pb-20 px-4 sm:px-10 lg:px-16 flex flex-col gap-14 sm:gap-18">
+      <main className="relative z-10 w-full pt-10 sm:pt-16 pb-16 sm:pb-20 px-4 sm:px-10 lg:px-16 flex flex-col gap-10 sm:gap-18">
 
-        {/* ─── 02. Three Action Pathways (Simple, Decent, No Tags, No Fluffy Text) ─── */}
-        <section className="w-full flex flex-col gap-6">
+        {/* ─── 02. Three Action Pathways (Optimized Mobile Layout, Hire Me) ─── */}
+        <section className="w-full flex flex-col gap-4 sm:gap-6">
           <div className="pb-3 border-b-2 border-zinc-900">
-            <h2 className="text-2xl sm:text-3xl font-heading font-black text-zinc-950 uppercase tracking-tight">
+            <h2 className="text-xl sm:text-3xl font-heading font-black text-zinc-950 uppercase tracking-tight">
               Ways to Collaborate
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-8 w-full">
             {/* Card 1: Freelancing Works */}
             <motion.div
               whileHover={{ y: -4 }}
               transition={{ duration: 0.2 }}
               onClick={() => handleSelectCard("AI / Software Project")}
-              className="bg-white border-3 border-zinc-900 shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-7 sm:p-8 flex flex-col justify-between gap-6 cursor-pointer group"
+              className="bg-white border-2 sm:border-3 border-zinc-900 shadow-[3px_3px_0px_#18181B] sm:shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-4 sm:p-8 flex flex-col justify-between gap-3 sm:gap-6 cursor-pointer group"
             >
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 bg-red-600 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[3px_3px_0px_#18181B] group-hover:scale-105 transition-transform">
-                  <Briefcase className="w-6 h-6" />
+              <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-600 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[2px_2px_0px_#18181B] group-hover:scale-105 transition-transform shrink-0">
+                  <Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
 
-                <div>
-                  <h3 className="text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
+                <div className="flex-1 sm:flex-initial">
+                  <h3 className="text-lg sm:text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
                     Freelancing Works
                   </h3>
-                  <p className="text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-1">
-                    Custom AI Pipelines &amp; Full-Stack Apps
+                  <p className="text-xs sm:text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-0.5 sm:mt-1">
+                    Custom AI Pipelines &amp; Apps
                   </p>
                 </div>
               </div>
 
-              <div className="pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
+              <div className="pt-2 sm:pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
                 <span>Discuss Project Scope</span>
-                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+                <ArrowDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-y-1" />
               </div>
             </motion.div>
 
@@ -242,26 +252,26 @@ const ContactPage: React.FC = () => {
               whileHover={{ y: -4 }}
               transition={{ duration: 0.2 }}
               onClick={() => handleSelectCard("General Inquiry")}
-              className="bg-white border-3 border-zinc-900 shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-7 sm:p-8 flex flex-col justify-between gap-6 cursor-pointer group"
+              className="bg-white border-2 sm:border-3 border-zinc-900 shadow-[3px_3px_0px_#18181B] sm:shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-4 sm:p-8 flex flex-col justify-between gap-3 sm:gap-6 cursor-pointer group"
             >
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 bg-zinc-950 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[3px_3px_0px_#18181B] group-hover:scale-105 transition-transform">
-                  <GitPullRequest className="w-6 h-6 text-red-500" />
+              <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-zinc-950 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[2px_2px_0px_#18181B] group-hover:scale-105 transition-transform shrink-0">
+                  <GitPullRequest className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
                 </div>
 
-                <div>
-                  <h3 className="text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
+                <div className="flex-1 sm:flex-initial">
+                  <h3 className="text-lg sm:text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
                     Open Contribution
                   </h3>
-                  <p className="text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-1">
+                  <p className="text-xs sm:text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-0.5 sm:mt-1">
                     Community Tooling &amp; Tech Talks
                   </p>
                 </div>
               </div>
 
-              <div className="pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
+              <div className="pt-2 sm:pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
                 <span>Collaborate Together</span>
-                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+                <ArrowDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-y-1" />
               </div>
             </motion.div>
 
@@ -270,26 +280,26 @@ const ContactPage: React.FC = () => {
               whileHover={{ y: -4 }}
               transition={{ duration: 0.2 }}
               onClick={() => handleSelectCard("Full-Time Role")}
-              className="bg-white border-3 border-zinc-900 shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-7 sm:p-8 flex flex-col justify-between gap-6 cursor-pointer group"
+              className="bg-white border-2 sm:border-3 border-zinc-900 shadow-[3px_3px_0px_#18181B] sm:shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-4 sm:p-8 flex flex-col justify-between gap-3 sm:gap-6 cursor-pointer group"
             >
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 bg-emerald-600 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[3px_3px_0px_#18181B] group-hover:scale-105 transition-transform">
-                  <Building2 className="w-6 h-6" />
+              <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-600 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[2px_2px_0px_#18181B] group-hover:scale-105 transition-transform shrink-0">
+                  <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
 
-                <div>
-                  <h3 className="text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
+                <div className="flex-1 sm:flex-initial">
+                  <h3 className="text-lg sm:text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
                     Full-Time Jobs
                   </h3>
-                  <p className="text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-1">
-                    AI Engineer &amp; Software Developer
+                  <p className="text-xs sm:text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-0.5 sm:mt-1">
+                    AI Engineer &amp; Systems Developer
                   </p>
                 </div>
               </div>
 
-              <div className="pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
-                <span>Hire Sowmiyan</span>
-                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+              <div className="pt-2 sm:pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
+                <span>Hire Me</span>
+                <ArrowDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-y-1" />
               </div>
             </motion.div>
           </div>
@@ -437,15 +447,15 @@ const ContactPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Elegant, Decent, Only Email & WhatsApp Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6 w-full max-w-xl">
+          {/* Direct Reachout Buttons (Refined & Distinctive) */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-xl">
             {/* Email Button */}
             <a
               href={`mailto:${EMAIL}`}
-              className="group w-full sm:w-1/2 inline-flex items-center justify-center gap-3 px-8 py-4.5 bg-red-600 hover:bg-red-500 text-white rounded-md border border-red-500 shadow-[0_0_24px_rgba(220,38,38,0.4)] hover:shadow-[0_0_35px_rgba(220,38,38,0.65)] font-sans text-sm sm:text-base font-bold uppercase tracking-wider transition-all hover:-translate-y-0.5 active:translate-y-0"
+              className="group w-full sm:w-1/2 inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-red-600 hover:bg-red-500 text-white rounded-sm border border-red-500 font-sans text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_4px_20px_rgba(220,38,38,0.35)] hover:-translate-y-0.5 active:translate-y-0"
             >
-              <Mail className="w-5 h-5 shrink-0" />
-              <span>Email</span>
+              <Mail className="w-4 h-4 shrink-0" />
+              <span>Email Direct</span>
               <ArrowUpRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
 
@@ -454,13 +464,13 @@ const ContactPage: React.FC = () => {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noreferrer"
-              className="group w-full sm:w-1/2 inline-flex items-center justify-center gap-3 px-8 py-4.5 bg-[#0d2a20] hover:bg-[#12382c] text-emerald-300 hover:text-emerald-200 rounded-md border border-emerald-500/50 hover:border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.25)] hover:shadow-[0_0_35px_rgba(16,185,129,0.45)] font-sans text-sm sm:text-base font-bold uppercase tracking-wider transition-all hover:-translate-y-0.5 active:translate-y-0"
+              className="group w-full sm:w-1/2 inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-sm border border-emerald-500 font-sans text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_4px_20px_rgba(16,185,129,0.3)] hover:-translate-y-0.5 active:translate-y-0"
             >
-              <svg className="w-5 h-5 shrink-0 fill-current text-emerald-400" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 shrink-0 fill-current" viewBox="0 0 24 24">
                 <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.49-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
               </svg>
-              <span>WhatsApp</span>
-              <ArrowUpRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-emerald-400" />
+              <span>WhatsApp Direct</span>
+              <ArrowUpRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </div>
         </div>
