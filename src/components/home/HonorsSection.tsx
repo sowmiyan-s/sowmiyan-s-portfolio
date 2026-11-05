@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Award, BookOpen, FileText, ArrowUpRight, X, ExternalLink, Download } from 'lucide-react';
+import { Award, BookOpen, FileText, ArrowUpRight, X, Download } from 'lucide-react';
 import { certificatesList, Certificate } from '@/lib/certificates';
 import { sectionReveal, staggerContainer, viewportConfig } from '@/lib/motionPresets';
 

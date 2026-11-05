@@ -79,7 +79,7 @@ const AchievementsPage: React.FC = () => {
 
       {/* Decorative Dragon & Japanese Art Watermarks in Background */}
       <div 
-        className="absolute right-0 top-36 w-[420px] sm:w-[540px] pointer-events-none opacity-[0.05] select-none"
+        className="absolute right-0 top-36 w-[420px] sm:w-[540px] pointer-events-none opacity-[0.1] select-none"
         aria-hidden="true"
       >
         <img
@@ -90,7 +90,7 @@ const AchievementsPage: React.FC = () => {
       </div>
 
       <div 
-        className="absolute left-0 top-[600px] w-[300px] sm:w-[400px] pointer-events-none opacity-[0.035] select-none"
+        className="absolute left-0 top-[600px] w-[300px] sm:w-[400px] pointer-events-none opacity-[0.08] select-none"
         aria-hidden="true"
       >
         <img
@@ -101,7 +101,7 @@ const AchievementsPage: React.FC = () => {
       </div>
 
       <div 
-        className="absolute -top-6 -left-6 w-36 sm:w-48 pointer-events-none opacity-[0.10] select-none"
+        className="absolute -top-6 -left-6 w-36 sm:w-48 pointer-events-none opacity-[0.16] select-none"
         aria-hidden="true"
       >
         <img
@@ -117,7 +117,7 @@ const AchievementsPage: React.FC = () => {
         aria-hidden="true" 
       />
 
-      <main className="relative z-10 pt-32 sm:pt-40 pb-24 px-4 sm:px-10 lg:px-16 max-w-7xl mx-auto flex flex-col gap-14 sm:gap-20">
+      <main className="relative z-10 pt-32 sm:pt-40 pb-24 px-4 sm:px-10 lg:px-16 w-full flex flex-col gap-14 sm:gap-20">
         
         {/* ─── Hero Section (No Mini-Title Eyebrows) ─── */}
         <section className="flex flex-col gap-4 border-b-2 border-zinc-900 pb-8">

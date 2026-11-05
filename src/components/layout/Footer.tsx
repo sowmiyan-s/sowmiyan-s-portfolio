@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
     <footer className="w-full bg-white text-zinc-900 border-t-2 border-zinc-900 py-12 sm:py-16 px-5 sm:px-10 lg:px-16 relative overflow-hidden">
       {/* Subtle Japanese Cloud Accent */}
       <div 
-        className="absolute -bottom-8 -right-8 w-44 sm:w-56 pointer-events-none opacity-[0.06] select-none"
+        className="absolute -bottom-8 -right-8 w-44 sm:w-56 pointer-events-none opacity-[0.14] select-none"
         aria-hidden="true"
       >
         <img

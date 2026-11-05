@@ -76,7 +76,7 @@ export const HeroSection: React.FC = () => {
 
       {/* Decorative Golden S-Dragon in Hero Background */}
       <div 
-        className="absolute right-0 lg:right-16 top-1/2 -translate-y-1/2 pointer-events-none select-none opacity-[0.16] lg:opacity-[0.24] w-[340px] sm:w-[480px] lg:w-[580px] z-0"
+        className="absolute right-0 lg:right-16 top-1/2 -translate-y-1/2 pointer-events-none select-none opacity-[0.22] lg:opacity-[0.3] w-[340px] sm:w-[480px] lg:w-[580px] z-0"
         aria-hidden="true"
       >
         <img
@@ -88,7 +88,7 @@ export const HeroSection: React.FC = () => {
 
       {/* Decorative Japanese Ink Calligraphy Watermark */}
       <div 
-        className="absolute left-2 lg:left-8 top-1/3 -translate-y-1/2 pointer-events-none select-none opacity-[0.035] w-[260px] sm:w-[340px] z-0"
+        className="absolute left-2 lg:left-8 top-1/3 -translate-y-1/2 pointer-events-none select-none opacity-[0.09] w-[260px] sm:w-[340px] z-0"
         aria-hidden="true"
       >
         <img
