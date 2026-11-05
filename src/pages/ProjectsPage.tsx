@@ -6,7 +6,6 @@ import ProjectsSection from '@/components/sections/ProjectsSection';
 import ProjectSlideshow from '@/components/sections/ProjectSlideshow';
 import SEOKeywords from '@/components/common/SEOKeywords';
 import SEO from '@/components/common/SEO';
-import { HankoSeal } from '@/components/home/ArtworkAccents';
 
 const headerEase = [0.22, 1, 0.36, 1] as const;
 
@@ -24,7 +23,6 @@ const ProjectsPage: React.FC = () => {
   });
   const dragonY = useTransform(scrollYProgress, [0, 1], [0, 220]);
   const dragonRotate = useTransform(scrollYProgress, [0, 1], [0, 8]);
-  const kanjiY = useTransform(scrollYProgress, [0, 1], [0, -140]);
 
   return (
     <div
@@ -33,7 +31,7 @@ const ProjectsPage: React.FC = () => {
     >
       <SEO
         title="Technical Projects & Software Systems — Sowmiyan S"
-        description="Explore open-source software, autonomous AI systems, multi-agent pipelines, and web applications engineered by Sowmiyan S."
+        description="Explore projects, applications, and systems built over the past 4 years by Sowmiyan S."
         canonical="https://www.sowmiyan.me/projects"
       />
       <SEOKeywords />
@@ -47,20 +45,12 @@ const ProjectsPage: React.FC = () => {
         <img src="/images/decorations/dragon.png" alt="" className="w-full h-auto" />
       </motion.div>
 
-      <motion.div
-        style={{ y: kanjiY }}
-        className="absolute -left-10 top-[900px] w-[280px] sm:w-[360px] pointer-events-none opacity-[0.08] select-none z-0"
-        aria-hidden="true"
-      >
-        <img src="/images/decorations/japanese-text.png" alt="" className="w-full h-auto" />
-      </motion.div>
-
       <div
         className="absolute top-24 -left-8 w-36 sm:w-44 pointer-events-none opacity-[0.14] select-none z-0"
         aria-hidden="true"
       >
         <img src="/images/decorations/red-cloud.png" alt="" className="w-full h-auto" />
-      </motion.div>
+      </div>
 
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(#18181B_1px,transparent_1px)] [background-size:24px_24px] z-0"
@@ -69,7 +59,7 @@ const ProjectsPage: React.FC = () => {
 
       <TechNav />
 
-      {/* ─── Full-Bleed Editorial Header ─── */}
+      {/* ─── Full-Bleed Editorial Header (No Japanese block) ─── */}
       <header className="relative z-10 pt-32 sm:pt-40 w-full border-b-3 border-zinc-900 bg-white overflow-hidden">
         <div className="w-full px-4 sm:px-10 lg:px-16 pb-10 sm:pb-14">
           <motion.div
@@ -78,19 +68,9 @@ const ProjectsPage: React.FC = () => {
             transition={{ duration: 0.7, ease: headerEase }}
             className="flex flex-col gap-5"
           >
-            <div className="flex items-center justify-between gap-6">
-              <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black uppercase tracking-tight text-zinc-950 leading-none whitespace-nowrap">
-                PROJECTS
-              </h1>
-              <motion.div
-                initial={{ opacity: 0, rotate: -12, scale: 0.6 }}
-                animate={{ opacity: 1, rotate: 6, scale: 1 }}
-                transition={{ delay: 0.35, duration: 0.5, ease: headerEase }}
-                className="shrink-0 hidden sm:block"
-              >
-                <HankoSeal kanji="作" size={56} />
-              </motion.div>
-            </div>
+            <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black uppercase tracking-tight text-zinc-950 leading-none whitespace-nowrap">
+              PROJECTS
+            </h1>
 
             <motion.div
               initial={{ scaleX: 0 }}
@@ -100,21 +80,13 @@ const ProjectsPage: React.FC = () => {
             />
 
             <p className="text-base sm:text-xl text-zinc-700 font-sans max-w-3xl leading-relaxed">
-              Open-source software, autonomous multi-agent pipelines, offline RAG packages, and high-performance applications built by Sowmiyan S.
+              Here is a curated collection of projects, applications, and systems I have worked on and built over the past 4 years.
             </p>
           </motion.div>
         </div>
-
-        {/* Kanji brush accent hugging the header edge */}
-        <div
-          className="absolute -bottom-6 right-4 sm:right-16 w-24 sm:w-32 pointer-events-none opacity-[0.12] select-none"
-          aria-hidden="true"
-        >
-          <img src="/images/decorations/japanese-text.png" alt="" className="w-full h-auto" />
-        </div>
       </header>
 
-      {/* ─── Content: full-width, same theming ─── */}
+      {/* ─── Content: full-width, clean theming ─── */}
       <main className="relative z-10 w-full pt-12 sm:pt-16 pb-24 px-4 sm:px-10 lg:px-16 flex flex-col gap-12">
         {/* Featured Project Slideshow */}
         <motion.section

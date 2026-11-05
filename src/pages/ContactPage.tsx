@@ -2,25 +2,22 @@ import React, { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   ArrowUpRight,
-  Check,
-  Copy,
   Send,
   Loader2,
   Mail,
-  Phone,
-  FileText,
   MessageSquare,
+  Briefcase,
+  GitPullRequest,
+  Building2,
+  ArrowDown,
 } from 'lucide-react';
 import TechNav from '@/components/layout/TechNav';
 import Footer from '@/components/layout/Footer';
 import SEOKeywords from '@/components/common/SEOKeywords';
 import SEO from '@/components/common/SEO';
-import { HankoSeal } from '@/components/home/ArtworkAccents';
 import { toast } from '@/hooks/use-toast';
 
-const RESUME_URL = "https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing";
 const EMAIL = "sowmisowmiyan58@gmail.com";
-const PHONE = "+919042561295";
 const WHATSAPP_URL = `https://wa.me/919042561295?text=${encodeURIComponent("Hi Sowmiyan, I saw your portfolio and would like to discuss an opportunity.")}`;
 
 const categories = [
@@ -38,24 +35,20 @@ const ContactPage: React.FC = () => {
   const [category, setCategory] = useState(categories[0]);
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
 
+  const formSectionRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: pageRef,
     offset: ['start start', 'end end'],
   });
   const cloudY = useTransform(scrollYProgress, [0, 1], [0, 160]);
-  const kanjiY = useTransform(scrollYProgress, [0, 1], [0, -120]);
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(EMAIL);
-    setCopiedEmail(true);
-    toast({
-      title: "Email Copied",
-      description: `${EMAIL} copied to clipboard.`,
-    });
-    setTimeout(() => setCopiedEmail(false), 2000);
+  const handleSelectCard = (targetCategory: string) => {
+    setCategory(targetCategory);
+    if (formSectionRef.current) {
+      formSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -147,26 +140,18 @@ const ContactPage: React.FC = () => {
     >
       <SEO
         title="Contact Sowmiyan S — AI Engineer & Software Developer"
-        description="Get in touch with Sowmiyan S for full-time AI engineering roles across India and software projects."
+        description="Get in touch with Sowmiyan S for full-time engineering roles, freelance projects, and open collaborations."
         canonical="https://www.sowmiyan.me/contact"
       />
       <SEOKeywords />
 
-      {/* ─── Decorative Layer ─── */}
+      {/* ─── Decorative Watermark ─── */}
       <motion.div
         style={{ y: cloudY }}
         className="absolute top-24 -right-12 w-48 sm:w-64 pointer-events-none opacity-[0.12] select-none z-0"
         aria-hidden="true"
       >
         <img src="/images/decorations/red-cloud.png" alt="" className="w-full h-auto" />
-      </motion.div>
-
-      <motion.div
-        style={{ y: kanjiY }}
-        className="absolute -left-10 bottom-40 w-[240px] sm:w-[320px] pointer-events-none opacity-[0.08] select-none z-0"
-        aria-hidden="true"
-      >
-        <img src="/images/decorations/japanese-text.png" alt="" className="w-full h-auto" />
       </motion.div>
 
       <div
@@ -185,19 +170,9 @@ const ContactPage: React.FC = () => {
             transition={{ duration: 0.7, ease: headerEase }}
             className="flex flex-col gap-5"
           >
-            <div className="flex items-center justify-between gap-6">
-              <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black uppercase tracking-tight text-zinc-950 leading-none whitespace-nowrap">
-                CONTACT
-              </h1>
-              <motion.div
-                initial={{ opacity: 0, rotate: -12, scale: 0.6 }}
-                animate={{ opacity: 1, rotate: 6, scale: 1 }}
-                transition={{ delay: 0.35, duration: 0.5, ease: headerEase }}
-                className="shrink-0 hidden sm:block"
-              >
-                <HankoSeal kanji="縁" size={56} />
-              </motion.div>
-            </div>
+            <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black uppercase tracking-tight text-zinc-950 leading-none whitespace-nowrap">
+              CONTACT
+            </h1>
 
             <motion.div
               initial={{ scaleX: 0 }}
@@ -207,32 +182,142 @@ const ContactPage: React.FC = () => {
             />
 
             <p className="text-base sm:text-xl text-zinc-700 font-sans max-w-3xl leading-relaxed">
-              Have a full-time role, software project, or engineering question? Send a message directly below.
+              Have a full-time engineering role, freelance project, or open-source idea? Let&apos;s build something exceptional together.
             </p>
           </motion.div>
         </div>
       </header>
 
-      {/* ─── Content: full-width ─── */}
-      <main className="relative z-10 w-full pt-12 sm:pt-16 pb-24 px-4 sm:px-10 lg:px-16 flex flex-col gap-10 sm:gap-14">
+      {/* ─── 01. Full-Bleed Edge-to-Edge Banner Image ─── */}
+      <section className="relative w-full border-b-3 border-zinc-900 overflow-hidden bg-zinc-950">
+        <img
+          src="/images/contact-banner.jpg"
+          alt="Sowmiyan S"
+          className="w-full h-[360px] sm:h-[500px] lg:h-[640px] object-cover object-center filter contrast-[1.03]"
+        />
+      </section>
 
-        {/* ─── Contact Form (Full-Width Centerpiece) ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.65, ease: headerEase }}
-          className="relative w-full"
-        >
-          {/* Offset Red Shadow Layer */}
-          <div className="absolute inset-0 bg-red-600 border-3 border-zinc-900 translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4 pointer-events-none" />
+      {/* ─── Main Content ─── */}
+      <main className="relative z-10 w-full pt-12 sm:pt-16 pb-20 px-4 sm:px-10 lg:px-16 flex flex-col gap-14 sm:gap-18">
 
-          <div className="relative bg-white border-3 border-zinc-900 shadow-brutal p-6 sm:p-12 w-full">
+        {/* ─── 02. Three Action Pathways (Simple, Decent, No Tags, No Fluffy Text) ─── */}
+        <section className="w-full flex flex-col gap-6">
+          <div className="pb-3 border-b-2 border-zinc-900">
+            <h2 className="text-2xl sm:text-3xl font-heading font-black text-zinc-950 uppercase tracking-tight">
+              Ways to Collaborate
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 w-full">
+            {/* Card 1: Freelancing Works */}
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => handleSelectCard("AI / Software Project")}
+              className="bg-white border-3 border-zinc-900 shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-7 sm:p-8 flex flex-col justify-between gap-6 cursor-pointer group"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-12 h-12 bg-red-600 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[3px_3px_0px_#18181B] group-hover:scale-105 transition-transform">
+                  <Briefcase className="w-6 h-6" />
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
+                    Freelancing Works
+                  </h3>
+                  <p className="text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-1">
+                    Custom AI Pipelines &amp; Full-Stack Apps
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
+                <span>Discuss Project Scope</span>
+                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+              </div>
+            </motion.div>
+
+            {/* Card 2: Open Contribution */}
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => handleSelectCard("General Inquiry")}
+              className="bg-white border-3 border-zinc-900 shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-7 sm:p-8 flex flex-col justify-between gap-6 cursor-pointer group"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-12 h-12 bg-zinc-950 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[3px_3px_0px_#18181B] group-hover:scale-105 transition-transform">
+                  <GitPullRequest className="w-6 h-6 text-red-500" />
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
+                    Open Contribution
+                  </h3>
+                  <p className="text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-1">
+                    Community Tooling &amp; Tech Talks
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
+                <span>Collaborate Together</span>
+                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+              </div>
+            </motion.div>
+
+            {/* Card 3: Full-Time Jobs */}
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => handleSelectCard("Full-Time Role")}
+              className="bg-white border-3 border-zinc-900 shadow-[5px_5px_0px_#18181B] hover:shadow-[7px_7px_0px_#DC2626] transition-all p-7 sm:p-8 flex flex-col justify-between gap-6 cursor-pointer group"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-12 h-12 bg-emerald-600 border-2 border-zinc-900 text-white flex items-center justify-center shadow-[3px_3px_0px_#18181B] group-hover:scale-105 transition-transform">
+                  <Building2 className="w-6 h-6" />
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors">
+                    Full-Time Jobs
+                  </h3>
+                  <p className="text-sm font-sans font-bold text-red-600 uppercase tracking-wide mt-1">
+                    AI Engineer &amp; Software Developer
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t-2 border-zinc-100 flex items-center justify-between text-xs font-sans font-black uppercase tracking-wider text-red-600 group-hover:text-zinc-950">
+                <span>Hire Sowmiyan</span>
+                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ─── 03. Contact Form (Clean, Non-Terminal Header) ─── */}
+        <div ref={formSectionRef} className="w-full scroll-mt-28 flex flex-col gap-4">
+          <div className="flex items-center justify-between pb-3 border-b-2 border-zinc-900">
+            <h2 className="text-2xl sm:text-3xl font-heading font-black text-zinc-950 uppercase tracking-tight">
+              Send a Message
+            </h2>
+            <span className="text-xs sm:text-sm font-sans font-bold text-zinc-600">
+              Selected: <strong className="text-zinc-950">{category}</strong>
+            </span>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.65, ease: headerEase }}
+            className="w-full bg-white border-3 border-zinc-900 shadow-[6px_6px_0px_#18181B] sm:shadow-[8px_8px_0px_#18181B] p-6 sm:p-12"
+          >
             <form onSubmit={handleSubmit} className="flex flex-col gap-6 sm:gap-8 w-full">
               {/* Name & Email Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 w-full">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="text-xs font-sans font-bold uppercase tracking-wide text-zinc-900">
+                  <label htmlFor="name" className="text-xs sm:text-sm font-sans font-black uppercase tracking-wider text-zinc-900">
                     Your Name <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -242,12 +327,12 @@ const ContactPage: React.FC = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Alex Chen"
-                    className="w-full px-4 py-3.5 bg-stone-50 border-2 border-zinc-900 focus:outline-none focus:bg-white focus:border-red-600 font-sans text-sm text-zinc-950 placeholder:text-zinc-400 transition-colors shadow-inner"
+                    className="w-full px-5 py-4 bg-stone-50 border-2 border-zinc-900 focus:outline-none focus:bg-white focus:border-red-600 font-sans text-sm sm:text-base text-zinc-950 placeholder:text-zinc-400 transition-colors shadow-inner"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-xs font-sans font-bold uppercase tracking-wide text-zinc-900">
+                  <label htmlFor="email" className="text-xs sm:text-sm font-sans font-black uppercase tracking-wider text-zinc-900">
                     Your Email <span className="text-red-600">*</span>
                   </label>
                   <input
@@ -257,26 +342,26 @@ const ContactPage: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full px-4 py-3.5 bg-stone-50 border-2 border-zinc-900 focus:outline-none focus:bg-white focus:border-red-600 font-sans text-sm text-zinc-950 placeholder:text-zinc-400 transition-colors shadow-inner"
+                    className="w-full px-5 py-4 bg-stone-50 border-2 border-zinc-900 focus:outline-none focus:bg-white focus:border-red-600 font-sans text-sm sm:text-base text-zinc-950 placeholder:text-zinc-400 transition-colors shadow-inner"
                   />
                 </div>
               </div>
 
               {/* Inquiry Type Selector */}
               <div className="flex flex-col gap-2.5">
-                <label className="text-xs font-sans font-bold uppercase tracking-wide text-zinc-900">
+                <label className="text-xs sm:text-sm font-sans font-black uppercase tracking-wider text-zinc-900">
                   Inquiry Type
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {categories.map((cat) => (
                     <button
                       key={cat}
                       type="button"
                       onClick={() => setCategory(cat)}
-                      className={`px-3 py-3 text-xs font-sans font-bold uppercase tracking-wider border-2 border-zinc-900 transition-all text-center cursor-pointer ${
+                      className={`px-4 py-3.5 text-xs sm:text-sm font-sans font-black uppercase tracking-wider border-2 border-zinc-900 transition-all text-center cursor-pointer ${
                         category === cat
-                          ? 'bg-zinc-950 text-white shadow-brutal-sm'
-                          : 'bg-stone-50 hover:bg-stone-100 text-zinc-700'
+                          ? 'bg-zinc-950 text-white shadow-[3px_3px_0px_#DC2626] -translate-y-0.5'
+                          : 'bg-stone-50 hover:bg-stone-100 text-zinc-800 shadow-[2px_2px_0px_#18181B]'
                       }`}
                     >
                       {cat}
@@ -287,7 +372,7 @@ const ContactPage: React.FC = () => {
 
               {/* Message Area */}
               <div className="flex flex-col gap-2">
-                <label htmlFor="message" className="text-xs font-sans font-bold uppercase tracking-wide text-zinc-900">
+                <label htmlFor="message" className="text-xs sm:text-sm font-sans font-black uppercase tracking-wider text-zinc-900">
                   Message <span className="text-red-600">*</span>
                 </label>
                 <textarea
@@ -297,7 +382,7 @@ const ContactPage: React.FC = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tell me about your team, role requirements, or project vision..."
-                  className="w-full px-4 py-3.5 bg-stone-50 border-2 border-zinc-900 focus:outline-none focus:bg-white focus:border-red-600 font-sans text-sm text-zinc-950 placeholder:text-zinc-400 transition-colors shadow-inner resize-y min-h-[140px]"
+                  className="w-full px-5 py-4 bg-stone-50 border-2 border-zinc-900 focus:outline-none focus:bg-white focus:border-red-600 font-sans text-sm sm:text-base text-zinc-950 placeholder:text-zinc-400 transition-colors shadow-inner resize-y min-h-[160px]"
                 />
               </div>
 
@@ -305,121 +390,81 @@ const ContactPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4.5 bg-red-600 hover:bg-red-700 text-white border-2 border-zinc-900 shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none font-sans text-sm font-bold uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer active:scale-95"
+                className="w-full inline-flex items-center justify-center gap-3 px-8 py-5 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white border-3 border-zinc-900 shadow-[4px_4px_0px_#18181B] sm:shadow-[6px_6px_0px_#18181B] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none font-sans text-base sm:text-lg font-black uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer active:scale-[0.99]"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 size={16} className="animate-spin" />
+                    <Loader2 size={20} className="animate-spin" />
                     <span>Transmitting Message...</span>
                   </>
                 ) : (
                   <>
-                    <Send size={16} />
+                    <Send size={20} />
                     <span>Send Message</span>
                   </>
                 )}
               </button>
             </form>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
+      </main>
 
-        {/* ─── Direct Contact Action Strip + Lucky Cat Mascot ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.65, ease: headerEase }}
-          className="relative w-full p-6 sm:p-10 bg-zinc-950 text-white border-3 border-zinc-900 shadow-brutal flex flex-col lg:flex-row items-center justify-between gap-6 overflow-hidden"
+      {/* ─── 04. Direct Reachout (Full-Bleed, Only Email & WhatsApp) ─── */}
+      <section className="relative w-full border-t-3 border-zinc-900 bg-zinc-950 text-white py-14 sm:py-20 px-4 sm:px-10 lg:px-16 overflow-hidden">
+        {/* Subtle Decorative Accents */}
+        <div
+          className="absolute -top-10 -left-10 w-44 pointer-events-none opacity-[0.08] invert select-none"
+          aria-hidden="true"
         >
-          {/* Inverted White Cloud in Dark Container */}
-          <div
-            className="absolute -top-6 -left-6 w-36 pointer-events-none opacity-[0.12] invert select-none"
-            aria-hidden="true"
-          >
-            <img src="/images/decorations/cloud-white.png" alt="" className="w-full h-auto" />
-          </div>
+          <img src="/images/decorations/cloud-white.png" alt="" className="w-full h-auto" />
+        </div>
 
-          {/* Golden Dragon glow accent on the dark strip */}
-          <div
-            className="absolute -right-8 -bottom-10 w-40 sm:w-52 pointer-events-none opacity-[0.14] select-none"
-            aria-hidden="true"
-          >
-            <img src="/images/decorations/golden-dragon.png" alt="" className="w-full h-auto" />
-          </div>
+        <div
+          className="absolute -right-10 -bottom-10 w-48 sm:w-60 pointer-events-none opacity-[0.10] select-none"
+          aria-hidden="true"
+        >
+          <img src="/images/decorations/golden-dragon.png" alt="" className="w-full h-auto" />
+        </div>
 
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-2 z-10">
-            <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white leading-tight">
-              DIRECT REACHOUT
-            </h3>
-            <p className="font-sans text-xs sm:text-sm text-zinc-400 max-w-md">
-              Connect directly via Email, WhatsApp, or Phone for immediate discussion.
+        <div className="relative z-10 w-full flex flex-col items-center text-center gap-8 max-w-4xl mx-auto">
+          <div className="flex flex-col items-center gap-3">
+            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white leading-tight">
+              Direct Reachout
+            </h2>
+
+            <p className="font-sans text-sm sm:text-base text-zinc-400 max-w-lg leading-relaxed">
+              Prefer instant communication? Connect directly via Email or WhatsApp.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3 z-10">
+          {/* Elegant, Decent, Only Email & WhatsApp Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6 w-full max-w-xl">
+            {/* Email Button */}
             <a
               href={`mailto:${EMAIL}`}
-              className="inline-flex items-center gap-2 px-5 py-3.5 bg-red-600 hover:bg-red-700 text-white border-2 border-white shadow-[2px_2px_0px_#ffffff] text-xs font-bold uppercase tracking-wider transition-all hover:translate-x-0.5 hover:translate-y-0.5"
+              className="group w-full sm:w-1/2 inline-flex items-center justify-center gap-3 px-8 py-4.5 bg-red-600 hover:bg-red-500 text-white rounded-md border border-red-500 shadow-[0_0_24px_rgba(220,38,38,0.4)] hover:shadow-[0_0_35px_rgba(220,38,38,0.65)] font-sans text-sm sm:text-base font-bold uppercase tracking-wider transition-all hover:-translate-y-0.5 active:translate-y-0"
             >
-              <Mail size={14} />
+              <Mail className="w-5 h-5 shrink-0" />
               <span>Email</span>
-              <ArrowUpRight size={13} />
+              <ArrowUpRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
 
+            {/* WhatsApp Button */}
             <a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-white shadow-[2px_2px_0px_#ffffff] text-xs font-bold uppercase tracking-wider transition-all hover:translate-x-0.5 hover:translate-y-0.5"
+              className="group w-full sm:w-1/2 inline-flex items-center justify-center gap-3 px-8 py-4.5 bg-[#0d2a20] hover:bg-[#12382c] text-emerald-300 hover:text-emerald-200 rounded-md border border-emerald-500/50 hover:border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.25)] hover:shadow-[0_0_35px_rgba(16,185,129,0.45)] font-sans text-sm sm:text-base font-bold uppercase tracking-wider transition-all hover:-translate-y-0.5 active:translate-y-0"
             >
-              <MessageSquare size={14} />
+              <svg className="w-5 h-5 shrink-0 fill-current text-emerald-400" viewBox="0 0 24 24">
+                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.49-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+              </svg>
               <span>WhatsApp</span>
-              <ArrowUpRight size={13} />
+              <ArrowUpRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-emerald-400" />
             </a>
-
-            <a
-              href={`tel:${PHONE}`}
-              className="inline-flex items-center gap-2 px-5 py-3.5 bg-zinc-900 hover:bg-zinc-800 text-white border-2 border-zinc-600 text-xs font-bold uppercase tracking-wider transition-all"
-            >
-              <Phone size={14} />
-              <span>{PHONE}</span>
-            </a>
-
-            <a
-              href={RESUME_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-stone-200 text-zinc-950 border-2 border-white shadow-[2px_2px_0px_#DC2626] text-xs font-bold uppercase tracking-wider transition-all hover:translate-x-0.5 hover:translate-y-0.5"
-            >
-              <FileText size={14} className="text-red-600" />
-              <span>Resume ↗</span>
-            </a>
-
-            <button
-              onClick={handleCopyEmail}
-              type="button"
-              className="inline-flex items-center gap-2 px-4 py-3.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border-2 border-zinc-700 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
-            >
-              {copiedEmail ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-              <span>{copiedEmail ? 'Copied' : 'Copy Email'}</span>
-            </button>
           </div>
-
-          {/* Decorative Maneki-neko Lucky Cat Mascot */}
-          <motion.div
-            animate={{ rotate: [-2, 2, -2] }}
-            transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-            className="absolute -right-2 -bottom-2 w-20 sm:w-24 pointer-events-none opacity-90 select-none hidden sm:block z-10"
-            aria-hidden="true"
-          >
-            <img
-              src="/images/decorations/cat.png"
-              alt="Lucky Cat"
-              className="w-full h-auto filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
-            />
-          </motion.div>
-        </motion.div>
-      </main>
+        </div>
+      </section>
 
       <Footer />
     </div>
