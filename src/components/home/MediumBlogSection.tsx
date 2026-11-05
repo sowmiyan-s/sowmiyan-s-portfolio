@@ -9,44 +9,44 @@ const MEDIUM_PROFILE = 'https://medium.com/@sowmiyan_s_';
 
 const REAL_POSTS: MediumPost[] = [
   {
-    title: 'Building Intelligent Autonomous Agents with Antigravity and Claude',
-    pubDate: 'May 2026',
-    link: 'https://medium.com/@sowmiyan_s_',
+    title: 'The AI That Plans, Acts, and Learns — Without You Clicking a Button',
+    pubDate: 'Sep 16, 2026',
+    link: 'https://blog.venturemagazine.net/the-ai-that-plans-acts-and-learns-without-you-clicking-a-button-a055fae796c0',
     guid: 'post-1',
     author: 'Sowmiyan S',
-    thumbnail: '/projects/crewlyze.png',
-    description: 'A practical walkthrough on creating autonomous agent workflows using modern AI tools and IDE integrations.',
-    categories: ['AI AGENTS'],
+    thumbnail: 'https://cdn-images-1.medium.com/max/1024/1*wf8w2FYyYl89tyTnQ7kJdA.png',
+    description: 'Demystifying agentic AI from first principles. Exploring ReAct loops, multi-agent architecture, memory tiers, and autonomous task execution.',
+    categories: ['AI AGENTS', 'LLM'],
   },
   {
-    title: 'Vibe Coding: The Next Paradigm Shift in Software Development',
-    pubDate: 'Apr 2026',
-    link: 'https://medium.com/@sowmiyan_s_',
+    title: 'Hermes Agent: The AI That Doesn’t Just Chat — It Thinks, Learns, and Takes Action',
+    pubDate: 'Jul 27, 2026',
+    link: 'https://blog.venturemagazine.net/hermes-agent-the-ai-that-doesnt-just-chat-it-thinks-learns-and-takes-action-ebf00a425a5e',
     guid: 'post-2',
     author: 'Sowmiyan S',
-    thumbnail: '/og-image.png',
-    description: 'How natural language interfaces and agentic pair programming tools are changing how developers build software.',
-    categories: ['VIBE CODING'],
+    thumbnail: 'https://cdn-images-1.medium.com/max/1024/1*sIhYQcA074Fftr4pLt9rkw.png',
+    description: 'How Hermes Agent is redefining AI assistants with persistent memory, autonomous reasoning, tool invocation, and real-world execution.',
+    categories: ['LLM', 'AI TOOLS'],
   },
   {
-    title: 'Mastering Langflow & RAG Systems for Real-World Applications',
-    pubDate: 'Mar 2026',
-    link: 'https://medium.com/@sowmiyan_s_',
+    title: 'The Top 10 LLM Models (May 2026)',
+    pubDate: 'May 8, 2026',
+    link: 'https://blog.venturemagazine.net/the-top-10-llm-models-may-2026-e811735d2ae9',
     guid: 'post-3',
     author: 'Sowmiyan S',
-    thumbnail: '/python_ebook_cover.jpg',
-    description: 'Step-by-step architecture for setting up Retrieval-Augmented Generation with vector databases and prompt safety.',
-    categories: ['RAG SYSTEMS'],
+    thumbnail: 'https://cdn-images-1.medium.com/max/1024/1*WOp4Jm3cf9Em8wW1Pu82jw.png',
+    description: 'An in-depth breakdown of the leading frontier foundation models, specialized reasoning architectures, and practical benchmarking across real codebases.',
+    categories: ['LLM', 'AI BENCHMARKS'],
   },
   {
-    title: 'Multi-Agent Swarm Orchestration with CrewAI and FastAPI',
-    pubDate: 'Feb 2026',
-    link: 'https://medium.com/@sowmiyan_s_',
+    title: 'From Prompt to Production: Building a Website without Credit Limits using AI, GitHub, and Netlify',
+    pubDate: 'Mar 16, 2026',
+    link: 'https://blog.venturemagazine.net/from-prompt-to-production-building-a-website-without-credit-limits-using-ai-github-and-netlify-0b7dbc8f7638',
     guid: 'post-4',
     author: 'Sowmiyan S',
-    thumbnail: '/projects/guardrag.png',
-    description: 'How to build multi-agent teams using CrewAI and connect them with FastAPI endpoints for real-world automation.',
-    categories: ['CREWAI'],
+    thumbnail: 'https://cdn-images-1.medium.com/max/1024/1*J8uvF8Lz2teItJqNl53RDw.png',
+    description: 'Complete engineering workflow on scaffolding, building, and deploying production web applications using natural language vibe coding, GitHub, and Netlify.',
+    categories: ['VIBE CODING', 'DEPLOYMENT'],
   },
 ];
 
@@ -137,6 +137,8 @@ export const MediumBlogSection: React.FC = () => {
                   <img
                     src={post.thumbnail || '/og-image.png'}
                     alt={post.title}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).src = '/og-image.png';
