@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Award, BookOpen, FileText, ArrowUpRight, X, ExternalLink, Download } from 'lucide-react';
+import { Award, BookOpen, FileText, ArrowUpRight, X, Download } from 'lucide-react';
 import { certificatesList, Certificate } from '@/lib/certificates';
 import { sectionReveal, staggerContainer, viewportConfig } from '@/lib/motionPresets';
 
@@ -22,7 +22,7 @@ export const HonorsSection: React.FC = () => {
           <div className="flex items-center gap-2 mb-2">
             <span className="w-3 h-3 bg-red-600 border border-zinc-900 shadow-brutal-sm inline-block" />
             <span className="font-mono text-xs text-red-600 font-bold uppercase tracking-widest">
-              ACCREDITATION // SECTION 07
+              HONORS
             </span>
           </div>
           <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-zinc-900 leading-none">
@@ -149,7 +149,7 @@ export const HonorsSection: React.FC = () => {
                 />
               </div>
               <span className="font-mono text-[10px] text-red-600 font-bold uppercase tracking-wider truncate block">
-                {cert.issuer}
+                Verified Credential
               </span>
               <span className="font-heading font-bold text-xs text-zinc-900 uppercase line-clamp-1">
                 {cert.name}
@@ -177,7 +177,7 @@ export const HonorsSection: React.FC = () => {
               <div className="flex items-center justify-between pb-4 mb-4 border-b-2 border-zinc-900">
                 <div>
                   <span className="px-2 py-0.5 bg-red-600 text-white font-mono text-[10px] font-bold uppercase tracking-wider">
-                    {selectedCert.issuer}
+                    Verified Credential
                   </span>
                   <h3 className="font-heading font-black text-xl sm:text-2xl text-zinc-900 uppercase tracking-tight mt-1">
                     {selectedCert.name}
@@ -202,32 +202,15 @@ export const HonorsSection: React.FC = () => {
               </div>
 
               {/* Footer Meta & Actions */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t-2 border-zinc-900">
-                <span className="font-mono text-xs text-zinc-500 uppercase">
-                  Issued: {selectedCert.date}
-                </span>
-
-                <div className="flex items-center gap-2">
-                  <a
-                    href={selectedCert.image}
-                    download
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-zinc-900 border-2 border-zinc-900 shadow-brutal-sm font-mono text-xs font-bold uppercase tracking-wider"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Download</span>
-                  </a>
-                  {selectedCert.link && (
-                    <a
-                      href={selectedCert.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-600 text-white border-2 border-zinc-900 shadow-brutal-sm font-mono text-xs font-bold uppercase tracking-wider"
-                    >
-                      <span>Verify Credential</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
+              <div className="flex items-center justify-end pt-4 border-t-2 border-zinc-900">
+                <a
+                  href={selectedCert.image}
+                  download
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-zinc-900 border-2 border-zinc-900 shadow-brutal-sm font-mono text-xs font-bold uppercase tracking-wider"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download</span>
+                </a>
               </div>
             </motion.div>
           </div>

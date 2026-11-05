@@ -27,10 +27,7 @@ export const HeroMarquee: React.FC = () => {
               <span className="font-heading text-lg sm:text-2xl font-black uppercase tracking-tight text-white drop-shadow-[1px_1px_0px_rgba(0,0,0,0.6)]">
                 {item}
               </span>
-              <div className="flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-zinc-950 border border-white" />
-                <BrutalistStar size={14} color="#FFFFFF" spin={idx % 2 === 0} />
-              </div>
+              <BrutalistStar size={14} color="#FFFFFF" spin={idx % 2 === 0} />
             </div>
           ))}
         </motion.div>
