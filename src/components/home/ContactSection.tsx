@@ -3,8 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, Copy, Check, ArrowUpRight, MessageSquare } from 'lucide-react';
 import { sectionReveal, viewportConfig } from '@/lib/motionPresets';
 
-const EMAIL = 'sowmisowmiyan58@gmail.com';
-const PHONE = '+919042561295';
+const EMAIL = 'sowmiyan.s.dev@gmail.com';
 
 export const ContactSection: React.FC = () => {
   const [copied, setCopied] = useState(false);

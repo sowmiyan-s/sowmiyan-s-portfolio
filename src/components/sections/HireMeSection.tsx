@@ -25,7 +25,7 @@ const HireMeSection = () => {
 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 w-full justify-center max-w-3xl">
                     <motion.a
-                        href="mailto:sowmisowmiyan58@gmail.com"
+                        href="mailto:sowmiyan.s.dev@gmail.com"
                         whileHover={{ y: -2 }}
                         className="w-full flex-1 px-5 md:px-8 py-4 md:py-5 border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-colors font-heading font-bold uppercase tracking-widest text-xs md:text-sm text-center flex items-center justify-center gap-3 rounded-xl"
                     >

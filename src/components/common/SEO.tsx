@@ -6,7 +6,7 @@ export interface SEOProps {
   canonical?: string;
   ogType?: 'website' | 'article' | 'profile';
   ogImage?: string;
-  jsonLd?: Record<string, any> | Array<Record<string, any>>;
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 const DEFAULT_IMAGE = "https://www.sowmiyan.me/og-image.png";

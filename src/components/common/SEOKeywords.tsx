@@ -15,8 +15,7 @@ const SEOKeywords: React.FC = () => (
         Sowmiyan S is an AI Engineer &amp; Full-Stack Systems Developer, Founder of Bound By Code. Specializing in Multi-Agent AI Frameworks (CrewAI, LangChain), Autonomous LLM Systems, Python, and Production React Platforms.
       </p>
       <p>
-        Direct Contact: <a href="mailto:sowmisowmiyan58@gmail.com" itemProp="email">sowmisowmiyan58@gmail.com</a> | 
-        Telephone: <a href="tel:+919042561295" itemProp="telephone">+91 9042561295</a> (<span itemProp="telephone">9042561295</span> / <span>+91 90425 61295</span>).
+        Direct Contact: <a href="mailto:sowmiyan.s.dev@gmail.com" itemProp="email">sowmiyan.s.dev@gmail.com</a>.
       </p>
       <p>
         Location: <span itemProp="address" itemScope itemType="https://schema.org/PostalAddress">

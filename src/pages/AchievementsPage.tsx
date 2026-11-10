@@ -371,12 +371,17 @@ export const AchievementsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-200 flex items-center justify-between text-xs font-sans font-bold text-zinc-700">
+            <div className="pt-4 border-t border-zinc-200 flex flex-wrap items-center justify-between gap-3 text-xs font-sans font-bold text-zinc-700">
               <span>Application Status: Officially Filed</span>
-              <span className="text-red-600 flex items-center gap-1 font-black">
+              <a
+                href="https://ipindiaservices.gov.in/publicsearch"
+                target="_blank"
+                rel="noreferrer"
+                className="text-red-600 hover:text-zinc-950 flex items-center gap-1 font-black transition-colors"
+              >
                 <span>Patent Office Registry</span>
                 <ArrowUpRight size={13} />
-              </span>
+              </a>
             </div>
           </div>
         </section>
@@ -424,12 +429,29 @@ export const AchievementsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-200 flex items-center justify-between text-xs font-sans font-bold text-zinc-700">
-              <span>Indexed Research Publication</span>
-              <span className="text-red-600 flex items-center gap-1 font-black">
-                <span>View IJCRT Publication</span>
-                <ArrowUpRight size={13} />
-              </span>
+            <div className="pt-4 border-t border-zinc-200 flex flex-wrap items-center justify-between gap-3 text-xs font-sans font-bold text-zinc-700">
+              <span>Indexed Research Publication · ISSN: 2320-2882</span>
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const found = certificatesList.find(c => c.name.toLowerCase().includes('ijcrt'));
+                    if (found) setSelectedCert(found);
+                  }}
+                  className="text-zinc-900 hover:text-red-600 font-bold underline transition-colors cursor-pointer"
+                >
+                  View Certificate
+                </button>
+                <a
+                  href="https://ijcrt.org/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-red-600 hover:text-zinc-950 flex items-center gap-1 font-black transition-colors"
+                >
+                  <span>IJCRT Portal</span>
+                  <ArrowUpRight size={13} />
+                </a>
+              </div>
             </div>
           </div>
         </section>

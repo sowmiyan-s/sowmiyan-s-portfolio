@@ -455,7 +455,9 @@ export const clearRepoCache = () => {
   try {
     localStorage.removeItem(CACHE_KEY);
     localStorage.removeItem(CACHE_TS_KEY);
-  } catch {}
+  } catch {
+    // Ignore storage clear error
+  }
 };
 
 /** Check whether the cache is still fresh (within TTL window) */
@@ -476,7 +478,9 @@ export function readCachedRepos(): GitHubRepo[] {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
-  } catch {}
+  } catch {
+    // Ignore storage clear error
+  }
   return [];
 }
 
@@ -522,7 +526,9 @@ export const fetchRepos = async (forceRefresh = false): Promise<GitHubRepo[]> =>
           try {
             localStorage.setItem(CACHE_KEY, JSON.stringify(mergedFallback));
             localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
-          } catch {}
+          } catch {
+    // Ignore storage clear error
+  }
           keepGoing = false;
           break;
         }
@@ -552,7 +558,9 @@ export const fetchRepos = async (forceRefresh = false): Promise<GitHubRepo[]> =>
         try {
           localStorage.setItem(CACHE_KEY, JSON.stringify(fullList));
           localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
-        } catch {}
+        } catch {
+    // Ignore storage clear error
+  }
         return fullList;
       }
     } catch (error) {
@@ -565,7 +573,9 @@ export const fetchRepos = async (forceRefresh = false): Promise<GitHubRepo[]> =>
       try {
         localStorage.setItem(CACHE_KEY, JSON.stringify(mergedFallback));
         localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
-      } catch {}
+      } catch {
+    // Ignore storage clear error
+  }
     }
 
     return mergedFallback;

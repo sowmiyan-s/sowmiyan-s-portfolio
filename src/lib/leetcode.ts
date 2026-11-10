@@ -79,39 +79,10 @@ export async function fetchLeetCodeStats(forceRefresh = false): Promise<LeetCode
   }
 
   pendingPromise = (async () => {
-    // 1. Try alfa-leetcode-api with 3s timeout
+    // 1. Try fast and reliable Vercel proxy first (sub-200ms latency)
     try {
       const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), 3000);
-      const res = await fetch('https://alfa-leetcode-api.onrender.com/userProfile/sowmiyan-s', {
-        signal: controller.signal
-      });
-      clearTimeout(id);
-
-      if (res.ok) {
-        const data = await res.json();
-        if (typeof data.totalSolved === 'number') {
-          cachedStats = {
-            totalSolved: data.totalSolved,
-            easySolved: data.easySolved ?? 221,
-            mediumSolved: data.mediumSolved ?? 135,
-            hardSolved: data.hardSolved ?? 25,
-            totalQuestions: data.totalQuestions ?? 4101,
-            ranking: data.ranking ?? 358500,
-            totalSubmissions: data.totalSubmissions?.[0]?.submissions ?? 661,
-            recentSubmissions: Array.isArray(data.recentSubmissions) ? data.recentSubmissions.slice(0, 5) : fallbackLeetCodeStats.recentSubmissions
-          };
-          return cachedStats;
-        }
-      }
-    } catch (e) {
-      // Try next fallback
-    }
-
-    // 2. Try Vercel proxy fallback with 3s timeout
-    try {
-      const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), 3000);
+      const id = setTimeout(() => controller.abort(), 2500);
       const res = await fetch('https://leetcode-api-faisalshohag.vercel.app/sowmiyan-s', {
         signal: controller.signal
       });
@@ -126,15 +97,44 @@ export async function fetchLeetCodeStats(forceRefresh = false): Promise<LeetCode
             mediumSolved: data.mediumSolved ?? 135,
             hardSolved: data.hardSolved ?? 25,
             totalQuestions: data.totalQuestions ?? 4101,
-            ranking: data.ranking ?? 358500,
+            ranking: data.ranking ?? 359532,
             totalSubmissions: data.totalSubmissions?.[0]?.submissions ?? 661,
             recentSubmissions: Array.isArray(data.recentSubmissions) ? data.recentSubmissions.slice(0, 5) : fallbackLeetCodeStats.recentSubmissions
           };
           return cachedStats;
         }
       }
-    } catch (e) {
-      // Fall through
+    } catch {
+      // Try secondary endpoint
+    }
+
+    // 2. Secondary fallback: alfa-leetcode-api
+    try {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), 1500);
+      const res = await fetch('https://alfa-leetcode-api.onrender.com/userProfile/sowmiyan-s', {
+        signal: controller.signal
+      });
+      clearTimeout(id);
+
+      if (res.ok) {
+        const data = await res.json();
+        if (typeof data.totalSolved === 'number') {
+          cachedStats = {
+            totalSolved: data.totalSolved,
+            easySolved: data.easySolved ?? 221,
+            mediumSolved: data.mediumSolved ?? 135,
+            hardSolved: data.hardSolved ?? 25,
+            totalQuestions: data.totalQuestions ?? 4101,
+            ranking: data.ranking ?? 359532,
+            totalSubmissions: data.totalSubmissions?.[0]?.submissions ?? 661,
+            recentSubmissions: Array.isArray(data.recentSubmissions) ? data.recentSubmissions.slice(0, 5) : fallbackLeetCodeStats.recentSubmissions
+          };
+          return cachedStats;
+        }
+      }
+    } catch {
+      // Fall through to deterministic static fallback
     } finally {
       pendingPromise = null;
     }
