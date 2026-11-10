@@ -79,13 +79,13 @@ export const FeaturedWorkSection: React.FC = () => {
       />
 
       <div className="w-full max-w-7xl mx-auto relative z-10">
-        {/* Clean Header - No Mini-Title Eyebrows or Terminal Styling */}
+        {/* Clean Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}
           variants={sectionReveal}
-          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-6 border-b-2 border-zinc-900"
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10 pb-6 border-b-2 border-zinc-900"
         >
           <div>
             <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-zinc-950 leading-none">
@@ -105,20 +105,20 @@ export const FeaturedWorkSection: React.FC = () => {
           </Link>
         </motion.div>
 
-        {/* 3 Featured Projects Grid (Optimized for Mobile) */}
+        {/* 3 Featured Projects: Horizontal Snap Scroll on Mobile, 3-Columns on Desktop */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}
           variants={staggerContainer}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8"
+          className="flex lg:grid overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:snap-none no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid-cols-3 gap-3.5 sm:gap-8 pb-3 lg:pb-0"
         >
           {REAL_PROJECTS.map((proj) => (
             <motion.div
               key={proj.id}
               variants={sectionReveal}
               whileHover={{ y: -4 }}
-              className="bg-white border-2 border-zinc-900 shadow-[4px_4px_0px_#18181B] sm:shadow-brutal hover:shadow-brutal-lg hover:border-red-600 p-4 sm:p-6 flex flex-col justify-between group transition-all"
+              className="w-[84vw] sm:w-[380px] lg:w-auto shrink-0 snap-center bg-white border-2 border-zinc-900 shadow-[4px_4px_0px_#18181B] sm:shadow-brutal hover:shadow-brutal-lg hover:border-red-600 p-4 sm:p-6 flex flex-col justify-between group transition-all"
             >
               <div>
                 {/* Top Number */}
@@ -191,6 +191,13 @@ export const FeaturedWorkSection: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Mobile Swipe Hint */}
+        <div className="flex lg:hidden items-center justify-center gap-2 mt-4 text-zinc-500 font-sans text-xs font-bold uppercase tracking-wider">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+          <span>Swipe to explore projects</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+        </div>
       </div>
     </section>
   );

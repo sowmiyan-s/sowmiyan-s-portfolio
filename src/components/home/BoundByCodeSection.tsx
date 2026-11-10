@@ -196,7 +196,7 @@ export const BoundByCodeSection: React.FC = () => {
           whileInView="visible"
           viewport={viewportConfig}
           variants={sectionReveal}
-          className="w-full bg-[#1c1d1f] border border-zinc-700/80 shadow-2xl p-6 sm:p-8 lg:p-10 relative overflow-hidden transition-all"
+          className="w-full bg-[#1c1d1f] border border-zinc-700/80 shadow-2xl p-4 sm:p-8 lg:p-10 relative overflow-hidden transition-all"
         >
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             {/* Left Content Column (Natural Udemy Layout) */}
@@ -242,7 +242,7 @@ export const BoundByCodeSection: React.FC = () => {
             </div>
 
             {/* Right Action CTA Column (Authentic Udemy Button Style) */}
-            <div className="shrink-0 flex items-center">
+            <div className="w-full lg:w-auto shrink-0 flex items-center">
               <a
                 href={UDEMY_COURSE_URL}
                 target="_blank"
@@ -262,34 +262,34 @@ export const BoundByCodeSection: React.FC = () => {
           whileInView="visible"
           viewport={viewportConfig}
           variants={sectionReveal}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 w-full"
         >
           {/* YouTube Channel Link */}
           <a
             href={YOUTUBE_URL}
             target="_blank"
             rel="noreferrer"
-            className="bg-[#121214] hover:bg-[#1a1a1d] border border-zinc-800 hover:border-zinc-700 p-5 sm:p-6 transition-all duration-200 group flex items-center justify-between"
+            className="bg-[#121214] hover:bg-[#1a1a1d] border border-zinc-800 hover:border-zinc-700 p-3.5 sm:p-6 transition-all duration-200 group flex items-center justify-between gap-2.5 sm:gap-4 overflow-hidden rounded-md sm:rounded-none"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-11 h-11 bg-red-600/10 border border-red-500/30 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 bg-red-600/10 border border-red-500/30 flex items-center justify-center shrink-0 rounded-sm sm:rounded-none">
                 {/* Authentic YouTube SVG */}
                 <svg className="w-5 h-5 fill-current text-red-500" viewBox="0 0 24 24">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
               </div>
 
-              <div>
-                <span className="font-sans text-[11px] font-bold text-zinc-400 uppercase tracking-widest block">
+              <div className="min-w-0 flex-1">
+                <span className="font-sans text-[10px] sm:text-[11px] font-bold text-zinc-400 uppercase tracking-widest block truncate">
                   YouTube Channel
                 </span>
-                <span className="font-heading font-black text-lg text-white group-hover:text-red-400 transition-colors uppercase">
+                <span className="font-heading font-black text-sm sm:text-lg text-white group-hover:text-red-400 transition-colors uppercase truncate block">
                   @bound-by-code
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-sans text-xs font-bold uppercase tracking-wider transition-colors">
+            <div className="shrink-0 flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-red-600 hover:bg-red-700 text-white font-sans text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">
               <span>Subscribe</span>
               <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
             </div>
@@ -300,10 +300,10 @@ export const BoundByCodeSection: React.FC = () => {
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noreferrer"
-            className="bg-[#121214] hover:bg-[#1a1a1d] border border-zinc-800 hover:border-zinc-700 p-5 sm:p-6 transition-all duration-200 group flex items-center justify-between"
+            className="bg-[#121214] hover:bg-[#1a1a1d] border border-zinc-800 hover:border-zinc-700 p-3.5 sm:p-6 transition-all duration-200 group flex items-center justify-between gap-2.5 sm:gap-4 overflow-hidden rounded-md sm:rounded-none"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-11 h-11 bg-fuchsia-600/10 border border-fuchsia-500/30 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 bg-fuchsia-600/10 border border-fuchsia-500/30 flex items-center justify-center shrink-0 rounded-sm sm:rounded-none">
                 {/* Authentic Instagram Multi-Color Gradient SVG */}
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
                   <defs>
@@ -322,17 +322,17 @@ export const BoundByCodeSection: React.FC = () => {
                 </svg>
               </div>
 
-              <div>
-                <span className="font-sans text-[11px] font-bold text-zinc-400 uppercase tracking-widest block">
+              <div className="min-w-0 flex-1">
+                <span className="font-sans text-[10px] sm:text-[11px] font-bold text-zinc-400 uppercase tracking-widest block truncate">
                   Instagram Profile
                 </span>
-                <span className="font-heading font-black text-lg text-white group-hover:text-fuchsia-400 transition-colors uppercase">
+                <span className="font-heading font-black text-sm sm:text-lg text-white group-hover:text-fuchsia-400 transition-colors uppercase truncate block">
                   @bound_by_code
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-sans text-xs font-bold uppercase tracking-wider transition-colors">
+            <div className="shrink-0 flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-sans text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">
               <span>Follow</span>
               <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
             </div>

@@ -55,7 +55,7 @@ export const ProjectsSection: React.FC = () => {
   return (
     <div className="w-full flex flex-col gap-12 sm:gap-16">
       {/* ─── Control Bar: Filter Tabs & Live Search ─── */}
-      <div className="w-full bg-white border-3 border-zinc-900 shadow-[6px_6px_0px_#18181B] p-5 sm:p-7 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5">
+      <div className="w-full bg-white border-3 border-zinc-900 shadow-[6px_6px_0px_#18181B] p-4 sm:p-7 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5">
         {/* Category Pills */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
           <button
@@ -104,7 +104,7 @@ export const ProjectsSection: React.FC = () => {
       {/* ─── Projects Display ─── */}
       {isPartitionedView ? (
         // Distinct Categorized Sections
-        <div className="flex flex-col gap-16 sm:gap-20">
+        <div className="flex flex-col gap-10 sm:gap-20">
           {CATEGORIES_CONFIG.map((cat) => {
             const catProjects = ALL_PROJECTS.filter((p) => p.category === cat.id);
             return (
@@ -127,7 +127,7 @@ export const ProjectsSection: React.FC = () => {
                 </div>
 
                 {/* Grid of Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
                   {catProjects.map((project) => (
                     <ProjectCard key={project.id} project={project} />
                   ))}
@@ -170,7 +170,7 @@ export const ProjectsSection: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
               {filteredProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
@@ -198,7 +198,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       <div>
         {/* Card Header Media or Banner */}
         {project.image ? (
-          <div className="relative w-full h-44 bg-zinc-950 border-b-3 border-zinc-900 overflow-hidden">
+          <div className="relative w-full h-36 sm:h-44 bg-zinc-950 border-b-3 border-zinc-900 overflow-hidden">
             <img
               src={project.image}
               alt={project.title}
@@ -220,8 +220,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         )}
 
         {/* Card Body */}
-        <div className="p-5 sm:p-6 flex flex-col gap-3">
-          <h3 className="text-xl sm:text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors leading-tight">
+        <div className="p-4 sm:p-6 flex flex-col gap-2.5 sm:gap-3">
+          <h3 className="text-lg sm:text-2xl font-heading font-black text-zinc-950 uppercase tracking-tight group-hover:text-red-600 transition-colors leading-tight">
             {project.title}
           </h3>
 
@@ -229,7 +229,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             {project.tagline}
           </p>
 
-          <p className="text-xs sm:text-sm text-zinc-700 font-sans leading-relaxed line-clamp-3">
+          <p className="text-xs sm:text-sm text-zinc-700 font-sans leading-relaxed line-clamp-2 sm:line-clamp-3">
             {project.description}
           </p>
 
@@ -248,7 +248,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       </div>
 
       {/* Card Action Footer */}
-      <div className="p-5 pt-0 mt-2">
+      <div className="p-4 sm:p-5 pt-0 mt-1 sm:mt-2">
         <div className="pt-4 border-t-2 border-zinc-100 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             {project.githubUrl ? (

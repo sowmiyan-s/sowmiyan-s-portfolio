@@ -197,7 +197,7 @@ export const AchievementsPage: React.FC = () => {
             </span>
           </div>
 
-          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-center justify-between">
+          <div className="p-4 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-center justify-between">
             {/* Book Cover */}
             <div className="w-48 sm:w-56 aspect-[1/1.4] bg-stone-100 border-2 border-zinc-900 shadow-brutal shrink-0 overflow-hidden">
               <img
@@ -225,18 +225,18 @@ export const AchievementsPage: React.FC = () => {
                 A hands-on, practical engineering curriculum designed to guide learners from fundamental syntax to building automation tools, understanding real packages, and preparing for software engineering technical interviews.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-xl text-red-600 block">50+</span>
-                  <span className="text-xs font-sans font-bold text-zinc-600 uppercase">Real-World Programs</span>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-base sm:text-xl text-red-600 block">50+</span>
+                  <span className="text-[10px] sm:text-xs font-sans font-bold text-zinc-600 uppercase line-clamp-1 sm:line-clamp-none">Programs</span>
                 </div>
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-xl text-red-600 block">50+</span>
-                  <span className="text-xs font-sans font-bold text-zinc-600 uppercase">Core Python Packages</span>
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-base sm:text-xl text-red-600 block">50+</span>
+                  <span className="text-[10px] sm:text-xs font-sans font-bold text-zinc-600 uppercase line-clamp-1 sm:line-clamp-none">Packages</span>
                 </div>
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-xl text-red-600 block">50+</span>
-                  <span className="text-xs font-sans font-bold text-zinc-600 uppercase">Interview Q&amp;A</span>
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-base sm:text-xl text-red-600 block">50+</span>
+                  <span className="text-[10px] sm:text-xs font-sans font-bold text-zinc-600 uppercase line-clamp-1 sm:line-clamp-none">Interview Q&amp;A</span>
                 </div>
               </div>
 
@@ -267,7 +267,7 @@ export const AchievementsPage: React.FC = () => {
             </span>
           </div>
 
-          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-center justify-between">
+          <div className="p-4 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-center justify-between">
             {/* Real YouTube Video Thumbnail with Play Button Overlay */}
             <div className="w-full lg:w-80 aspect-[16/9] bg-stone-100 border-2 border-zinc-900 shadow-brutal overflow-hidden relative shrink-0 group">
               <img
@@ -306,18 +306,18 @@ export const AchievementsPage: React.FC = () => {
                 An intensive practical session covering modern vibe coding workflows, autonomous web builders, prompt engineering architectures, and rapid deployment of responsive web applications without manual boilerplate.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-base text-zinc-950 block">AI Workflows</span>
-                  <span className="text-xs font-sans text-zinc-600">Vibe Coding &amp; Tools</span>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-xs sm:text-base text-zinc-950 block truncate">AI Workflows</span>
+                  <span className="text-[10px] sm:text-xs font-sans text-zinc-600 line-clamp-1">Vibe Coding</span>
                 </div>
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-base text-zinc-950 block">Live Demo</span>
-                  <span className="text-xs font-sans text-zinc-600">Zero to Production</span>
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-xs sm:text-base text-zinc-950 block truncate">Live Demo</span>
+                  <span className="text-[10px] sm:text-xs font-sans text-zinc-600 line-clamp-1">Production</span>
                 </div>
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-base text-zinc-950 block">100+ Devs</span>
-                  <span className="text-xs font-sans text-zinc-600">Active Attendees</span>
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-xs sm:text-base text-zinc-950 block truncate">100+ Devs</span>
+                  <span className="text-[10px] sm:text-xs font-sans text-zinc-600 line-clamp-1">Attendees</span>
                 </div>
               </div>
 
@@ -352,7 +352,7 @@ export const AchievementsPage: React.FC = () => {
             </span>
           </div>
 
-          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col justify-between">
+          <div className="p-4 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between gap-3 mb-4">
                 <span className="px-3 py-1 bg-red-600 text-white text-xs font-sans font-black uppercase tracking-wide border border-zinc-900 shadow-brutal-sm">
@@ -410,7 +410,7 @@ export const AchievementsPage: React.FC = () => {
             </span>
           </div>
 
-          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col justify-between">
+          <div className="p-4 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between gap-3 mb-4">
                 <span className="px-3 py-1 bg-zinc-900 text-white text-xs font-sans font-black uppercase tracking-wide border border-zinc-900 shadow-brutal-sm">
@@ -487,61 +487,61 @@ export const AchievementsPage: React.FC = () => {
             </a>
           </div>
 
-          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col gap-6">
+          <div className="p-4 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col gap-6">
             {/* Live Counts Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
-                <span className="text-xs font-sans font-bold uppercase text-zinc-500">Total Solved</span>
-                <span className="text-4xl sm:text-5xl font-heading font-black text-zinc-950 mt-2">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+              <div className="p-3 sm:p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
+                <span className="text-[10px] sm:text-xs font-sans font-bold uppercase text-zinc-500">Total Solved</span>
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-zinc-950 my-1">
                   {lcStats.totalSolved}
                 </span>
-                <span className="text-xs font-sans font-semibold text-zinc-600 mt-1">
-                  Verified Solved Problems
+                <span className="text-[10px] sm:text-xs font-sans font-semibold text-zinc-600">
+                  Verified Solved
                 </span>
               </div>
 
-              <div className="p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
-                <span className="text-xs font-sans font-bold uppercase text-emerald-600">Easy Level</span>
-                <span className="text-4xl sm:text-5xl font-heading font-black text-emerald-600 mt-2">
+              <div className="p-3 sm:p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
+                <span className="text-[10px] sm:text-xs font-sans font-bold uppercase text-emerald-600">Easy Level</span>
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-emerald-600 my-1">
                   {lcStats.easySolved}
                 </span>
-                <span className="text-xs font-sans font-semibold text-zinc-600 mt-1">
-                  Foundations &amp; Logic
+                <span className="text-[10px] sm:text-xs font-sans font-semibold text-zinc-600">
+                  Foundations
                 </span>
               </div>
 
-              <div className="p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
-                <span className="text-xs font-sans font-bold uppercase text-amber-600">Medium Level</span>
-                <span className="text-4xl sm:text-5xl font-heading font-black text-amber-600 mt-2">
+              <div className="p-3 sm:p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
+                <span className="text-[10px] sm:text-xs font-sans font-bold uppercase text-amber-600">Medium Level</span>
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-amber-600 my-1">
                   {lcStats.mediumSolved}
                 </span>
-                <span className="text-xs font-sans font-semibold text-zinc-600 mt-1">
-                  Algorithms &amp; Optimization
+                <span className="text-[10px] sm:text-xs font-sans font-semibold text-zinc-600">
+                  Algorithms
                 </span>
               </div>
 
-              <div className="p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
-                <span className="text-xs font-sans font-bold uppercase text-red-600">Hard Level</span>
-                <span className="text-4xl sm:text-5xl font-heading font-black text-red-600 mt-2">
+              <div className="p-3 sm:p-5 bg-stone-50 border-2 border-zinc-900 flex flex-col justify-between">
+                <span className="text-[10px] sm:text-xs font-sans font-bold uppercase text-red-600">Hard Level</span>
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-red-600 my-1">
                   {lcStats.hardSolved}
                 </span>
-                <span className="text-xs font-sans font-semibold text-zinc-600 mt-1">
-                  Advanced Data Structures
+                <span className="text-[10px] sm:text-xs font-sans font-semibold text-zinc-600">
+                  Data Structures
                 </span>
               </div>
             </div>
 
             {/* Profile Meta Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 bg-zinc-950 text-white border-2 border-zinc-900 flex items-center justify-between">
-                <span className="text-xs font-sans font-bold uppercase text-zinc-400">Global Ranking</span>
-                <span className="font-heading font-black text-xl text-white">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-zinc-950 text-white border-2 border-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
+                <span className="text-[10px] sm:text-xs font-sans font-bold uppercase text-zinc-400">Global Ranking</span>
+                <span className="font-heading font-black text-base sm:text-xl text-white">
                   #{lcStats.ranking.toLocaleString()}
                 </span>
               </div>
-              <div className="p-4 bg-zinc-950 text-white border-2 border-zinc-900 flex items-center justify-between">
-                <span className="text-xs font-sans font-bold uppercase text-zinc-400">Total Submissions</span>
-                <span className="font-heading font-black text-xl text-white">
+              <div className="p-3 sm:p-4 bg-zinc-950 text-white border-2 border-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
+                <span className="text-[10px] sm:text-xs font-sans font-bold uppercase text-zinc-400">Total Submissions</span>
+                <span className="font-heading font-black text-base sm:text-xl text-white">
                   {lcStats.totalSubmissions}
                 </span>
               </div>
@@ -655,32 +655,32 @@ export const AchievementsPage: React.FC = () => {
           )}
 
           {/* Certificates Grid (4 initially, or all when toggled) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5">
             {displayedCerts.map((cert) => (
               <div
                 key={cert.name}
                 onClick={() => setSelectedCert(cert)}
-                className="p-4 bg-white border-2 border-zinc-900 shadow-brutal hover:shadow-brutal-lg hover:border-red-600 transition-all flex flex-col justify-between group cursor-pointer"
+                className="p-2.5 sm:p-4 bg-white border-2 border-zinc-900 shadow-[3px_3px_0px_#18181B] sm:shadow-brutal hover:shadow-brutal-lg hover:border-red-600 transition-all flex flex-col justify-between group cursor-pointer"
               >
                 <div>
-                  <div className="w-full aspect-[4/3] bg-stone-100 border border-zinc-900 overflow-hidden mb-3 relative">
+                  <div className="w-full aspect-[4/3] bg-stone-100 border border-zinc-900 overflow-hidden mb-2 sm:mb-3 relative">
                     <img 
                       src={cert.image} 
                       alt={cert.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <h4 className="font-heading font-black text-sm text-zinc-950 group-hover:text-red-600 transition-colors line-clamp-2 uppercase">
+                  <h4 className="font-heading font-black text-xs sm:text-sm text-zinc-950 group-hover:text-red-600 transition-colors line-clamp-2 uppercase leading-tight">
                     {cert.name}
                   </h4>
-                  <span className="text-xs text-zinc-500 font-sans mt-1 block">
+                  <span className="text-[10px] sm:text-xs text-zinc-500 font-sans mt-0.5 sm:mt-1 block">
                     Verified Credential
                   </span>
                 </div>
 
-                <div className="pt-2.5 mt-3 border-t border-zinc-200 flex items-center justify-between text-xs font-sans font-bold text-red-600">
-                  <span>View Full Certificate</span>
-                  <ArrowUpRight size={13} />
+                <div className="pt-2 sm:pt-2.5 mt-2 sm:mt-3 border-t border-zinc-200 flex items-center justify-between text-[10px] sm:text-xs font-sans font-bold text-red-600">
+                  <span>View Full</span>
+                  <ArrowUpRight size={12} />
                 </div>
               </div>
             ))}
@@ -717,7 +717,7 @@ export const AchievementsPage: React.FC = () => {
             </span>
           </div>
 
-          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-start justify-between">
+          <div className="p-4 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-start justify-between">
             {/* Degree Crest / University Icon Badge */}
             <div className="w-full lg:w-72 aspect-[16/10] bg-zinc-950 border-2 border-zinc-900 shadow-brutal flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden shrink-0">
               <div className="absolute inset-0 bg-red-600/10 pointer-events-none" />
@@ -748,18 +748,18 @@ export const AchievementsPage: React.FC = () => {
                 Rigorous core engineering curriculum combining Machine Learning foundations, Deep Neural Architectures, Data Structures &amp; Algorithms, Distributed Systems, and Big Data Analytics. Applied research in IoT optimization protocols and network intrusion detection heuristics.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-base text-zinc-950 block">AI &amp; ML</span>
-                  <span className="text-xs font-sans text-zinc-600">Core Specialization</span>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-xs sm:text-base text-zinc-950 block">AI &amp; ML</span>
+                  <span className="text-[10px] sm:text-xs font-sans text-zinc-600">Specialization</span>
                 </div>
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-base text-zinc-950 block">Anna Univ.</span>
-                  <span className="text-xs font-sans text-zinc-600">State Affiliation</span>
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-xs sm:text-base text-zinc-950 block">Anna Univ.</span>
+                  <span className="text-[10px] sm:text-xs font-sans text-zinc-600">Affiliation</span>
                 </div>
-                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
-                  <span className="font-heading font-black text-base text-zinc-950 block">Coimbatore</span>
-                  <span className="text-xs font-sans text-zinc-600">Campus Location</span>
+                <div className="p-2 sm:p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-xs sm:text-base text-zinc-950 block">Coimbatore</span>
+                  <span className="text-[10px] sm:text-xs font-sans text-zinc-600">Campus</span>
                 </div>
               </div>
 
