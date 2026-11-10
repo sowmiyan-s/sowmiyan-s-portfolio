@@ -5,7 +5,9 @@
 - **Name:** Sowmiyan S
 - **Title:** AI Engineer & Full-Stack Systems Developer
 - **Organization:** Bound By Code (Founder)
-- **Location:** Namakkal, Tamil Nadu, India
+- **Education:** B.Tech in Artificial Intelligence & Data Science, VSB College of Engineering Technical Campus
+- **Location:** Namakkal, Tamil Nadu, India (Open to Relocate Across India & Remote)
+- **Resume:** https://www.sowmiyan.me/resume.pdf
 - **Email:** sowmiyan.s.dev@gmail.com
 - **Website:** https://www.sowmiyan.me/
 

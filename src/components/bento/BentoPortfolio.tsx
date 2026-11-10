@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { certificatesList, Certificate } from '@/lib/certificates';
 
-const RESUME_URL = "https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing";
+const RESUME_URL = "/resume.pdf";
 const EMAIL = "sowmiyan.s.dev@gmail.com";
 
 interface FlagshipProject {

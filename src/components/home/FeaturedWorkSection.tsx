@@ -9,7 +9,6 @@ interface Project {
   id: string;
   num: string;
   title: string;
-  category: string;
   desc: string;
   tech: string[];
   image: string;
@@ -23,7 +22,6 @@ const REAL_PROJECTS: Project[] = [
     id: 'crewlyze',
     num: '01',
     title: 'crewlyze',
-    category: 'Multi-Agent Analysis Tool',
     desc: 'An open-source autonomous multi-agent data analyst platform built with CrewAI and FastAPI. It converts CSV and Excel datasets into executive PDF reports and interactive charts.',
     tech: ['CrewAI', 'FastAPI', 'Python', 'JavaScript'],
     image: '/projects/crewlyze.png',
@@ -35,7 +33,6 @@ const REAL_PROJECTS: Project[] = [
     id: 'guard-rag',
     num: '02',
     title: 'GUARD-RAG',
-    category: 'Offline Private RAG',
     desc: 'An offline RAG chatbot tool packaged for Python. It allows users to interact with sensitive documents locally on their own machines with zero data leakage.',
     tech: ['Python', 'LangChain', 'RAG', 'CLI'],
     image: '/projects/guardrag.png',
@@ -45,7 +42,6 @@ const REAL_PROJECTS: Project[] = [
     id: 'we-share',
     num: '03',
     title: 'We-Share',
-    category: 'Desktop File Transfer',
     desc: 'An open-source desktop application for instant, high-speed file transfers between computers with or without an active Wi-Fi router.',
     tech: ['C#', '.NET', 'P2P Networking', 'WPF'],
     image: '/projects/weshare.png',
@@ -125,13 +121,10 @@ export const FeaturedWorkSection: React.FC = () => {
               className="bg-white border-2 border-zinc-900 shadow-[4px_4px_0px_#18181B] sm:shadow-brutal hover:shadow-brutal-lg hover:border-red-600 p-4 sm:p-6 flex flex-col justify-between group transition-all"
             >
               <div>
-                {/* Top Number & Tag */}
+                {/* Top Number */}
                 <div className="flex items-center justify-between pb-2 sm:pb-3 mb-2.5 sm:mb-4 border-b-2 border-zinc-900">
                   <span className="font-sans text-2xl sm:text-3xl font-black text-red-600 leading-none">
                     {proj.num}
-                  </span>
-                  <span className="text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider text-zinc-700 bg-stone-100 border border-zinc-900 px-2 py-0.5">
-                    {proj.category}
                   </span>
                 </div>
 

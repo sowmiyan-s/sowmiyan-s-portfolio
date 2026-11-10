@@ -5,7 +5,7 @@ import { ArrowUpRight, Mail, FileText, MapPin } from 'lucide-react';
 import ScrambleText from '@/components/common/ScrambleText';
 import UpvoteButton from '@/components/common/UpvoteButton';
 
-const RESUME_URL = "https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing";
+const RESUME_URL = "/resume.pdf";
 
 const Hero = () => {
     const containerRef = useRef<HTMLDivElement>(null);

@@ -27,7 +27,7 @@ const KONAMI_CODE = [
   "b", "a"
 ];
 
-const RESUME_URL = "https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing";
+const RESUME_URL = "/resume.pdf";
 
 // ─── Audio Helpers ───────────────────────────────────────────────────────────
 const playSynthBeep = (freq = 800, duration = 0.08, type: OscillatorType = "sine") => {

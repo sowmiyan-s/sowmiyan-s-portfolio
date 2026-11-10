@@ -3,7 +3,7 @@ import { Mail, MapPin, Linkedin, Instagram, PenTool, Youtube, ArrowUp, Github, E
 import { Link } from 'react-router-dom';
 
 const EMAIL = 'sowmiyan.s.dev@gmail.com';
-const RESUME_URL = 'https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing';
+const RESUME_URL = '/resume.pdf';
 const WHATSAPP_URL = 'https://wa.me/919042561295?text=Hi%20Sowmiyan%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect.';
 
 export const Footer: React.FC = () => {

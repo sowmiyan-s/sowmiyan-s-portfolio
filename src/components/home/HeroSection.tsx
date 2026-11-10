@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowUpRight, 
@@ -9,11 +9,17 @@ import {
   Instagram,
   BookOpen,
   Twitter,
-  Briefcase
+  Briefcase,
+  GraduationCap,
+  MapPin,
+  Copy,
+  Check
 } from 'lucide-react';
 import { slideLeft, slideRight } from '@/lib/motionPresets';
+import { toast } from '@/hooks/use-toast';
 
-const RESUME_URL = 'https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing';
+const RESUME_URL = '/resume.pdf';
+const EMAIL = 'sowmiyan.s.dev@gmail.com';
 
 interface SocialLink {
   name: string;
@@ -62,6 +68,18 @@ const SOCIAL_LINKS: SocialLink[] = [
 ];
 
 export const HeroSection: React.FC = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(EMAIL);
+    setCopied(true);
+    toast({
+      title: "Email Copied!",
+      description: `${EMAIL} copied to clipboard.`,
+    });
+    setTimeout(() => setCopied(false), 2200);
+  };
+
   return (
     <section className="relative w-full pt-32 sm:pt-40 pb-20 sm:pb-28 px-4 sm:px-10 lg:px-16 bg-[#FAFAF9] overflow-hidden">
       {/* Background Decorative Mesh */}
@@ -117,6 +135,18 @@ export const HeroSection: React.FC = () => {
               <p className="text-xl sm:text-3xl lg:text-4xl font-heading font-black text-red-600 uppercase tracking-tight leading-tight">
                 AI ENGINEER <span className="text-zinc-900 font-light mx-1">/</span> SOFTWARE DEVELOPER
               </p>
+
+              {/* Recruiter-Friendly Fast-Scan Credentials */}
+              <div className="flex flex-wrap items-center gap-2 pt-3 font-sans text-xs sm:text-sm font-bold text-zinc-800">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-zinc-900 shadow-brutal-xs">
+                  <GraduationCap className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>B.Tech AI &amp; Data Science · VSB College of Engineering</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 border-2 border-zinc-900 text-zinc-700 shadow-brutal-xs">
+                  <MapPin className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>Tamil Nadu, India · Open to Relocate</span>
+                </span>
+              </div>
             </div>
 
             {/* Clear, Engaging Bio */}
@@ -173,8 +203,28 @@ export const HeroSection: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-white hover:bg-stone-100 text-zinc-900 font-sans text-xs sm:text-sm font-bold uppercase tracking-wider border-2 border-zinc-900 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
               >
                 <FileText className="w-4 h-4 text-red-600 shrink-0" />
-                <span>Resume ↗</span>
+                <span>Resume (PDF) ↗</span>
               </a>
+
+              {/* 1-Click Copy Email for Recruiters */}
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-stone-100 text-zinc-900 font-sans text-xs sm:text-sm font-bold uppercase tracking-wider border-2 border-zinc-900 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer active:scale-95"
+                title="Copy email to clipboard"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="text-emerald-700 font-black">Email Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 text-zinc-700 shrink-0" />
+                    <span>Copy Email</span>
+                  </>
+                )}
+              </button>
             </div>
           </motion.div>
 

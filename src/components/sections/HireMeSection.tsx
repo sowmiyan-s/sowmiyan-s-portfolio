@@ -33,7 +33,7 @@ const HireMeSection = () => {
                     </motion.a>
 
                     <motion.a
-                        href="https://drive.google.com/file/d/1NmangaAFo0eGT-KAsZi4VWOm6zI-KPk6/view?usp=sharing"
+                        href="/resume.pdf"
                         target="_blank"
                         rel="noreferrer"
                         whileHover={{ y: -2 }}

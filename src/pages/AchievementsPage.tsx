@@ -20,7 +20,9 @@ import {
   FileText,
   Calendar,
   Flame,
-  CheckCircle2
+  CheckCircle2,
+  GraduationCap,
+  Play
 } from 'lucide-react';
 
 const certCategories = [
@@ -266,16 +268,27 @@ export const AchievementsPage: React.FC = () => {
           </div>
 
           <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-center justify-between">
-            {/* Visual Icon / Presentation Badge */}
-            <div className="w-full lg:w-72 aspect-[16/10] bg-zinc-950 border-2 border-zinc-900 shadow-brutal flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden shrink-0">
-              <div className="absolute inset-0 bg-red-600/10 pointer-events-none" />
-              <Presentation className="w-14 h-14 text-red-500 mb-3 relative z-10" />
-              <span className="font-heading font-black text-sm uppercase tracking-wider relative z-10">
-                1-Day Live Workshop
-              </span>
-              <span className="font-sans text-xs text-zinc-400 mt-1 relative z-10">
-                AI Web Development
-              </span>
+            {/* Real YouTube Video Thumbnail with Play Button Overlay */}
+            <div className="w-full lg:w-80 aspect-[16/9] bg-stone-100 border-2 border-zinc-900 shadow-brutal overflow-hidden relative shrink-0 group">
+              <img
+                src="/images/webinar-thumbnail.jpg"
+                alt="Webinar on Building Website with AI"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = 'https://img.youtube.com/vi/tqZO_eIQXJs/maxresdefault.jpg';
+                }}
+              />
+              <a
+                href="https://www.youtube.com/live/tqZO_eIQXJs"
+                target="_blank"
+                rel="noreferrer"
+                className="absolute inset-0 flex items-center justify-center bg-black/35 hover:bg-black/20 transition-colors"
+                aria-label="Play Workshop on YouTube"
+              >
+                <div className="w-12 h-12 rounded-full bg-red-600 border border-white flex items-center justify-center shadow-lg text-white group-hover:scale-110 transition-transform">
+                  <Play className="w-5 h-5 fill-white translate-x-0.5" />
+                </div>
+              </a>
             </div>
 
             {/* Content Details */}
@@ -310,7 +323,7 @@ export const AchievementsPage: React.FC = () => {
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <a
-                  href="https://www.youtube.com/watch?v=VBFx-VX8B3M"
+                  href="https://www.youtube.com/live/tqZO_eIQXJs"
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3.5 bg-red-600 hover:bg-zinc-900 text-white font-sans text-xs sm:text-sm font-bold uppercase tracking-wider border-2 border-zinc-900 shadow-brutal-sm transition-all"
@@ -691,6 +704,78 @@ export const AchievementsPage: React.FC = () => {
                 </>
               )}
             </button>
+          </div>
+        </section>
+        {/* ─── 07. ACADEMIC BACKGROUND & DEGREE ─── */}
+        <section id="education" className="flex flex-col gap-6">
+          <div className="flex items-center justify-between border-b-2 border-zinc-900 pb-3">
+            <h2 className="text-2xl sm:text-4xl font-heading font-black uppercase tracking-tight text-zinc-950">
+              ACADEMIC BACKGROUND &amp; DEGREE
+            </h2>
+            <span className="px-3 py-1 bg-red-600 text-white font-sans text-xs font-bold uppercase border border-zinc-900 shadow-brutal-sm hidden sm:inline-block">
+              Accredited Engineering Degree
+            </span>
+          </div>
+
+          <div className="p-6 sm:p-8 bg-white border-2 border-zinc-900 shadow-brutal flex flex-col lg:flex-row gap-8 items-start justify-between">
+            {/* Degree Crest / University Icon Badge */}
+            <div className="w-full lg:w-72 aspect-[16/10] bg-zinc-950 border-2 border-zinc-900 shadow-brutal flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden shrink-0">
+              <div className="absolute inset-0 bg-red-600/10 pointer-events-none" />
+              <GraduationCap className="w-14 h-14 text-red-500 mb-3 relative z-10" />
+              <span className="font-heading font-black text-sm uppercase tracking-wider relative z-10">
+                B.Tech Degree
+              </span>
+              <span className="font-sans text-xs text-zinc-400 mt-1 relative z-10">
+                AI &amp; Data Science
+              </span>
+            </div>
+
+            {/* Degree & Institution Details */}
+            <div className="flex flex-col gap-4 flex-1">
+              <div>
+                <span className="text-xs font-sans font-bold text-red-600 uppercase tracking-wide block mb-1">
+                  Anna University Affiliated · AICTE Approved
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-heading font-black uppercase text-zinc-950 tracking-tight leading-tight">
+                  Bachelor of Technology (B.Tech) in Artificial Intelligence &amp; Data Science
+                </h3>
+                <p className="text-sm font-sans font-semibold text-zinc-700 mt-1">
+                  VSB College of Engineering Technical Campus (VSBCETC) · Coimbatore, Tamil Nadu
+                </p>
+              </div>
+
+              <p className="text-sm text-zinc-600 font-sans leading-relaxed">
+                Rigorous core engineering curriculum combining Machine Learning foundations, Deep Neural Architectures, Data Structures &amp; Algorithms, Distributed Systems, and Big Data Analytics. Applied research in IoT optimization protocols and network intrusion detection heuristics.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-base text-zinc-950 block">AI &amp; ML</span>
+                  <span className="text-xs font-sans text-zinc-600">Core Specialization</span>
+                </div>
+                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-base text-zinc-950 block">Anna Univ.</span>
+                  <span className="text-xs font-sans text-zinc-600">State Affiliation</span>
+                </div>
+                <div className="p-3 bg-stone-50 border border-zinc-900 text-center">
+                  <span className="font-heading font-black text-base text-zinc-950 block">Coimbatore</span>
+                  <span className="text-xs font-sans text-zinc-600">Campus Location</span>
+                </div>
+              </div>
+
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-3 text-xs font-sans font-bold text-zinc-700 border-t border-zinc-200 mt-2">
+                <span>Verified Academic Credentials · B.Tech AI &amp; DS</span>
+                <a
+                  href="https://www.vsbcetc.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-red-600 hover:text-zinc-950 flex items-center gap-1 font-black transition-colors"
+                >
+                  <span>Institution Portal</span>
+                  <ArrowUpRight size={13} />
+                </a>
+              </div>
+            </div>
           </div>
         </section>
       </main>
